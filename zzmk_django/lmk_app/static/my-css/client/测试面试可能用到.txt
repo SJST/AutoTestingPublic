@@ -1,0 +1,186 @@
+#  
+
+log="无"
+global start_time
+global end_time
+global use_time
+global drop_collection# 删除
+global status#状态
+global list_num#
+global detail_num
+global Time
+global year_flags
+global month_flags
+global day_flags
+global yes_year_flags
+global yes_month_flags
+global yes_day_flags
+global list_count_192
+global detail_count_192
+global check_status
+global insert_check
+global project_status
+global yesterday
+try:
+    # 用于发送邮件的模块
+    import smtplib
+    import traceback
+    import pymongo
+    import time
+    import datetime
+    from datetime import datetime
+	strat_time=time.time()
+    mogoclient = pymongo.MongoClient("192.168.112.191", port=27017)
+    db = mogoclient.reunion
+    db_target=mogoclient.nielsen_tmall_shop_201809
+    collection_detail=db.original_jumeidetail_doing
+    collection_list= db.original_jumei_list
+    course_detail=collection_detail.find()
+    course_list=collection_list.find()
+    detail_num=0
+    list_num=0
+    status="备份失败"
+    ''' This are the variable for the backup collection number''' '''case test'''
+    This_time=time.strftime('%Y-%m-%d',time.localtime(time.time()))
+    Time=(str(datetime.strptime(This_time,'%Y-%m-%d')).split(" ")[0])
+    year_flags=str(str(datetime.strptime(This_time,'%Y-%m-%d')).split(" ")[0]).split("-")[0]
+    month_flags=str(str(datetime.strptime(This_time,'%Y-%m-%d')).split(" ")[0]).split("-")[1]
+    day_flags=str(str(datetime.strptime(This_time,'%Y-%m-%d')).split(" ")[0]).split("-")[2]
+    today_flags=month_flags+day_flags
+    '''  today flags is the flag to creat corresponding collection '''
+    collection_detail_target=db_target["jumei_detail_test_"+today_flags]
+    collection_list_target=db_target["jumei_list_test_"+today_flags]
+    for num, item in enumerate(course_detail, 1):
+        collection_detail_target.insert(item)
+        detail_num+=1
+    print(detail_num)
+    '''case test'''
+    for num, item in enumerate(course_list, 1):
+        collection_list_target.insert(item)
+        list_num +=1
+    print(list_num)
+    status="备份成功"
+    print(status)
+    num1 = collection_detail_target.count()
+    num2 = collection_list_target.count()
+    if int(num1)==int(collection_detail.count()) and  int(num2)==int(collection_list.count()):
+        if  int(collection_detail.count()) > 7800:
+            collection_detail.remove()
+            collection_list.remove()
+# 2> 192
+    mogoclient192=pymongo.MongoClient("192.168.112.192", port=27017)
+    if int(day_flags)==int("01"):
+        if int(month_flags)!=int("01"):
+            yes_month_flags=str(0)+str(int(month_flags)-1)
+        else:
+            yes_month_flags=str(12)
+            yes_year_flags= str(int(year_flags)-1)
+    else:
+        yes_month_flags=month_flags
+        yes_year_flags=year_flags
+    db192=mogoclient192["nielsen_data_"+yes_year_flags+yes_month_flags]
+    yes_day_flags=str(int(day_flags)-1)
+    '''case test'''
+    if (int(day_flags)-1)<10:
+        yes_day_flags=str(0)+str(int(day_flags)-1)
+    if int(day_flags)==int("01"):
+
+        yes_day_flags=str(31)
+    collection_list_192 = db192["original_jumei_list_" + yes_day_flags]
+    collection_detail_192=db192["original_jumeidetail_doing_"+yes_day_flags]
+    list_count_192=collection_list_192.count()
+    detail_count_192=collection_detail_192.count()
+    if list_count_192 > 7800 and detail_count_192 > 7800:
+        check_status="检查成功"
+    else:
+        check_status="检查失败"
+# 3> 192 insert
+    collection_list_insert_192= db192["original_jumei_list_" + day_flags]
+    collection_detail_insert_192=db192["original_jumeidetail_doing_" + day_flags]
+    course_detail_192=collection_detail_target.find()
+    course_list_192=collection_list_target.find()
+    for num, item in enumerate(course_detail_192, 1):
+        collection_detail_insert_192.insert(item)
+    for num, item in enumerate(course_list_192, 1):
+        collection_list_insert_192.insert(item)
+        '''case test'''
+    if  int(collection_list_insert_192.count())== num2 and int(collection_detail_insert_192.count())==num1:
+        insert_check="插入成功"
+    else:
+        insert_check="插入失败"
+    if insert_check=="插入成功" and check_status=="检查失败":
+        collection_detail.remove()
+        collection_list.remove()
+        '''case test'''
+except Exception as ex:
+    log=traceback.print_exc()
+drop_collection="删除成功"
+yesterday=yes_year_flags+"-"+yes_month_flags+"-"+yes_day_flags
+end_time=time.time()
+use_time=start_time-end_time
+''' report'''
+f = open("C:\\Users\\P0112343\\Desktop\\data_check\\jumei_report\\201903.txt", "a+", encoding="utf-8")
+f.write(
+    ("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % (Time,"191",list_num, detail_num,  status, log,
+                                                             drop_collection,"192",yesterday,list_count_192,
+                                                             detail_count_192,check_status,insert_check,use_time)) + "\n")
+f.close()
+# # 3 >  发送到我的微信上
+#
+# try:
+#     project_status="进程进入发送微信阶段"
+#     itchat.auto_login(hotReload=True)
+#
+#     itchat.send_file("C:\\Users\\P0112343\\Desktop\\data_check\\jumei_report\\201903.txt",toUserName=None)
+#
+# except  Exception as ex:
+#     error= traceback.print_exc()
+#     error_f=open("C:\\Users\\P0112343\\Desktop\\data_check\\jumei_report\\error.txt", "a+", encoding="utf-8")
+#     f.write(
+#         ("%s\t%s\t%s" % (Time,  error, project_status)) + "\n")
+#     f.close()
+#4 <  发送邮件给我的邮箱
+new_file = open("C:\\Users\\P0112343\\Desktop\\data_check\\jumei_report\\201903.txt", 'r',encoding="utf-8")
+lines = new_file.readlines()  # 读取全部内容 ，并以列表方式返回
+all_line=""
+n=0
+for line in lines:
+    n+=1
+    if n>1:
+        all_line+=line
+# QQ邮箱/163邮箱的邮件发送：py文件发送邮件内容相当于一个第三方的客户端，借助于QQ/163邮箱服务器来发送的邮件。
+
+# QQ邮件
+# 1> 配置邮箱SMTP服务器的主机地址，将来使用这个服务器收发邮件。
+HOST = 'smtp.qq.com'
+# 2> 配置服务的端口，默认的邮件端口是25.
+PORT = '465'
+# 3> 指定发件人和收件人。
+FROM = '1318985516@qq.com'
+TO = '1318985516@qq.com'
+# 4> 邮件标题
+SUBJECT = 'Jumei Report'
+# 5> 邮件内容
+CONTENT = all_line
+
+# 创建邮件发送对象
+# 普通的邮件发送形式
+# smtp_obj = smtplib.SMTP()
+
+# 数据在传输过程中会被加密。
+smtp_obj = smtplib.SMTP_SSL()
+
+# 需要进行发件人的认证，授权。
+# smtp_obj就是一个第三方客户端对象
+smtp_obj.connect(host=HOST, port=PORT)
+
+
+
+# 发送邮件如果使用第三方客户端登录，要求使用授权码，不能使用真实密码，防止密码泄露。
+res = smtp_obj.login(user=FROM, password='mquofgnxlwluhfde')
+print('登录结果：', res)
+msg = '\n'.join(['From: {}'.format(FROM), 'To: {}'.format(TO), 'Subject: {}'.format(SUBJECT), '', CONTENT])
+smtp_obj.sendmail(from_addr=FROM, to_addrs=[TO], msg=msg.encode('utf-8'))
+
+
+

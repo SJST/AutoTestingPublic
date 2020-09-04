@@ -1,0 +1,246 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html>
+{% include '../common_html/_header.html' %}
+<body>
+<nav class="breadcrumb"><a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" >刷新我的桌面<i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+<div class="page-container">
+	<div id="search_info">
+		<fieldset>
+			<legend style="text-align:center;">简历导入</legend>
+			<!-- <span class="c-danger">【 暂不支持后缀为doc的文件，标准后缀为docx, pdf 】</span> -->
+	        <div class="uploader-thum-container">
+				<div id="filePicker">选择简历文件</div>
+				<button id="btn-star" class="btn btn-default btn-uploadstar radius ml-10">开始上传</button>
+			</div>
+			<div id="fileList" class="uploader-list"></div>
+		</fieldset>
+    </div>
+    <br>
+    <div id="search_result_null" style="display:none"><p>无相关信息</p></div>
+    <div id="search_result" style="display:none"><!--  style="display:none" -->
+        <table id="data_table" class="table table-border table-bordered table-hover table-bg table-sort">
+            <thead>
+            	<tr>
+					<th scope="col" colspan="6">成功导入_简历信息<span class="f-r c-danger">【 红色行：为之前已被导入过的简历 】（不计入录入工作量）</span></th>
+				</tr>
+                <tr id="tr_head" class="text-c">
+                    <th width="100" data-title="name" style="text-align:center;font-weight:bold;">名字</th>
+                    <th width="100" data-title="telephone" style="text-align:center;font-weight:bold;">电话</th>
+                    <th width="100" data-title="company" style="text-align:center;font-weight:bold;">公司</th>
+                    <th width="100" data-title="position" style="text-align:center;font-weight:bold;">职位</th>
+                    <th width="100" data-title="import_status" style="text-align:center;font-weight:bold;">导入状态</th>
+	                <th width="100" data-title="last_update_info" style="text-align:center;font-weight:bold;">最后更新时间</th>
+                </tr>
+            </thead>
+            <tbody id="tbody_result">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- <form action="{% url 'resume-import' %}" enctype="multipart/form-data" accept-charset="gbk">
+	<div class="page-container">
+		<div id="search_info">
+			<fieldset>
+				<legend style="text-align:center;">简历导入</legend>
+		        <div class="uploader-thum-container">
+					<div id="filePicker">选择简历文件</div>
+					<button id="btn-star" class="btn btn-default btn-uploadstar radius ml-10">开始上传</button>
+				</div>
+				<div id="fileList" class="uploader-list"></div>
+			</fieldset>
+	    </div>
+	</div>
+</form> -->
+
+
+<script type="text/javascript" src="{% static 'jquery/1.9.1/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'layer/2.4/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui/js/H-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui.admin/js/H-ui.admin.js' %}"></script>
+<script type="text/javascript" src="{% static 'webuploader/0.1.5/webuploader.min.js' %}"></script>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'jquery.contextmenu/jquery.contextmenu.r2.js' %}"></script>
+<script>
+$(function(){
+	/*选项卡导航 点击简历姓名查看简历信息*/
+	$("#tbody_result").on("click", "td#name a", function(){
+		Hui_admin_tab(this);
+	});
+	
+	$list = $("#fileList"),
+	$btn = $("#btn-star"),
+	state = "pending",
+	uploader;
+//async : false
+	var uploader = WebUploader.create({
+		//auto: true,
+		swf: "{% static 'webuploader/0.1.5/Uploader.swf' %}",
+	
+		// 文件接收服务端。
+		server: "{% url 'resume-import' %}",
+		//threads: '1', //同时运行1个线程传输
+		method: 'POST',
+	
+		// 选择文件的按钮。可选。
+		// 内部根据当前运行是创建，可能是input元素，也可能是flash.
+		/* pick: '#filePicker', */
+		
+		pick: {  
+	        id: '#filePicker',//Seletor|dom 指定选择文件的按钮容器，不指定则不创建按钮。注意 这里虽然写的是 id, 但是不是只支持 id, 还支持 class, 或者 dom 节点。  
+	        //multiple: false //是否开起同时选择多个文件能力。
+	        multiple: true //是否开起同时选择多个文件能力。
+	    },
+	    
+	    /* formData: {
+	    }, */
+	    
+	    fileVal:"upload",   //指明参数名称，后台也用这个参数接收文件
+        //fileType:'rar,zip,doc,xls,docx,xlsx,pdf'
+        accept: {
+            title: 'intoTypes',
+            extensions: 'doc,docx,pdf',	//	doc,文件，python处理有问题，暂时先不加入
+            mimeTypes: '.rar,.zip,.doc,.xls,.docx,.xlsx,.pdf'
+        },
+	    duplicate: false,
+        fileNumLimit: 5,
+        //sendAsBinary:true,  //指明使用二进制的方式上传文件
+        fileSingleSizeLimit: 5242880,
+	});
+	
+	uploader.on( 'fileQueued', function( file ) {
+		var $li = $(
+			'<div id="' + file.id + '" class="item">' +
+				'<div class="info">' + file.name + '</div>' +
+				'<p class="state">等待上传...</p>' +
+			'</div>'
+		);
+		$list.append( $li );
+		//alert($list.html());
+	});
+	
+	// 文件上传过程中创建进度条实时显示。
+	uploader.on( 'uploadProgress', function( file, percentage ) {
+		var $li = $( '#'+file.id ),
+			$percent = $li.find('.progress-box .sr-only');
+	
+		// 避免重复创建
+		if ( !$percent.length ) {
+			$percent = $('<div class="progress-box"><span class="progress-bar radius"><span class="sr-only" style="width:0%"></span></span></div>').appendTo( $li ).find('.sr-only');
+		}
+		$li.find(".state").text("上传中");
+		$percent.css( 'width', percentage * 100 + '%' );
+	});
+	
+	// 文件上传成功，给item添加成功class, 用样式标记上传成功。
+	uploader.on( 'uploadSuccess', function( file ) {
+		$( '#'+file.id ).addClass('upload-state-success').find(".state").text("已上传");
+	});
+	
+	// 文件上传失败，显示上传出错。
+	uploader.on( 'uploadError', function( file ) {
+		$( '#'+file.id ).addClass('upload-state-error').find(".state").text("上传出错");
+	});
+	
+	// 完成上传完了，成功或者失败，先删除进度条。
+	uploader.on( 'uploadComplete', function( file ) {
+		$( '#'+file.id ).find('.progress-box').fadeOut();
+	});
+	
+	trigger_count = 1;
+	uploader.on('all', function (type) {
+        if (type === 'startUpload') {
+            state = 'uploading';
+            
+            if(trigger_count = 1){
+            	$.ajax({
+                    async: false,
+                    url:"{% url 'before-upload-resume' %}",
+                    type:'GET',
+                });
+            	trigger_count++;
+            }
+        } else if (type === 'stopUpload') {
+            state = 'paused';
+        } else if (type === 'uploadFinished') {
+            state = 'done';
+            
+            $.getJSON("{% url 'after-upload-resume' %}", function(ret){
+            	if($.isEmptyObject(ret)){
+                    $("#search_result_null").show();
+                    $("#search_result").hide();
+                }else{
+                    $("#search_result_null").hide();
+                    $("#tbody_result").empty();
+
+                    var url = "{% url 'get-resumeInfo' %}?telephone=";
+                    $.each(ret, function(i,item){
+                    	if(!item.position || item.position == 'null'){
+                    		item.position = '';
+                        }
+                    	
+                    	if(!item.company || item.company == 'null'){
+                    		item.company = '';
+                        }
+                    	
+                    	var import_status = item.first_upload_time + '<mark>' + ' by ' + item.first_uploader + '</mark>';
+                    	
+                    	var tr_class = 'text-c';
+                    	if(!item.new_import_flag){
+                    		tr_class = tr_class + ' danger';
+                    	}else{
+                    		import_status = '新导入';
+                    	}
+                    	
+                        var tr=$('<tr class="' + tr_class + '" id="' + i + '"></tr>');
+                        tr.append('<td id="name">' + 
+                        				'<a data-title="' + item.name + '" data-href="' + url + item.telephone + '" class="c-primary" href="javascript:;">'+ item.name + '</a>' + 
+                        			'</td>' + 
+                        			'<td id="telephone">'+ item.telephone + '</td>' + 
+                        			'<td style="white-space: nowrap;" id="company">'+ item.company + '</td>' + 
+                        			'<td style="white-space: nowrap;" id="position">'+ item.position + '</td>');
+
+                        tr.append('<td id="import_status">' + import_status + '</td>');
+                        
+                        var last_update_info = item.update_time + '<mark>' + ' by ' + '<mark>' + item.last_operator + '</mark>';
+                        tr.append('<td id="last_update_info">' + last_update_info + '</td>');
+
+                        $("#tbody_result").append(tr);
+                    });
+
+                    if($("#tbody_result")){
+                    	$("#search_result").show();
+                    	$("#data_table").show();
+                    	$("#pagination_div").show();
+                    	$("div #all").hide();
+                    }
+                }
+            })
+        }
+
+        if (state === 'uploading') {
+            $btn.text('暂停上传');
+        } else {
+            $btn.text('开始上传');
+        }
+    });
+
+    $btn.on('click', function () {
+        if (state === 'uploading') {
+            uploader.stop();
+        } else {
+            uploader.upload();
+        }
+    });
+	
+	//var ue = UE.getEditor('editor');
+	
+});
+
+</script>
+</body>
+</html>
+

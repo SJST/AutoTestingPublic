@@ -1,0 +1,55 @@
+角色与权限：
+管理员：所有工权限，所有权限，只能增加或者修改，不能减少
+Teamleader：可增加或者修改简历和备注，不能删除简历和备注，可以看到团队里面所有的数据
+SC/C：能看到自己的数据，只能增加，不能修改和删除所有信息
+AC：只能看到自己的数据，只能增加，不能修改和删除所有信息
+R：只能看到自己的数据，只能增加，不能修改和删除所有信息
+
+
+
+业务总监：Jessie
+Teamleader团队：Susan
+SC（Senior Consultant）资深猎头顾问：Anna
+C（Consultant）顾问：无
+AC（Assistant Consultant）助理猎头顾问：无
+Researcher寻访员：Eavan，Smile，Chris，Calla
+
+user表
+id,login_name,password,real_name,gender,birthday,telephone,address,email,marital_status,remark,
+enter_time(入职时间),dimission_time(离职时间),rank(职级),work_status,account_status(帐号状态),
+create_time,update_time,last_operator
+
+{
+  "_id" : ObjectId("5bee7fac6c92a524841c38e8"),
+  "login_name" : "CESC",
+  "password" : "871108",
+  "real_name" : "WWD",
+  "gender" : "男",
+  "birthday" : ISODate("1987-11-08T08:18:19Z"),
+  "telephone" : NumberLong("15909850681"),
+  "address" : "",
+  "email" : "",
+  "marital_status" : "",
+  "remark" : "",
+  "enter_time" : "",
+  "dimission_time" : "",
+  "rank" : "",
+  "work_status" : "",
+  "account_status" : "",
+  "create_time" : ISODate("2018-11-16T08:40:00Z"),
+  "update_time" : "",
+  "last_operator" : ""
+}
+	
+role表
+id,role_name,role_description,enable_time,disable_time,create_time,update_time,last_operator
+
+permission表
+id,permission_name,permission_description,enable_time,disable_time,create_time,update_time,last_operator
+
+menu表
+
+
+
+
+

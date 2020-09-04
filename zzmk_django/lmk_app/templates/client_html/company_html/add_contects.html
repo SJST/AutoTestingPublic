@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+{% load staticfiles%}
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui/css/H-ui.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui.admin/css/H-ui.admin.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'Hui-iconfont/1.0.8/iconfont.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui.admin/skin/green/skin.css' %}" id="skin" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui.admin/css/style.css' %}" />
+<title>添加备注</title>
+<meta name="keywords" content="H-ui.admin v3.1,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
+<meta name="description" content="H-ui.admin v3.1，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+</head>
+<body>
+<script type="text/javascript">
+
+
+
+    
+</script>
+	
+<article class="page-container">
+	<form action="{% url 'add-contects' %}" method="get" class="form form-horizontal" id="form-admin-role-add">
+		<!--  <input type="hidden" class="input-text" value=resume_name placeholder="" id="resume_name" name="resume_name">-->
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>姓名:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="new_contectsName" name="new_contectsName">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">职务:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="new_contectsJob" name="new_contectsJob">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">手机:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="new_contectsTel" name="new_contectsTel">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">邮箱:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="new_contectsEmall" name="new_contectsEmall">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">座机:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="new_contectsLine" name="new_contectsLine">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">其他:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="new_contectsOther" name="new_contectsOther">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">备注:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" id="new_contectsRemark" name="new_contectsRemark">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius" id="remark_save" name="remark_save"><i class="icon-ok"></i> 确定</button>
+			</div>
+		</div>
+	</form>
+</article>
+			
+
+<script type="text/javascript" src="{% static 'jquery/1.9.1/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'layer/2.4/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui/js/H-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui.admin/js/H-ui.admin.js' %}"></script>
+<script type="text/javascript" src="{% static 'datatables/1.10.0/jquery.dataTables.min.js' %}"></script> 
+<script type="text/javascript" src="{% static 'jquery.SuperSlide/2.1.1/jquery.SuperSlide.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript">
+$(function(){
+	//这些往下是新的方法
+
+	var ajax_option={
+			success:function(ret){
+			
+				if(ret == 'success'){
+	        		var index = parent.layer.getFrameIndex(window.name);
+	        		
+	        		// 刷新父页面
+	        		parent.location.reload();
+	    			parent.layer.close(index);
+	        	}else{
+	        		alert("添加失败");
+	        	}
+			}
+	};
+			//这之上是新添的代码 
+	$("#form-admin-role-add").validate({
+		rules:{
+			remark_data:{
+				required:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			//var remark_data = $('#remark_data').val();
+			//var remark_info = $('#remark_info').val();
+			//从这开始这是这个函数新的代码
+			$(form).ajaxSubmit(ajax_option);
+			//$(form).ajaxSubmit();
+			//$(window.parent.document).find("#data_string").val(remark_data);
+			//$(window.parent.document).find("#comment").val(remark_info);
+			//var index = parent.layer.getFrameIndex(window.name);
+			//parent.layer.close(index);
+			//parent.location.reload();
+		}
+	});
+	$("#date_time").datetimepicker({
+    	format: 'yyyy-mm-dd',
+		minView: "month",
+		todayBtn:  1,
+		autoclose: 1,
+		endDate : new Date()
+	}).on('hide',function(e) {
+		//此处可以触发日期校验。
+	});
+	//这是是表单的校验
+	$("#reset").click(function() {
+        validator.resetForm();
+    });
+});
+</script>
+</body>
+</html>

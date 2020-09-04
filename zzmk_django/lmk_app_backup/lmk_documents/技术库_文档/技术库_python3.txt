@@ -1,0 +1,24 @@
+
+python3 读取文件
+	with open(txt_file_path, "r") as f:     #    , encoding="utf-8"
+	
+python3 正则表达式
+	在字符串之前加r，让整个字符串不转义
+	替换
+		re.sub(pattern, repl, string, count=0)
+		参数：
+			pattern : 正则中的模式字符串。
+			repl : 替换的字符串，也可为一个函数。
+			string : 要被查找替换的原始字符串。
+			count : 模式匹配后替换的最大次数，默认 0 表示替换所有的匹配。
+		
+		num = re.sub(r'#.*$', "", phone)
+	
+	匹配
+		re.search( r'dogs', line, re.M|re.I)
+	
+
+python3 时间格式化问题
+	datetime类型，time类型
+	format_time_string1 = user_obj_dict.get('create_time').isoformat()
+    format_time_string = user_obj_dict.get('create_time').date().isoformat()

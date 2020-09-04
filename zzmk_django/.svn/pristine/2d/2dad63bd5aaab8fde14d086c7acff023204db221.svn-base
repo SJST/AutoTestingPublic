@@ -1,0 +1,69 @@
+'''
+Created on 2018-11-8
+
+@author: P0044185
+'''
+
+import re
+
+zzmk_django_logs_dir_path = 'E:\\workspace\\zzmk_django_logs'
+
+resume_file_logs_dir_path = zzmk_django_logs_dir_path + "\\resume_file_logs\\"
+
+bad_code_file_name = "bad_code_collection.txt"
+
+bad_code_file_path = resume_file_logs_dir_path + bad_code_file_name
+
+def read_failed_logs():
+    
+    print(resume_file_logs_dir_path)
+
+
+        
+
+
+#---    乱码收集，如果检测到乱码异常，将乱码存入txt中，
+#---    当简历文件解析下一页之前，将txt中的乱码遍历替换掉，如果检测到新乱码，重复操作
+def bad_code_collection_write(bad_code):
+    
+    
+    print(bad_code_file_path)
+    
+    with open(bad_code_file_path, mode='r+', encoding='utf-8') as f:  #    , encoding='utf-8'
+        first_line = f.readline()
+        print(first_line)
+        f.write(bad_code)
+        
+#         print(f.tell())
+#         print(f.seek(0,1))
+        
+        
+        if(first_line == ''):
+            f.write(bad_code)
+        else:
+            for line in f:
+                if(line == ''):
+                    f.write(bad_code)
+                elif(re.search(r"\n$", line)):
+                    continue
+                else:
+                    if(len(line.findall(',')) < 19):
+                        f.write(',' + bad_code)
+                    elif(len(line.findall(',')) == 19):
+                        f.write(',\n' + bad_code)
+        
+        
+            
+            
+        
+
+def bad_code_collection_read(bad_code):
+    with open(bad_code_file_path, 'r', encoding='utf-8') as f:  #    , encoding='utf-8'
+        results = ''
+        f.write(results + '\n')
+
+if __name__ == '__main__':
+#     read_failed_logs()
+    bad_code = '\\xd8'
+    bad_code_collection_write(bad_code)
+    

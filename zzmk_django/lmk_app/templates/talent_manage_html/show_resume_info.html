@@ -1,0 +1,370 @@
+﻿{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../common_html/_header.html' %}
+<body>
+<nav class="breadcrumb"><a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" >刷新<i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div id="base_info" style="width:49%;display:inline-table;">
+		<form action="{% url 'update-jianli' %}" method="post" id="resume_modify_form">
+			<table id="resume_info_table" class="table" style="display:inline-table;">
+				<thead>
+					<tr id="tr_head" class="text-c">
+		        		<th data-title="resume_info" style="font-weight:bold;"><p class="f-18">简历信息</p></th>
+		        		<th style="text-align:right;">
+		        			<button type="button" class="btn btn-success size-MINI radius" id='edit'>编辑简历</button>
+		        			<span class="pipe">|</span>
+		        			<button type="button" class="btn btn-secondary size-MINI radius" style="pointer-events:none" id='save'>确认修改</button>
+		        		</th>
+		            </tr>
+		        </thead>
+	        	<tbody id="resume_info_tbody"></tbody>
+		    </table>
+	    </form>
+	</div>
+	<div id="remark_info" style="width:49%;display:inline-table;">
+		<table id="remark_table" class="table" style="display:inline-table;">
+			<thead>
+	            <tr id="tr_head" class="text-c">
+	        		<th data-title="new_remark" style="font-weight:bold;"><p class="f-18">备注信息</p></th>
+	        		<th style="text-align:right;">
+	        			<button type="button" class="btn btn-secondary size-MINI radius" id='add_remark'>添加备注</button>
+	        			<span class="pipe">|</span>
+	        			<button type="button" class="btn btn-success size-MINI radius" id='fold_all'>展开全部</button>
+	        			<span class="pipe">|</span>
+	        			<!-- <i class="Hui-iconfont">&#xe600;</i> -->
+	        			<button type="button" class="btn btn-warning size-MINI radius" id='close_all'>关闭全部</button>
+	        			<!-- <i class="Hui-iconfont">&#xe6a1;</i> -->
+						<!-- <div id="remark_switch" class="switch has-switch" data-on="warning" data-off="danger">
+							<input id="switch" type="checkbox" checked="checked">
+						</div> -->
+	        		</th>
+	            </tr>
+	        </thead>
+	        <tbody id="remark_tbody">
+		        <tr>
+					<td class="text-l" scope="col" colspan="2">
+						<ul id="remark_fold" class="Huifold">
+							{% if resume_info_dict.new_remark %}
+								{% for one_remark in resume_info_dict.new_remark %}
+									<li class="item">
+										<h4>
+											{{one_remark.date_string}}
+											{% if one_remark.last_operator %}
+												<div style="float:right;">{{one_remark.last_operator}}<span class="pipe">|</span>updated</div>
+											{% endif %}
+											<b>+</b>
+										</h4>
+										<div class="info">
+											<pre>{{one_remark.comment}}</pre>
+										</div>
+									</li>
+								{% endfor %}
+							{% endif %}
+						</ul>
+					</td>
+				</tr>
+	        </tbody>
+		</table>
+	</div>
+</div>
+
+{% include '../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/validate-methods.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/messages_zh.js' %}"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+	var operate_flag = 'default';
+	
+	if("{{resume_info_dict.telephone}}" == ""){
+		operate_flag = 'edit';
+		$("#edit").hide();
+		$("#save").text('确认录入');
+		$("button[id='save']").attr("disabled", false);
+		$("button[id='save']").css("pointer-events","auto");
+	}
+	
+	generate_table(operate_flag);
+	
+	$('#edit').on('click', function () {
+		if($("#edit").text() == '取消编辑'){
+			operate_flag = 'cancel_edit';
+			generate_table(operate_flag);
+			$("#edit").text('编辑简历');
+			$("button[id='save']").attr("disabled", true);
+			$("button[id='save']").css("pointer-events","none");
+		}else{
+			operate_flag = 'edit';
+			generate_table(operate_flag);
+			$("#edit").text('取消编辑');
+			$("button[id='save']").attr("disabled", false);
+			$("button[id='save']").css("pointer-events","auto");
+		}
+	});
+	
+	$('#save').on('click', function () {
+		//	for layer.confirm
+		var confirm_content = '';
+		if($("#save").text() == '确认录入'){
+			confirm_content = '确认录入？';
+			url = "{% url 'insert-jianli' %}";
+		}else if($("#save").text() == '确认修改'){
+			confirm_content = '确认修改？';
+			url = "{% url 'update-jianli' %}";
+		}
+		
+		$('#save').attr('type','submit');
+		$("#resume_modify_form").validate({
+			rules: {
+				name: {
+					required: true,
+					maxlength: 4
+				},
+				telephone: {
+					required: true,
+					maxlength: 11
+				},
+				email: {
+					required: true,
+					email: true
+				},
+				company: {
+					required: true,
+				},
+				position: {
+					required: true,
+				},
+				onkeyup: false,
+				onfocusout: true,//在得到焦点时是否验证
+				focusCleanup: true,
+				//success: "valid",
+			},
+			submitHandler:function(){
+				layer.confirm(
+					confirm_content,
+					{
+						title: '保存',
+						icon: 3,
+						yes: function(index, layero){
+							$('#save').attr('type','submit');
+							
+							var ajax_option = {
+								url: url,
+								success:function(ret){
+									if(ret.status == 'success'){
+										//alert('修改成功');
+										if($("#save").text() == '确认录入'){
+											var title = $("input[name='name']").val();
+											var telephone = $("input[name='telephone']").val();
+											parent.$("li.active span").text(title);
+											self.location.href = "{% url 'get-resumeInfo' %}?telephone=" + telephone;
+										}else if($("#save").text() == '确认修改'){
+											location.reload();
+										}
+							       	}else{
+							       		alert("修改失败");
+							       	}
+								}
+							}
+							
+							$("#resume_modify_form").ajaxSubmit(ajax_option);
+							top.layer.msg('保存成功！', {
+								icon: 1,
+								time: 2000,
+							});
+							layer.close(index);
+						},
+					}
+				);
+		    },
+		});
+		//	for layer.confirm
+	});
+	
+	// 折叠
+	$("#remark_fold").Huifold({
+		titCell:'.item h4',
+		mainCell:'.item .info',
+		type:3,//1	只打开一个，可以全部关闭;2	必须有一个打开;3	可打开多个
+		trigger:'click',
+		className:"selected",
+		speed:'first',
+	});
+	
+	// 展开全部
+	$('#fold_all').on('click', function () {
+		$("li.item h4").attr("class",'selectd');
+		$("li.item .info").attr("style",'display: block;');
+		$("li.item h4 b").text('-');
+	});
+	
+	// 关闭全部
+	$('#close_all').on('click', function () {
+		$("li.item h4").removeAttr("class");
+		$("li.item .info").removeAttr("style");
+		$("li.item h4 b").text('+');
+	});
+	
+	// 触发已经绑定好得事件
+	$('th #fold_all').trigger("click");
+	
+	// 添加备注信息
+	$("#add_remark").on("click", function(){
+		/* alert('编辑');
+		alert($(this).parents("tr").html());
+		alert($(this).parents("tr").find("td").html());
+		alert($(this).parents("tr").find("#role_name").text()); */
+		
+		var telephone = "{{resume_info_dict.telephone}}";
+		if(telephone){
+			telephone = parseInt(telephone);
+		}else if($("input[name='telephone']").val()){
+			telephone = parseInt($("input[name='telephone']").val());
+		}else{
+			alert("缺少电话号");
+			return false;
+		}
+		var url_string = '{% url "resume-remark-add" %}' + '?telephone=' + telephone;
+		//alert(url_string);
+		
+		resume_remark_add('添加备注',url_string,'400px','450px');
+		//resume_remark_add('添加备注',url_string,'telephone');
+    });
+	
+	var work_experience = $("pre#work_experience").html();
+	work_experience = text_add_mark(work_experience);
+	$("pre#work_experience").html(work_experience);
+	
+	var project_experience = $("pre#project_experience").html();
+	project_experience = text_add_mark(project_experience);
+	$("pre#project_experience").html(project_experience);
+	
+})
+
+function generate_table(operate_flag){
+	
+	$("#resume_info_tbody").empty();
+	
+	// 根据models中所有的字段动态显示不为空的字段，点击编辑后，为空的字段也显示出来，所有字段样式变为可编辑
+	var all_fields_dict_obj = {{all_fields_dict|safe}};
+	var resume_info_dict_obj = {{resume_info_dict|safe}};
+	
+	//console.log(all_fields_dict_obj);
+	//console.log(resume_info_dict_obj);
+	
+	//var operate_flag = 'edit';
+	//var operate_flag = '';
+	
+	for(var key in all_fields_dict_obj){
+		
+		var en_field_name = key;
+		var ch_field_name = all_fields_dict_obj[key];
+		
+		var text_value = '';
+		if(resume_info_dict_obj[key]){
+			text_value = resume_info_dict_obj[key];
+		}
+		
+		var tr = $('<tr></tr>');
+		var th_string = '<th class="text-l va-t" style="font-size: 14px;" width="100" nowrap="nowrap">' + ch_field_name + ':</th>';
+		var td_string = '';
+		
+		var td_input_string;
+		
+		if(operate_flag != 'edit'){
+			if(!text_value){
+				continue;
+			}else{
+				if(text_value.length > 30){
+					td_string = '<td style="font-size: 14px;"><div style="word-break:break-all;"><pre id="' + en_field_name + '">' + text_value + '</pre></div></td>';
+				}else{
+					td_string = '<td style="font-size: 14px;">' + text_value + '</td>';
+				}
+			}
+		}else{
+			if(text_value){
+				if(text_value.length > 30){
+					var area_rows = 1;
+					var enter_list = text_value.match(/\n/g);
+					
+					if(enter_list){
+						area_rows = enter_list.length;
+					}
+					
+					area_rows = area_rows + 2;
+					
+					td_input_string = '<textarea rows="' + area_rows + '" cols="70" class="radius" style="resize:none" name="' + en_field_name + '">' + text_value + '</textarea>';
+				}else{
+					td_input_string = '<input type="text" class="input-text size-M radius" name="' + en_field_name + '" value="' + text_value + '">';
+				}
+			}else{
+				td_input_string = '<input type="text" class="input-text size-M radius" name="' + en_field_name + '" value="">';
+			}
+			
+			td_string = '<td style="font-size: 14px;">' + td_input_string + '</td>';
+		}
+		
+		var tr_string = th_string + td_string;
+		tr.append(tr_string);
+		$("#resume_info_tbody").append(tr);
+	}
+	
+	var name_th_html = $("input[name='name']").parents("tr").find("th").html();
+	$("input[name='name']").parents("tr").find("th").html(name_th_html + '<span class="c-red">*</span>');
+	//$("input[name='name']").attr("required", true);
+	var telephone_th_html = $("input[name='telephone']").parents("tr").find("th").html();
+	$("input[name='telephone']").parents("tr").find("th").html(telephone_th_html + '<span class="c-red">*</span>');
+	//$("input[name='telephone']").attr("required", true);
+	var email_th_html = $("input[name='email']").parents("tr").find("th").html();
+	$("input[name='email']").parents("tr").find("th").html(email_th_html + '<span class="c-red">*</span>');
+	//$("input[name='email']").attr("required", true);
+	var company_th_html = $("input[name='company']").parents("tr").find("th").html();
+	$("input[name='company']").parents("tr").find("th").html(company_th_html + '<span class="c-red">*</span>');
+	//$("input[name='company']").attr("required", true);
+	var position_th_html = $("input[name='position']").parents("tr").find("th").html();
+	$("input[name='position']").parents("tr").find("th").html(position_th_html + '<span class="c-red">*</span>');
+	//$("input[name='position']").attr("required", true);
+}
+
+/*添加一条备注信息*/
+function resume_remark_add(title,url,w,h){
+	layer.open({
+		type : 2,
+		area : [ w, h ],
+		offset: 'rb', //右下角弹出
+		fix : true,	// true不固定，false固定
+		//fixed : false, // fixed true或者false都不固定，说明HUI框架fixed标签不好使，fixed是layer中默认写法
+		//fixed: false,	//默认：true 即鼠标滚动时，层是否固定在可视区域。如果不想，设置fixed: false即可
+		maxmin : true,
+		shade: [0.1,'#fff'], //0.1透明度的白色背景
+		title : title,
+		content : [url, 'no'],
+		//scrollbar: true
+	});
+}
+
+/* 给显示信息增加高亮显示 */
+function text_add_mark(text){
+	
+	var model_text = text;
+	
+	/* model_text = model_text.replace(new RegExp("\n{1,}","igm"),"\n");
+	//model_text = model_text.replace(/\n{1,}/igm,"\n");
+	model_text = model_text.replace(/(\d{4}[\.-]\d{1,2})/igm,"<mark>$1</mark>");
+	model_text = model_text.replace(/(至今)/igm,"<mark>$1</mark>");
+	model_text = model_text.replace(/((主要工作|工作内容)[:：])/igm,"<mark>$1</mark>");
+	model_text = model_text.replace(/([一二三四五六七八九十][.、])/igm,"<mark>$1</mark>");
+	model_text = model_text.replace(/(\d[\)）])/igm,"<mark>$1</mark>");	//	1),1） */
+	
+	return model_text;
+}
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

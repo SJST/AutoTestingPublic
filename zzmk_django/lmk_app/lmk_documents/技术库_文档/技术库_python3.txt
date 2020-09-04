@@ -1,0 +1,39 @@
+
+python3 读取文件
+	with open(txt_file_path, "r") as f:     #    , encoding="utf-8"
+	
+python3 正则表达式
+	在字符串之前加r，让整个字符串不转义
+	替换
+		re.sub(pattern, repl, string, count=0)
+		参数：
+			pattern : 正则中的模式字符串。
+			repl : 替换的字符串，也可为一个函数。
+			string : 要被查找替换的原始字符串。
+			count : 模式匹配后替换的最大次数，默认 0 表示替换所有的匹配。
+		
+		num = re.sub(r'#.*$', "", phone)
+	
+	匹配
+		re.search( r'dogs', line, re.M|re.I)
+		
+		re.I	使匹配对大小写不敏感
+		re.L	做本地化识别（locale-aware）匹配
+		re.M	多行匹配，影响 ^ 和 $
+		re.S	使 . 匹配包括换行在内的所有字符
+		re.U	根据Unicode字符集解析字符。这个标志影响 \w, \W, \b, \B.
+		re.X	该标志通过给予你更灵活的格式以便你将正则表达式写得更易于理解。
+	
+	string = "个人简历——数字营销-周虹.docx"
+	# encode_string = string.encode() #此处必须进行字符串转义
+	# temp = encode_string.decode('utf-8')
+	pattern="[-{1,2}]([\u4E00-\u9FA5]{2,4})\.[^\.]*$"  #中文正则表达式
+	regex = re.compile(pattern) #生成正则对象 
+	# result = regex.findall(temp)  #匹配
+	result = regex.findall(string)  #匹配
+	print(result)	#	['周虹']
+	
+python3 时间格式化问题
+	datetime类型，time类型
+	format_time_string1 = user_obj_dict.get('create_time').isoformat()
+    format_time_string = user_obj_dict.get('create_time').date().isoformat()

@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'Hui-iconfont/1.0.8/iconfont.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui/css/H-ui.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui.admin/css/H-ui.admin.css' %}" />
+
+<title>职位信息</title>
+<meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+<meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+</head>
+<body ontouchstart>
+
+<div class="containBox">
+	<div class="container ui-sortable">
+		<div class="panel panel-default">
+			<div class="panel-header">职位列表</div>
+			<div class="panel-body">
+			<br>
+			<table border="1"width="50%" height="50%" align="center" id=table_head >
+				<thead>
+				<tr id="table_head">
+					<th data-title="company_name">公司名称</th>
+					<th data-title="position_name">职位名称</th>
+					<th data-title="company_adress">公司地址</th>
+					<th	data-title="Referral_Info">推荐</th>
+					<th	data-title="interview_times">面试</th>
+					<th	data-title="offer">offer</th>
+					<th data-title='newstime'>发布时间</th>
+					<th data-title='operate'>操作</th>
+				
+				</tr>
+				</thead>
+				<tbody id="tbody_result">
+					
+				</tbody>
+			</table>
+			<br/>
+			<button type="button" class="btn btn-success radius" id='add-button'>
+				<i class="Hui-iconfont"></i>添加职位
+			</button>
+			<button type="button" class="btn btn-secondary radius" id='next_page'>
+				<i class="Hui-iconfont"></i>下一页
+			</button>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript" src="{% static 'jquery/1.9.1/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'layer/2.4/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui/js/H-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui.admin/js/H-ui.admin.js' %}"></script>
+<script language="javascript">
+	$(document).ready(function(){
+		$('#table_head').hide();
+		//$("#tbody_result").on("click", "td#company a", function(){
+			//Hui_admin_tab(this);
+		//});
+
+		var test_num=1
+		$.ajax({
+        	async: false,
+        	url:"{% url 'position-ajax' %}",
+        	type:'GET',
+        	dataType: 'json',
+        	data:{'test_num':test_num},
+        	success:function(ret){
+        		
+        		$('#table_head tr:gt(0)').remove();
+        		$('#table_head').show();
+        		$.each(ret, function(i,item){
+        				var tr=$('<tr></tr>');
+                    	tr.append('<td height="50px">' + item.company_name + '</td>'+
+                    			'<td height="50px">' + item.position_name + '</td>' + 
+                    			'<td height="50px">'+ item.work_city + '</td>'+
+                    			'<td height="50px">'+ " "  + '</td>' + 
+                    			'<td height="50px">'+ " " + '</td>' + 
+                    			'<td height="50px">'+ " " + '</td>' +
+                    			'<td height="50px">'+ " "  +'</td>');
+                    	$("#tbody_result").append(tr);
+        			
+        		});
+        	}
+		}); 
+	});
+
+	
+        		     		
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+﻿{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../common_html/_header.html' %}
+<body>
+<nav class="breadcrumb"><a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" >刷新<i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<table id="resume_info_table" class="table" style="width:45%;display:inline-table;">
+		<thead>
+			<tr id="tr_head" class="text-c">
+			    <th scope="col" colspan="2" style="font-weight:bold;"><p class="f-18">简历信息</p></th>
+			</tr>
+        </thead>
+        <tbody id="resume_info_tbody">
+        	<tr>
+				<th class="text-l" width="100">姓名：</th>
+				<td>{{name}}</td>
+			</tr>
+			<tr>
+				<th class="text-l" width="100">电话：</th>
+				<td>{{telephone}}</td>
+			</tr>
+			<tr>
+				<th class="text-l" width="100">邮箱：</th>
+				<td>{{email}}</td>
+			</tr>
+			<tr>
+				<th class="text-l" width="100">学历：</th>
+				<td>{{education}}</td>
+			</tr>
+			<tr>
+				<th class="text-l" width="100">公司：</th>
+				<td>{{company}}</td>
+			</tr>
+			<tr>
+				<th class="text-l" width="100">地点：</th>
+				<td>{{province_city}}{{district_city}}</td>
+			</tr>
+			<tr>
+				<th class="text-l" width="100">职位：</th>
+				<td>{{position}}</td>
+			</tr>
+			<tr>
+				<th class="text-l va-t" width="100" nowrap="nowrap">工作经历：</th>
+				<td>
+					<div style="word-break:break-all;">
+						{% if work_experience %}
+							<pre>{{work_experience}}</pre>
+						{% endif %}
+					</div>
+				</td>
+				<!-- <td>
+					<ul id="experience_fold" class="Huifold">
+						<li class="item">
+							<h4><b>+</b></h4>
+							<div class="info">{{work_experience}}</div>
+						</li>
+					</ul>
+				</td> -->
+			</tr>
+			<!--  style="width:300;overflow:auto;" -->
+			<tr>
+				<th class="text-l va-t" width="100" nowrap="nowrap">项目经验：</th>
+				<td>
+					<div style="word-break:break-all;">
+						{% if project_experience %}
+							<pre>{{project_experience}}</pre>
+						{% endif %}
+					</div>
+				</td>
+			</tr>
+        </tbody>
+    </table>
+    <table id="remark_table" class="table" style="width:45%;display:inline-table;">
+		<thead>
+            <tr id="tr_head" class="text-c">
+        		<th data-title="new_remark" style="font-weight:bold;"><p class="f-18">备注信息</p></th>
+        		<th style="text-align:right;">
+        			<button type="button" class="btn btn-secondary size-MINI radius" id='add_remark'>添加备注</button>
+        			<span class="pipe">|</span>
+        			<button type="button" class="btn btn-success size-MINI radius" id='fold_all'>展开全部</button>
+        			<span class="pipe">|</span>
+        			<!-- <i class="Hui-iconfont">&#xe600;</i> -->
+        			<button type="button" class="btn btn-warning size-MINI radius" id='close_all'>关闭全部</button>
+        			<!-- <i class="Hui-iconfont">&#xe6a1;</i> -->
+					<!-- <div id="remark_switch" class="switch has-switch" data-on="warning" data-off="danger">
+						<input id="switch" type="checkbox" checked="checked">
+					</div> -->
+        		</th>
+            </tr>
+        </thead>
+        <tbody id="remark_tbody">
+	        <tr>
+				<td class="text-l" scope="col" colspan="2">
+					<ul id="remark_fold" class="Huifold">
+						{% if new_remark %}
+							{% for one_remark in new_remark %}
+								<li class="item">
+									<h4>
+										{{one_remark.date_string}}
+										{% if one_remark.last_operator %}
+											<div style="float:right;">{{one_remark.last_operator}}<span class="pipe">|</span>updated</div>
+										{% endif %}
+										<b>+</b>
+									</h4>
+									<div class="info">{{one_remark.comment}}</div>
+								</li>
+							{% endfor %}
+						{% endif %}
+					</ul>
+				</td>
+			</tr>
+        </tbody>
+	</table>
+</div>
+
+{% include '../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/validate-methods.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/messages_zh.js' %}"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+	// 折叠
+	$("#remark_fold").Huifold({
+		titCell:'.item h4',
+		mainCell:'.item .info',
+		type:3,//1	只打开一个，可以全部关闭;2	必须有一个打开;3	可打开多个
+		trigger:'click',
+		className:"selected",
+		speed:'first',
+	});
+	
+	// 展开全部
+	$('#fold_all').on('click', function () {
+		$("li.item h4").attr("class",'selectd');
+		$("li.item .info").attr("style",'display: block;');
+		$("li.item h4 b").text('-');
+	});
+	
+	// 关闭全部
+	$('#close_all').on('click', function () {
+		$("li.item h4").removeAttr("class");
+		$("li.item .info").removeAttr("style");
+		$("li.item h4 b").text('+');
+	});
+	
+	// 触发已经绑定好得事件
+	$('th #fold_all').trigger("click");
+	
+	// 添加备注信息
+	$("#add_remark").on("click", function(){
+		/* alert('编辑');
+		alert($(this).parents("tr").html());
+		alert($(this).parents("tr").find("td").html());
+		alert($(this).parents("tr").find("#role_name").text()); */
+		
+		var telephone = {{telephone}};
+		//alert(telephone);
+		//alert(typeof(telephone));
+		var url_string = '{% url "resume-remark-add" %}' + '?telephone=' + telephone;
+		//alert(url_string);
+		
+		resume_remark_add('添加备注',url_string,'400px','450px');
+		//resume_remark_add('添加备注',url_string,'telephone');
+    });
+})
+
+/*添加一条备注信息*/
+/* function resume_remark_add(title,url,w,h){
+	layer_show(title,url,w,h);
+} */
+
+/*添加一条备注信息*/
+function resume_remark_add(title,url,w,h){
+	layer.open({
+		type : 2,
+		area : [ w, h ],
+		offset: 'rb', //右下角弹出
+		fix : true,	// true不固定，false固定
+		//fixed : false, // fixed true或者false都不固定，说明HUI框架fixed标签不好使，fixed是layer中默认写法
+		//fixed: false,	//默认：true 即鼠标滚动时，层是否固定在可视区域。如果不想，设置fixed: false即可
+		maxmin : true,
+		shade: [0.1,'#fff'], //0.1透明度的白色背景
+		title : title,
+		content : [url, 'no'],
+		//scrollbar: true
+	});
+}
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

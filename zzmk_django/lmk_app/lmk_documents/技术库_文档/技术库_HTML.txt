@@ -1,0 +1,11 @@
+
+HTML
+#	表格让文本不换行
+<th class="text-l va-t" nowrap="nowrap">工作经历：</th>
+<td>
+	#	本本强制换行与不换行
+	<div style="word-break:break-all;">
+		#	<pre>标签是保留文本中得空格及换行符等
+		<pre>{{work_experience}}</pre>
+	</div>
+</td>

@@ -1,0 +1,121 @@
+{% load static %}
+<!DOCTYPE HTML>
+<!-- 这个页面用来添加新的公司  -->
+<html>
+{% include '../../common_html/_header.html' %}
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'Hui-iconfont/1.0.8/iconfont.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui/css/H-ui.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui.admin/css/H-ui.admin.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'my-css/client/company_add.css' %}" />
+<title>Hi，H-ui v3.1</title>
+<meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+<meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+<!--  <style>
+		button{
+			border-radius:20px;}
+		#save-from{
+		 margin-left:267px;}
+		textarea{
+			text-indent:15px;
+			resize:none ;
+			border-radius:10px;}
+		textarea:hover{
+			border-color:#f40;}
+		.modle_div {
+		/*这个是模块的css样式*/ 
+			border-bottom: solid 1px transparent;
+		    padding: 8px 15px;
+		    font-size: 14px;
+		    font-weight: 700;
+		    margin-bottom: -1px;
+		    
+		    background-color:#eee;
+		    }
+		/*将需要同行显示的div改为块级元素,也可以使用float*/
+		
+		.many_div{
+					display:inline-block;
+				}
+		.button_div{
+					text-align:right;
+		        }
+		
+<!--这是每个模块的样式-->
+</style>
+</head>
+<body>
+<article class="page-container">
+	<form action="" method="post" class="form form-horizontal" id="form-register">
+			<div class="row cl">
+				<label class="form-label col-xs-3"><span class="c-red">*</span>职位名称：</label>
+				<div class="formControls col-xs-8">
+					<input type="text" class="input-text" placeholder="2~16个字符，字母/中文/数字/下划线" name="position_name" id="position_name"  required>
+				</div>
+			</div>	
+			<div class="row cl">
+				<label class="form-label col-xs-3"><span class="c-red">*</span>职位名称：</label>
+				<div class="formControls col-xs-8">
+					<input type="text" class="input-text" placeholder="2~16个字符，字母/中文/数字/下划线" name="position_name" id="position_name"  required>
+				</div>
+			</div>	
+			<div class="row cl">
+				<label class="form-label col-xs-3"><span class="c-red">*</span>职位名称：</label>
+				<div class="formControls col-xs-8">
+					<input type="text" class="input-text" placeholder="2~16个字符，字母/中文/数字/下划线" name="position_name" id="position_name"  required>
+				</div>
+			</div>	
+			<div class="row cl">
+				<label class="form-label col-xs-3"><span class="c-red">*</span>职位名称：</label>
+				<div class="formControls col-xs-8">
+					<input type="text" class="input-text" placeholder="2~16个字符，字母/中文/数字/下划线" name="position_name" id="position_name"  required>
+				</div>
+			</div>	
+			
+			
+	<!-- 	<div class="row cl modle_div many_div" id="model2"> 
+		联系人:
+		</div>	
+		<div id="add_div"></div>
+		<div class="row cl">
+			<div class="formControls col-xs-8 button_div many_div" >
+					<button class="btn btn-primary " type="button" id="add-button" value="">&nbsp;&nbsp;添加其他联系人&nbsp;&nbsp;</button>
+			</div>
+		</div>-->
+		<div class="row cl">
+			<div class="col-xs-8 col-xs-offset-3">
+			   <button class="btn btn-default " type="button" id="add-button">&nbsp;&nbsp;添加职位&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+{% include '../../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'h-ui/js/H-ui.js' %}"></script>
+<script type="text/javascript" src="{% static 'layer/2.4/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/validate-methods.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/messages_zh.js' %}"></script>
+<script type="text/javascript" src="{% static 'My97DatePicker/4.8/WdatePicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'webuploader/0.1.5/webuploader.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/1.4.3/ueditor.config.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/1.4.3/ueditor.all.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/1.4.3/lang/zh-cn/zh-cn.js' %}"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var company_name="{{ company_name|safe }}";
+		var contact_name="{{ contact_name|safe }}";
+	});
+
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

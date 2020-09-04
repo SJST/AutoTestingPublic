@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../common_html/_header.html' %}
+<body>
+<div class="page-container">
+	<div class="cl pd-5 bg-1 bk-gray">
+		<span class="l">
+			<a href="javascript:;" onclick="prompt_message_batch_del()" class="btn btn-danger radius" style="pointer-events:none" id="batch_del"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+		</span>
+		
+		<span class="r pt-5"><strong id='unread_count'><font color="red">{{unread_count}}</font></strong> 条未处理</span>
+		<span class="r pt-5"><strong id='read_count'>{{read_count}}</strong> 条已处理<span class="pipe">|</span></span>
+		<span class="r pt-5">共有 <strong>{{result_count}}</strong> 条信息<span class="pipe">|</span></span>
+	</div>
+	
+	<br>
+	<div id="result_info_null" style="display:none"><p>暂无记录</p></div>
+	<div id="result_info" style="display:none">
+        <table id="data_table" class="table table-border table-bordered table-hover table-bg">
+            <thead>
+            	<tr>
+					<th scope="col" colspan="8">信息管理</th>
+				</tr>
+                <tr id="tr_head" class="text-c">
+                	<th width="25"><input type="checkbox" value="" name="" disabled="true"></th>
+                	<th width="100" data-title="register_real_name" style="text-align:center;font-weight:bold;">真实姓名</th>
+                	<th width="100" data-title="login_name" style="text-align:center;font-weight:bold;">登陆昵称</th>
+                	<th width="200" data-title="comment" style="text-align:center;font-weight:bold;">信息内容</th>
+                    <th width="200" data-title="date_string" style="text-align:center;font-weight:bold;">信息时间</th>
+                    <th width="80" data-title="account_status" style="text-align:center;font-weight:bold;">账号状态</th>
+                    <th width="70" data-title="open_operation" style="text-align:center;font-weight:bold;">操作</th>
+                    <th width="50" data-title="del_operation" style="text-align:center;font-weight:bold;">删除</th>
+                </tr>
+            </thead>
+            <tbody id="tbody_result">
+            </tbody>
+        </table>
+        <br>
+    </div>
+</div>
+
+{% include '../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/validate-methods.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/messages_zh.js' %}"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+	
+	// 判断是否有数据，有数据则动态创建表格显示
+	if({{result_count}} > 0){
+		var result_json_obj = {{result_json|safe}};
+		
+		// 输出对象类型的字符串，方便debug
+		//alert(JSON.stringify(result_json_obj));
+		
+		$("#tbody_result").empty();
+
+        $.each(result_json_obj, function(i,item){
+        	
+        	if(!item.del_flag){
+        		var tr=$('<tr class="text-c"></tr>');
+            	
+            	var account_status;
+            	var button_class;
+            	var button_disabled;
+            	var button_value;
+            	
+            	if(item.read_status){
+            		account_status = '<span class="label label-success radius">已启用</span>';
+            		button_value = "已开通";
+            		
+            		button_class = ' class="btn btn-default radius" style="pointer-events:none"';
+            		//button_class = ' class="hui-button hui-button-large"';
+            		button_disabled = ' disabled="disabled"';
+            	}else{
+            		account_status = "等待通过";
+            		button_value = "开&nbsp;&nbsp;&nbsp;通";
+            		
+            		button_class = ' class="btn btn-primary radius" style="pointer-events:auto"';
+            		button_disabled = '';
+            	}
+            	
+        	    tr.append(
+        	    		'<td width="25"><input type="checkbox" value="' + item.register_real_name + '" name="check"></td>' + 
+        	    		'<td width="100" id="register_real_name" class="c-primary">'+ item.register_real_name + '</td>' + 
+        	    		'<td width="100" id="login_name">'+ item.login_name + '</td>' + 
+        	    		'<td width="200" id="comment">' + item.comment + '</td>' + 
+        	    		'<td width="200" id="date_string">'+ item.date_string + '</td>' + 
+        	    		'<td width="80" id="account_status">'+ account_status + '</td>' + 
+        	    		'<td width="70">' + 
+    		    			'<button type="button"' + button_class + ' id="open_button"' + button_disabled + '>' + button_value + '</button>' + 
+    		    		'</td>' + 
+        	    		'<td width="50">' + 
+        	    			'<a title="删除" href="javascript:;" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>' + 
+        	    		'</td>');
+        	    $("#tbody_result").append(tr);
+        	}
+        });
+		
+		$('#result_info').show();
+		$('#result_info_null').hide();
+	}else{
+		$('#result_info').hide();
+		$('#result_info_null').show();
+	}
+	
+	// 有至少一个checkbox checked，批量删除按钮样式变为可用，否则不可用
+	$('input:checkbox').click(function(){
+		//$('input:checkbox:checked').parents("tr").remove();
+		
+		if($("input[type='checkbox']:checked").length>0){
+			$("a[id='batch_del']").attr("disabled", false);
+			$("a[id='batch_del']").css("pointer-events","auto");
+		}else{
+			$("a[id='batch_del']").attr("disabled", true);
+			$("a[id='batch_del']").css("pointer-events","none");
+		}
+	})
+	
+	$("#tbody_result").on("click", "button", function(){
+		var login_name = $(this).parents("tr").find("#login_name").text();
+		var register_real_name = $(this).parents("tr").find("#register_real_name").text();
+		
+		var open_account_params_dict = {};
+		
+		open_account_params_dict['register_login_name'] = login_name;
+		
+		var this_obj = $(this);
+		
+		var unread_count = {{unread_count}};
+		var read_count = {{read_count}};
+		
+		$.ajax({
+			type: 'POST',
+			url: "{% url 'prompt-register-authorize' %}",
+			data: open_account_params_dict,
+			success: function(ret){
+				if(ret == 'success'){
+					this_obj.parents("tr").find("#account_status").text('已启用');
+					this_obj.parents("tr").find("#open_button").text("已开通");
+					this_obj.parents("tr").find("#open_button").attr("disabled", true);
+					this_obj.parents("tr").find("#open_button").css("pointer-events","none");
+					
+					unread_count -= 1;
+					read_count += 1;
+					
+					$("#read_count").text(read_count);
+					$("#unread_count font").text(unread_count);
+					
+					parent.$('#unread').text(unread_count);
+					location.reload();
+				}
+			}
+		});
+    });
+	
+	$("#tbody_result").on("click", "a[title='删除']", function(){
+		var del_register_real_name = $(this).parents("tr").find("#register_real_name").text();
+		
+		var button_status = $(this).parents("tr").find("#open_button").attr("disabled");
+		
+		if(del_register_real_name){
+			prompt_message_del(del_register_real_name, button_status);
+			//$(this).parents("tr").remove();
+		}else{
+			alert("del error");
+		}
+    });
+})
+
+/*管理员提示信息-批量删除*/
+function prompt_message_batch_del(){
+	// $('input:checkbox:checked') 等同于 $('input[type=checkbox]:checked')
+    // 意思是选择被选中的checkbox
+    
+    //var register_real_name_array = [];
+	
+	var register_real_name_dict = {};
+	var undisabled_count = 0;
+    $.each($('input:checkbox:checked'),function(){
+        //window.alert("你选了："+$('input[type=checkbox]:checked').length+"个，其中有："+$(this).val());
+        
+    	//register_real_name_array.push($(this).val());
+    	
+    	register_real_name_dict[$(this).val()] = 1;
+    	
+    	var button_status = $(this).parents("tr").find("#open_button").attr("disabled");
+    	if(button_status != 'disabled'){
+    		undisabled_count += 1;
+    	}
+    });
+    
+    var unread_count = {{unread_count}};
+    
+    layer.confirm('角色删除须谨慎，确认要删除吗？', {icon: 2, title:'批量删除'}, function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{% url 'prompt-message-del' %}",
+			data: register_real_name_dict,
+			success: function(ret){
+				if(ret.status == 'success'){
+					/* var del_count = ret.del_count;
+					var remain_count = unread_count - del_count;
+					parent.$('#unread').text(remain_count);
+					location.reload(); */
+					
+					var remain_count = unread_count - undisabled_count;
+					parent.$('#unread').text(remain_count);
+					location.reload();
+				}
+			}
+		});
+	});
+}
+/*管理员提示信息-删除*/
+function prompt_message_del(del_register_real_name, button_status){
+	var register_real_name_dict = {};
+	register_real_name_dict[del_register_real_name] = 1;
+	
+	var unread_count = {{unread_count}};
+	
+    layer.confirm('角色删除须谨慎，确认要删除吗？', {icon: 2, title:'删除'}, function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{% url 'prompt-message-del' %}",
+			data: register_real_name_dict,
+			success: function(ret){
+				if(ret.status == 'success'){
+					if(button_status != 'disabled'){
+						var del_count = ret.del_count;
+						var remain_count = unread_count - del_count;
+						parent.$('#unread').text(remain_count);
+					}
+					location.reload();
+				}
+			}
+		});
+	});
+}
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

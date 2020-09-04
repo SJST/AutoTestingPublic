@@ -1,0 +1,464 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../../common_html/_header.html' %}
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<link rel="stylesheet" type="text/css" href="{% static 'Hui-iconfont/1.0.8/iconfont.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui/css/H-ui.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui.admin/css/H-ui.admin.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui/mycss/jquery_ui.css' %}" />
+<title>Hi，H-ui v3.1</title>
+<meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+<meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+
+<style>
+		.modle_div { 
+				width:200px;
+				display:inline-block;
+				text-align:right;
+				font-size: 20px;
+				font-weight: 700;}
+		.many_div{
+					display:inline-block;
+				}
+<!--这是每个模块的样式-->
+</style>
+</head>
+<body>
+<div class="containBox">
+	<div class="container ui-sortable">
+		<!-- <h1>知识词典，属于我自己的学习目标</h1>
+		<p>开始学习之旅！</p>-->
+		<div class="panel panel-default">
+			<div class="panel-header">添加职位</div>
+			
+			<br>
+				<form action="{% url 'position-add' %}" method="post" class="form form-horizontal" id="form-register">		
+					  <div class="row cl">
+						<label class="form-label col-xs-3"><span class="c-red">*</span>公司名称：</label>
+						<div class="formControls col-xs-6 many_div">
+							<input type="text" class="input-text" placeholder="2~16个字符，字母/中文/数字/下划线" name="company_name" id="company_name"  required>
+						</div>
+						<a class="btn btn-primary radius" onclick="company_add('添加公司','company-add',920)" href="javascript:;"><i class="Hui-iconfont"></i> 新增公司</a>
+					</div>
+					
+				  	<div class="row cl">
+						<label class="form-label col-xs-3"><span class="c-red">*</span>职位名称：</label>
+						<div class="formControls col-xs-8 ">
+							<input type="text" class="input-text" placeholder="" name="position_name" id="position_name"  required>
+						</div>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-3"><span class="c-red">*</span>年薪范围：</label>
+							&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="min_salary" id="min" class="input-text " style="width:180px;" required>	
+							-
+							<input type="text" name="max_salary" id="max" class="input-text " style="width:180px;" required>
+					</div>
+					<div class="row cl">
+						<label class="form-label col-xs-3"><span class="c-red">*</span>工作城市：</label>
+						<div class="formControls col-xs-8 ">
+							<input type="text" class="input-text" placeholder="" name="work_city" id="work_city"  required>
+						</div>
+					</div>
+		
+			<div class="row cl">
+				<label class="form-label col-xs-3">职能分类：</label>
+				<div class="formControls col-xs-2" style="display:block" >
+					<select  class="select" size="1" name="position_class" id="position_class" >
+	  					<option value="1" selected="selected">请选择一级分类 </option>
+					</select>
+					
+				</div>
+			
+			
+				
+				<div class="formControls col-xs-2"  style="display:inline-block" >
+					<select  class="select" size="1" name="second_class" id="second_class" >
+	  					<option value="请选择二级分类 " selected="selected">请选择二级分类 </option>
+					</select>	
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">预计佣金：</label>
+					<div class="formControls col-xs-8">
+							<input type="text" class="input-text" placeholder="" name="estimate_commission" id="estimate_commission"  >
+					</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">工作年限：</label>
+				<div class="formControls col-xs-2" style="display:inline-block" >
+					<select  class="select" size="1" name="Working_life">
+	  					<option value="10年以上">10年以上 </option>
+	  					<option value="5-10年">5-10年</option>
+	  					<option value="3-5年">3-5年</option>
+	  					<option value="1-3年">1-3年</option>
+	  					<option value="1年以下" selected = "selected" >1年以下</option>
+	  					
+					</select>
+				</div>
+			
+			
+			
+				<label class="form-label col-xs-3">学历要求：</label>
+				<div class="formControls col-xs-2"  style="display:inline-block" >
+					<select  class="select" size="1" name="Academic_requirements">
+	  					<option value="博士">博士 </option>
+	  					<option value="博士后">博士后</option>
+	  					<option value="硕士 ">硕士 </option>
+	  					<option value="本科 " selected = "selected" >本科 </option>
+	  					<option value="大专">大专</option>
+	  					<option value="高中">高中</option>
+	  					<option value="中专">中专</option>
+	  					<option value="初中">初中</option>
+	  					<option value="无">无</option>
+	  					<option value="MBA">MBA</option>
+	  					
+					</select>
+					
+				</div>
+			</div>
+			<div class="row cl">
+				
+				<label class="form-label col-xs-3">年龄要求：</label>
+				<div class="formControls  col-sm-2 "  style="display:inline-block" >
+					<select  class="select" size="1" name="Age_requirements">
+	  					<option value="20-25岁">20-25岁 </option>
+	  					<option value="25-30岁">25-30岁</option>
+	  					<option value="30-35岁 ">30-35岁 </option>
+	  					<option value="35-40岁 " selected = "selected" >35-40岁 </option>
+	  					<option value="40-45岁">40-45岁</option>
+	  					<option value="45-50岁"> 45-50岁</option>
+	  					<option value="50岁以上">50岁以上</option>
+					</select>
+					
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">性别要求：</label>
+					<div class="formControls col-xs-8 col-sm-9 skin-minimal">
+						<div class="radio-box">
+							<label for="gender-1">男</label>
+							<input type="radio" id="gender-1" name="gender" value="男" checked>
+						</div>
+						<div class="radio-box">
+							<label for="gender-2">女</label>
+							<input type="radio" id="gender-2" value="女" name="gender">
+						</div>
+						<div class="radio-box">
+							<label for="gender-3">保密</label>
+							<input type="radio" id="gender-3" value="保密" name="gender">
+						</div>
+					</div>
+				</div>
+				<div class="row cl">
+				<label class="form-label col-xs-3">工作职责：</label>
+				<div class="formControls col-xs-2 ">
+					<textarea name="work_duty" rows="5" cols="100" placeholder="请输入工作职责"></textarea>
+				</div>
+				</div>	
+				<div class="row cl">
+				<label class="form-label col-xs-3">任职资格：</label>
+				<div class="formControls col-xs-2 ">
+					<textarea name="qualifications" rows="5" cols="100" placeholder="请输入任职资格"></textarea>
+				</div>
+				</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">B D归属：</label>
+				<div class="formControls col-xs-2" style="display:inline-block" >
+					<select  class="select" size="1" name="ascription" id="ascription" >
+	  					<option value="1" selected="selected">请选择用户 </option>
+					</select>
+				</div>
+				<label class="form-label col-xs-3">负责顾问：</label>
+				<div class="formControls col-xs-2"  style="display:inline-block" >
+					<select  class="select" size="1" name="adviser" id="adviser" >
+	  					<option value="请选择二级分类 " selected="selected">请选择用户 </option>
+					</select>	
+				</div>
+			</div>
+			<div class="row cl">
+				
+				<label class="form-label col-xs-3">参与人员：</label>
+				<div class="formControls  col-sm-2 "  style="display:inline-block" >
+					<select  class="select" size="1" name="participant" id="participant">
+	  					<option value="20-25岁">请选择用户 </option>
+	  				</select>
+	  			</div>	
+	  		</div>
+	  		<div class="row cl">
+				<label class="form-label col-xs-3">部门信息：</label>
+				<div class="formControls col-xs-2 ">
+					<textarea name="department_info" rows="3" cols="100" placeholder="请输入部门信息"></textarea>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">面试流程：</label>
+				<div class="formControls col-xs-2 ">
+					<textarea name="Interview_process" rows="3" cols="100" placeholder="请输入面试流程"></textarea>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">背景要求：</label>
+				<div class="formControls col-xs-2 ">
+					<textarea name="Background" rows="3" cols="100" placeholder="请输入背景要求"></textarea>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">寻访建议：</label>
+				<div class="formControls col-xs-2 ">
+					<textarea name="Seeking_advice" rows="3" cols="100" placeholder="请输入寻访建议"></textarea>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">其他信息：</label>
+				<div class="formControls col-xs-2 ">
+					<textarea name="other_info" rows="3" cols="100" placeholder="请输入其他信息"></textarea>
+				</div>
+			</div>
+			<div class="row cl">
+				<div class="col-xs-8 col-xs-offset-3">
+					<button class="btn btn-primary" type="submit" id="register" value="">&nbsp;&nbsp;添加&nbsp;&nbsp;</button>
+					<!--  <button class="btn btn-primary" type="button" id="add-button" value="">&nbsp;&nbsp;添加其他联系人&nbsp;&nbsp;</button>-->
+				</div>
+			</div>
+		</form>	
+      </div>
+    </div>
+ </div>
+	
+</body>
+
+<!--请在下方写此页面业务相关的脚本-->
+
+
+
+
+<script type="text/javascript" src="{% static 'jquery/1.9.1/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery/1.9.1/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery-ui/1.9.1/jquery-ui.min.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'layer/2.4/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/validate-methods.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/messages_zh.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui/js/H-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'My97DatePicker/4.8/WdatePicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'webuploader/0.1.5/webuploader.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/1.4.3/ueditor.config.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/1.4.3/ueditor.all.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/1.4.3/lang/zh-cn/zh-cn.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui.admin/js/H-ui.admin.js' %}"></script>
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		var test_num=1
+		$.ajax({
+        	async: false,
+        	url:"{% url 'newCompany-ajax' %}",
+        	type:'GET',
+        	dataType: 'json',
+        	data:{'test_num':test_num},
+        	success:function(ret){
+        		//这个是jquery-ui autocomplete
+        		var name_list=[];
+        	
+        		$.each(ret, function(i,item){
+        			name_list.push(item.company_name)
+        			//自动填充地址信息
+        			 $("#company_name").blur(function(){
+        				 var company_name=$("#company_name").val();
+        				  if (company_name!=''){
+        					  if (company_name==item.company_name){
+        						  var work_city=item.company_address;
+        						  document.getElementById("work_city").value = work_city;
+        					  }
+        				  } 
+        				  else{
+        					  layer.msg('公司名称不能为空! ',{icon:2,time:1000}
+    			        	  
+    			        	  );
+        				  }
+        			 });
+   							
+        	    });
+        		$(function(){
+        			
+        			$( "#company_name" ).autocomplete({
+        				
+        			      source: name_list,
+        			      
+        			      messages:{
+        			          noResults:function(){
+        			        	  layer.msg('没有与该关键字匹配的公司！',{icon:2,time:1000}
+        			        	  
+        			        	  );
+        			        	
+        			          },
+        			          results:function(){
+        			        	  
+        			          }}
+        			    });
+        			    
+        		});
+        	}	
+        
+     });
+});
+  function company_add(title,url,w,h){
+		layer_show(title,url,w,h);
+  }
+  //薪资判断
+  $("#max").blur(function(){
+	 var max_salary=parseInt($("#max").val());
+	 var min_salary=parseInt($("#min").val());
+	 if (max_salary<=min_salary||max_salary<0||min_salary<0){
+		 layer.msg('薪资范围不正确！',{icon:2,time:1000})
+		 }
+		 
+	
+	 
+  });
+  //佣金判断
+  $("#estimate_commission").blur(function(){
+	 var estimate_commission=parseInt($("#estimate_commission").val());
+	
+	 if (estimate_commission<=0){
+		 layer.msg('佣金格式不正确！',{icon:2,time:1000})
+		 }
+  });
+  //选择下拉时候变色
+  $("#ui-id-1").change(function(){
+	  $(this).css("background-color","#FFFFCC");
+  });
+  //获取所有的一级职能分类
+  $(function(){
+	  var ID=1;
+	  $.ajax({
+      	async: false,
+      	url:"{% url 'frist-class' %}",
+      	type:'GET',
+      	dataType: 'json',
+      	data:{'ID':ID},
+      	success:function(data){
+		  var frist_list=[];
+		  position_class=$("#position_class")
+		  
+  		$.each(data, function(c,item){
+  			//frist_list.push(item.frist_level)
+  			option_str = '<option value="'+item.frist_level+'">'+item.frist_level+ '</option>'
+  			position_class.append(option_str)
+	  });
+		  //二级联动
+		  $("#position_class").change(function(){
+			  second_class=$("#second_class")
+			  second_class.empty().append('<option value="'+"请选择二级分类"+'">'+"请选择二级分类"+ '</option>')
+			  class_value=$(this).val();
+			  $.each(data,function(d,items){
+				 if(items.frist_level==class_value){
+					 var strlist=(items.second_level).split(",")
+					  if (typeof (strlist)=='object'){
+						  $.each(strlist, function(f,second_level){
+							  second_option= '<option value="'+second_level+'">'+second_level+ '</option>'
+							  second_class.append(second_option)
+					  });
+					  }
+					//second_option= '<option value="'+item.second_level+'">'+item.second_level+ '</option>'
+				 }
+			  });
+		  });
+  		
+	  }
+  });
+  });
+ 	//自动获取下拉菜单
+ 	$(function(){
+	  var pacter=1;
+	  $.ajax({
+      	async: false,
+      	url:"{% url 'users-select' %}",
+      	type:'GET',
+      	dataType: 'json',
+      	data:{'pacter':pacter},
+      	success:function(user){
+      		ascription=$("#ascription")
+      		adviser=$("#adviser")
+      		participant=$("#participant")
+      		$.each(user, function(e,item){
+      			name_str = '<option value="'+item.real_name+'">'+item.real_name+ '</option>'
+      			ascription.append(name_str)
+      			adviser.append(name_str)
+      			participant.append(name_str)
+      		
+      			
+    	  });
+      		
+      		}
+	  	});
+ 	});
+ 	$(function(){
+ 		$('.skin-minimal input').iCheck({
+ 			checkboxClass: 'icheckbox-blue',
+ 			radioClass: 'iradio-blue',
+ 			increaseArea: '20%'
+ 		});
+ 		
+ 		var ajax_option={
+ 			success:function(ret){
+ 				/* alert("添加成功");
+ 				alert(ret);
+ 				alert(typeof(ret)); */
+ 				
+ 				if(ret == 'success'){
+ 	        		var index = parent.layer.getFrameIndex(window.name);
+ 	        		layer.alert('请联系你的leader开通账号!', {title:'注册成功', icon:1}, function(index){
+ 	        			parent.layer.close(index);
+ 	        		});
+ 	        	}else{
+ 	        		alert("注册失败");
+ 	        	}
+ 				
+ 			}
+ 		}
+ 		
+ 		$("#form-register").validate({
+ 			rules:{
+ 				login_name:{
+ 					required:true,
+ 					minlength:4,
+ 					maxlength:12
+ 				},
+ 				password:{
+ 					required:true,
+ 					minlength:6,
+ 					maxlength:12
+ 				},
+ 				real_name:{
+ 					required:true,
+ 				},
+ 				telephone:{
+ 					required:true,
+ 					isMobile:true,
+ 				},
+ 				email:{
+ 					required:true,
+ 					email:true,
+ 				},
+ 			},
+ 			onkeyup:false,
+ 			focusCleanup:true,
+ 			success:"valid",
+ 			submitHandler:function(form){
+ 				/* alert("完成验证"); */
+ 				$(form).ajaxSubmit(ajax_option);
+ 			}
+ 		});
+ 	});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

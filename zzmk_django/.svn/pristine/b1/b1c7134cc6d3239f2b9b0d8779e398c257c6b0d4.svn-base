@@ -1,0 +1,5 @@
+
+python3 时间格式化问题
+	datetime类型，time类型
+	format_time_string1 = user_obj_dict.get('create_time').isoformat()
+    format_time_string = user_obj_dict.get('create_time').date().isoformat()

@@ -1,0 +1,74 @@
+﻿{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../common_html/_header.html' %}
+<body>
+<article class="page-container">
+	<form action="{% url 'admin-permission-add' %}" method="post" class="form form-horizontal" id="form-admin-permission-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>权限名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{{permission_name}}" placeholder="" id="permission_name" name="permission_name" required>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">描述：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{{permission_description}}" placeholder="" id="permission_description" name="permission_description">
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius" id="admin-permission-save" value="{{permission_name}}" name="old-permission-name"><i class="icon-ok"></i> 确定</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+{% include '../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/validate-methods.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/messages_zh.js' %}"></script>
+<script type="text/javascript">
+
+$(function(){
+	var ajax_option={
+		success:function(ret){
+			
+			if(ret == 'success'){
+        		var index = parent.layer.getFrameIndex(window.name);
+        		
+        		// 刷新父页面
+        		parent.location.reload();
+    			parent.layer.close(index);
+        	}else{
+        		alert("添加失败");
+        	}
+		}
+	}
+	
+	$("#form-admin-permission-add").validate({
+		rules:{
+			permission_name:{
+				required:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			/* alert("完成验证"); */
+			$(form).ajaxSubmit(ajax_option);
+		}
+	});
+	
+	$("#reset").click(function() {
+        validator.resetForm();
+    });
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

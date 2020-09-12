@@ -1,0 +1,88 @@
+<!--这是公司列表的css样式表-->
+*{
+	margin:0;
+	padding:0;
+}
+ #table_head th,td{
+	    text-align:center;}
+.button_class{
+		text-align:right;}
+.top-warp{
+	width:1270px;
+	height:121px;
+	
+	
+}
+.search-li{
+	width:400px;
+	height:22px;
+	margin:0 auto;
+}
+.search-li li{
+	border-top-right-radius: 6px;
+	border-top-left-radius: 6px;
+	width:36px;
+	hight:22px;
+	float:left;
+	line-height: 22px;
+	margin-right: 4px;
+	margin-top: 4px;
+	cursor: pointer;
+	text-align:center;
+	background-color: #fff;
+	color:#f40;
+	
+}
+.search-li li:hover{
+	color:#fff;
+	background-color: #ff5000;
+}
+.search-div{
+	margin:0 auto;
+	width:400px;
+	height:31px;
+	
+	
+}
+.search{
+	width:400px;
+	height:31px;
+	position: relative;
+	
+}
+.search-industy{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display:none;	
+}
+.search-city{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display:none;	
+}
+.search-class{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display:none;	
+}
+#reset{
+	margin-top:15px;
+	width:1168px;
+	height:31px;
+	position:relative;
+	
+}
+#reset_button{
+	position:absolute;
+	left:25px;
+	
+}

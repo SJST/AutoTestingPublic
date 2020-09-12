@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>注册</title>
+</head>
+<body>
+	<span>姓名：</span><input type="text" class="input-text" value="name" id="username">
+	<button type="button" class="btn btn-success radius" id='search-button'>搜用户</button>
+	<br>
+	<button type="button" class="page-btn">1</button>
+	<button type="button" class="page-btn">2</button>
+	<button type="button" class="page-btn">3</button>
+	<button type="button" class="page-btn">4</button>
+	<button type="button" class="page-btn">5</button>
+	
+	<form action="/register/" method="get">
+		<span>登录昵称：</span><input type="text" class="input-text" value="CESC" name="login_name" id="login_name">
+		<span id="hidden_check">111</span>
+		<br>
+		<span>真实姓名：</span><input type="text" class="input-text" name="real_name" id="real_name">
+		<br>
+		<button type="submit" class="btn radius" id='register-button'>注册</button>
+	</form>
+</body>
+<script src="https://cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
+<script language="javascript">
+$(document).ready(function(){
+	$('#hidden_check').hide();
+	$('#login_name').blur(function(){
+		var login_name = $('#login_name').val();
+		$.ajax({
+            async: false,
+            url:"{% url 'check-exist' %}",
+            type:'GET',
+            dataType: 'json',
+            data:{'login_name':login_name},
+            success:function(ret){
+            	if(ret.status){
+            		$('#hidden_check').text("不可用");
+            	}else{
+            		$('#hidden_check').text("可用");
+            	}
+            	$('#hidden_check').show();
+            }
+        });
+	})
+	
+	$('#login_name').focus(function(){
+		$('#hidden_check').text("");
+		$('#hidden_check').hide();
+	})
+	
+	$('#search-button').click(function(){
+		var login_name = $('#login_name').val();
+		alert(login_name);
+		$('#hidden_check').show();
+		$.ajax({
+            async: false,
+            url:"{% url 'check-exist' %}",
+            type:'GET',
+            dataType: 'json',
+            data:{'login_name':login_name},
+            success:function(ret){
+            	alert(1111);
+            }
+        });
+	})
+	
+	$('.page-btn').click(function(){
+		var page_num = $(this).html();
+		alert(page_num);
+		$.ajax({
+            async: false,
+            url:"{% url 'show-data' %}",
+            type:'GET',
+            dataType: 'json',
+            data:{'page_num':page_num},
+            success:function(ret){
+            	alert(1111);
+            	//$('#username').val(ret.user)
+            }
+        });
+	})
+})
+
+
+</script>
+</html>

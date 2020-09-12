@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../common_html/_header.html' %}
+<body>
+<div class="page-container">
+	<div id="result_info">
+        <table id="data_table" class="table">
+            <tr>
+				<th class="text-r">用户名：</th>
+				<td>{{DB_mark}}</td>
+			</tr>
+			<tr>
+				<th class="text-r">密码：</th>
+				<td>{{DB_password}}</td>
+			</tr>
+			<!-- <tr>
+				<th class="text-r">积分：</th>
+				<td>330</td>
+			</tr> -->
+        </table>
+        <br>
+    </div>
+</div>
+
+{% include '../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/validate-methods.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/messages_zh.js' %}"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+	
+})
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

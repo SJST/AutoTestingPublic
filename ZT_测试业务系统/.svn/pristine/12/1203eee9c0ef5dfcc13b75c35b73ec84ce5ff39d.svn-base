@@ -1,0 +1,95 @@
+'''
+Created on 2018-11-8
+
+@author: P0044185
+'''
+
+# coding=utf-8
+import os
+import sys
+import importlib
+importlib.reload(sys)
+
+from pdfminer.pdfparser import PDFParser, PDFDocument
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.converter import PDFPageAggregator
+from pdfminer.layout import LTTextBoxHorizontal, LAParams
+from pdfminer.pdfinterp import PDFTextExtractionNotAllowed
+
+from lmk_app.lmk_tools.resume_tools.string_process import space_process
+from lmk_app.lmk_tools.resume_tools.string_process import recursive_process_UnicodeEncodeError
+from lmk_app.lmk_tools.record_logs_tools.process_logs import read_failed_logs, bad_code_collection_read
+from lmk_app.lmk_tools.record_logs_tools.process_logs import bad_code_clean
+
+'''
+ 解析pdf 文本，保存到txt文件中
+'''
+
+def read_pdf(resume_file_path, txt_output_path):
+    resume_file = open(resume_file_path, 'rb') # 以二进制读模式打开
+    #用文件对象来创建一个pdf文档分析器
+    praser = PDFParser(resume_file)
+    # 创建一个PDF文档
+    doc = PDFDocument()
+    # 连接分析器 与文档对象
+    praser.set_document(doc)
+    doc.set_parser(praser)
+
+    # 提供初始化密码
+    # 如果没有密码 就创建一个空的字符串
+    doc.initialize()
+
+    # 检测文档是否提供txt转换，不提供就忽略
+    if not doc.is_extractable:
+        raise PDFTextExtractionNotAllowed
+    else:
+        # 创建PDf 资源管理器 来管理共享资源
+        resource_magager = PDFResourceManager()
+        # 创建一个PDF设备对象
+        laparams = LAParams()
+        device = PDFPageAggregator(resource_magager, laparams=laparams)
+        # 创建一个PDF解释器对象
+        interpreter = PDFPageInterpreter(resource_magager, device)
+
+        # 如果写入文件存在，则清空文件或者删除文件
+        if(os.path.exists(txt_output_path)):
+            os.remove(txt_output_path)
+            print('exist and remove')
+
+        # 循环遍历列表，每次处理一个page的内容
+        for page in doc.get_pages(): # doc.get_pages() 获取page列表
+            try:
+                interpreter.process_page(page)
+            except KeyError:
+                error_info_string = str(sys.exc_info())
+                print(resume_file_path + ":" + error_info_string)
+                read_failed_logs(resume_file_path)
+                break
+                
+            # 接受该页面的LTPage对象
+            layout = device.get_result()
+            
+            # 这里layout是一个LTPage对象 里面存放着 这个page解析出的各种对象 一般包括LTTextBox, LTFigure, LTImage, LTTextBoxHorizontal 等等 想要获取文本就获得对象的text属性，
+            for x in layout:
+                if (isinstance(x, LTTextBoxHorizontal)):
+                    
+                    with open(txt_output_path, 'a') as f:  #    , encoding='utf-8'
+                        results = x.get_text()
+                        
+                        all_lines_string = bad_code_collection_read()
+                        results = bad_code_clean(all_lines_string, results)
+                        
+                        results = space_process(results)
+                        
+                        results = recursive_process_UnicodeEncodeError(f, results)
+                        
+                        print(results)
+                        
+    resume_file.close()
+    
+if __name__ == '__main__':
+    #---    for test
+    resume_file_path = 'D:\\ZZMK_LMK_resume_files\\all_resume\\pdf\\产品经理-谢杨-13910383869.pdf'
+    txt_output_path = 'D:\\ZZMK_LMK_resume_files\\all_resume_txt\\产品经理-谢杨-13910383869.txt'
+    read_pdf(resume_file_path, txt_output_path)
+    

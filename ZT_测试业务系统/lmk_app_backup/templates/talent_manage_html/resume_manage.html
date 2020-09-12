@@ -1,0 +1,771 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html>
+{% include '../common_html/_header.html' %}
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 人才管理 <span class="c-gray en">&gt;</span> 简历管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" >刷新当前页面<i class="Hui-iconfont">&#xe68f;</i></a></nav>
+
+<form action="/search_jianli/" method="get">
+	<div class="page-container">
+		<div id="search_info">
+			<fieldset>
+				<legend style="text-align:center;">检索信息</legend>
+				<div class="text-c">
+			        <span>姓名：</span><input type="text" class="input-text" style="width:250px" id="search-name-text">
+			        <span>电话号码：</span><input type="text" class="input-text" style="width:250px" id="search-telephone-text" maxlength="11" oninput="value=value.replace(/[^\d]/g,'')"><br>
+			        <span>职位：</span><input type="text" class="input-text" style="width:250px" id="search-position-text">
+			        <span>公司名称：</span><input type="text" class="input-text" style="width:250px" id="search-company-text"><br><br>
+		        </div>
+		        <div id="button">
+			        <button type="button" class="btn btn-success radius col-md-offset-0" id='add-modify-tab'><a data-title="快捷录入" data-href="{% url 'get-resumeInfo' %}?telephone=" href="javascript:;">快捷录入</a></button>
+			    	<button type="button" class="btn btn-primary radius col-md-offset-4" id='search-reset'>清空搜索框</button>
+			        <button type="button" class="btn btn-success radius col-md-offset-0" id='search-button'><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>
+			    </div>
+			</fieldset>
+	    </div>
+	    <!-- <br>
+		<div class="text-c">
+		    <div id="button">
+		        <button type="button" class="btn btn-success radius" id='add-modify-tab'><a data-title="快捷录入" data-href="{% url 'get-resumeInfo' %}?telephone=" href="javascript:;">快捷录入</a></button><br>
+		    </div>
+		</div> -->
+		<br>
+		<div id="search_result_null" style="display:none"><p>无相关信息</p></div>
+		<div id="search_result" style="display:none">
+	        <table id="data_table" class="table table-border table-bordered table-hover table-bg table-sort" style="table-layout:fixed;">
+	            <thead>
+	                <tr id="tr_head" class="text-c">
+	                	<!-- width，代码里的数，比页面F12选择器里的数小17，另，页面表格中的input，与td之间会有内距 -->
+	                    <th width="80" data-title="name" style="text-align:center;font-weight:bold;">名字</th>
+	                    <th width="40" data-title="age" style="text-align:center;font-weight:bold;">年龄</th>
+	                    <th width="40" data-title="gender" style="text-align:center;font-weight:bold;">性别</th>
+	                    <th width="100" data-title="telephone" style="text-align:center;font-weight:bold;">电话</th>
+	                    <th width="230" data-title="company" style="text-align:center;font-weight:bold;">公司</th>
+	                    <th width="130" data-title="position" style="text-align:center;font-weight:bold;">职位</th>
+	                    <th width="180" data-title="first_upload_info" style="text-align:center;font-weight:bold;">最早上传时间</th>
+	                    <th width="180" data-title="last_update_info" style="text-align:center;font-weight:bold;">最后更新时间</th>
+	                    <!-- <th width="100" data-title="new_remark" style="text-align:center;font-weight:bold;">最新备注</th> -->
+	                </tr>
+	            </thead>
+	            <tbody id="tbody_result">
+	            </tbody>
+	        </table>
+	        <br>
+	        <div id="pagination_div">
+	            <div id="show_page_count_div">
+	            	共 <span id="total_page">...</span> 页
+	            </div>
+	            <div id="show_total_count_div">
+	               	 共 <span id="total_count">...</span> 条记录
+	            </div>
+	            <div id="pageGro">
+	                <div class="pageUp">上一页</div>
+	                <div class="pageList">
+	                    <ul></ul>
+	                </div>
+	                <div class="pageDown">下一页</div>
+	                <div id="jump">
+	                    <input type="button" value="跳到" id="jump_button" disabled="disabled"/>
+	                    <input id="jump_to_pageNum" maxlength="4" oninput="value=value.replace(/[^\d]/g,'')" value=""/><span>页</span>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <br>
+	</div>
+</form>
+<script type="text/javascript" src="{% static 'jquery/1.9.1/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'layer/2.4/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui/js/H-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui.admin/js/H-ui.admin.js' %}"></script>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'jquery.contextmenu/jquery.contextmenu.r2.js' %}"></script>
+<script>
+	$(document).ready(function(){
+		
+		/*选项卡导航 点击简历姓名查看简历信息*/
+		$("#tbody_result").on("click", "td#name a", function(){
+			Hui_admin_tab(this);
+		});
+		
+		/*选项卡导航 点击快捷录入*/
+		$("#button").on("click", "#add-modify-tab a", function(){
+			Hui_admin_tab(this);
+		});
+		
+		// 点击清空搜索框
+	    $("#search_info").on("click", '#search-reset', function(event){
+	        search_reset();
+	    });
+	
+	    // 搜索简历
+	    $(document).keydown(function(event){
+	        if(event.keyCode==13){
+	            $("#search-button").click();
+	            $("#add_submit").click();
+	        }
+	    });
+	
+	    $("#jump_to_pageNum").keydown(function(){
+	        $("#jump_to_pageNum").css("background-color","#FFFFCC");
+	    });
+	    $("#jump_to_pageNum").keyup(function(){
+	        $("#jump_to_pageNum").css("background-color","#D6D6FF");
+	    });
+	
+	    $("#jump_to_pageNum").keyup(function(){
+	        var to_num = parseInt($("#jump_to_pageNum").val());
+	        var total_pages_count = parseInt($("#total_page").text());
+	
+	        if(to_num > total_pages_count){
+	            $("#jump_button").attr('disabled',true);
+	        }else{
+	            $("#jump_button").attr('disabled',false);
+	        }
+	    });
+	
+	    //	此编辑功能已在新版本更新掉了
+	    /* $("#tbody_result").on("click", '#edit_button', function(){
+	        <!--alert($(this).parents("tr").html());-->
+	        <!--alert($(this).parents("tr").find("td").html());-->
+	
+	        var params_obj = {};
+	        $(this).parents("tr").find("td").each(function(i){
+	            if($(this).attr('id') && $(this).attr('id') != undefined){
+	                <!--alert($(this).attr('id'));-->
+	                <!--alert($(this).text());-->
+	                <!--alert($(this).html());-->
+	
+	                if($(this).attr('id') == 'new_remark'){
+	                    <!--alert($(this).find("#all_remark").text());-->
+	                    params_obj[$(this).attr('id')] = $(this).find("#all_remark").text();
+	                }else{
+	                    params_obj[$(this).attr('id')] = $(this).text();
+	                }
+	            }
+	        });
+	
+	        params_obj['search_name'] = $('#search-name-text').val();
+	        params_obj['search_telephone'] = $('#search-telephone-text').val();
+	        params_obj['search_company'] = $('#search-company-text').val();
+	        params_obj['search_position'] = $('#search-position-text').val();
+	        params_obj['per_page_count'] = 10;
+	        params_obj['current_page_num'] = parseInt($("#pageGro ul li.on").html());
+	        <!--alert(params_obj['current_page_num']);-->
+	
+	        add_modify_tab(params_obj);
+	    }); */
+	
+	    $("#tbody_result").on("click", 'span', function(){
+	        var tr_id = $(this).parents("tr").attr("id");
+	//         alert($(this).parents("tr").attr("id"));
+	//         alert($("tr").eq(parseInt(tr_id)+1).find("div").html());
+	        <!--alert($(this).parents("td").html());-->
+	        <!--$(this).parents("td").html('211221122');-->
+	        <!--alert($(this).attr('class'));-->
+	
+	        var show_open = new RegExp("展开");
+	        var show_close = new RegExp("收起");
+	
+	        var tmp_string = $(this).text();
+	        if(show_open.test(tmp_string)){
+	            $("tr").eq(parseInt(tr_id)+1).find("#all").show();
+	            $("tr").eq(parseInt(tr_id)+1).find("#part").hide();
+	        }else if(show_close.test(tmp_string)){
+	            $("tr").eq(parseInt(tr_id)+1).find("#all").hide();
+	            $("tr").eq(parseInt(tr_id)+1).find("#part").show();
+	        }
+	    });
+	
+	    $("#tbody_result").on("click", '#add_submit, #modify_submit', function(){
+	        <!--alert($(this).parents("tr").find("input").val());-->
+	
+	        alert($(this).attr('id'));
+	        var submit_value = $(this).attr('id');
+	        var params_dict = {};
+	        $(this).parents("tr").find("input[name],textarea").each(function(i){
+	            <!--alert($(this).attr("name"));-->
+	            <!--alert($(this).val());-->
+	
+	            if($(this).attr("name") == 'telephone'){
+	                if($(this).val()){
+	                    if($(this).val().length != 11){
+	                        alert("请输入正确位数的手机号码");
+	                        params_dict = null;
+	                        return false;
+	                    }
+	
+	                    if($(this).val() != $("#telephone_hidden").val()){
+	                        var exist_count = get_total_count({'telephone':$(this).val()})
+	                        if(exist_count > 0){
+	                            alert("此电话号码已被录入,请通过检索电话号码查找对应候选人的信息。");
+	                            params_dict = null;
+	                            return false;
+	                        }else{
+	                            submit_value = 'add_submit';
+	                        }
+	                    }
+	                }else{
+	                    alert('电话不能为空');
+	                    params_dict = null;
+	                    return false;
+	                }
+	            }
+	
+	            if(!$(this).val() || $(this).val() == 'null' || $(this).val() == 'undefined'){
+	                params_dict[$(this).attr("name")] = '';
+	            }else{
+	            	var tmp_val = $(this).val();
+	            	tmp_val = tmp_val.replace(/,/g, "，");
+	            	params_dict[$(this).attr("name")] = tmp_val;
+	            }
+	            <!--alert($(this).attr("name"));-->
+	            <!--alert(params_dict[$(this).attr("name")]);-->
+	        });
+	
+	        <!--alert(JSON.stringify(params_dict));-->
+	        <!--console.log(JSON.stringify(params_dict));-->
+	        var params = params_dict;
+	
+	        var after_mofify_search_dict = {};
+	        after_mofify_search_dict['name'] = $("#search_name_hidden").val();
+	        after_mofify_search_dict['company'] = $("#search_company_hidden").val();
+	        after_mofify_search_dict['position'] = $("#search_position_hidden").val();
+	        after_mofify_search_dict['per_page_count'] = $("#per_page_count_hidden").val();
+	        after_mofify_search_dict['current_page_num'] = $("#current_page_num_hidden").val();
+	
+	        if(params != null){
+	            var action_url;
+	            switch(submit_value)
+	            {
+	                case 'add_submit':
+	                    action_url = "{% url 'insert-jianli' %}";
+	                    after_mofify_search_dict['telephone'] = params['telephone'];
+	                    break;
+	                case 'modify_submit':
+	                    action_url = "{% url 'update-jianli' %}";
+	                    after_mofify_search_dict['telephone'] = $("#search_telephone_hidden").val();
+	                    break;
+	                default:
+	            }
+	
+	            $.ajax({
+	                async: false,
+	                url:action_url,
+	                type:'GET',
+	                dataType: 'json',
+	                data:params,
+	                success:function(ret){
+	                    alert(ret.status);
+	
+	                    search_common(after_mofify_search_dict['current_page_num'], after_mofify_search_dict);
+	                    var total_pages_count = get_total_count({'telephone':after_mofify_search_dict['telephone']});
+	
+	                    if(total_pages_count > 5){
+	                        pageGroup(parseInt(after_mofify_search_dict['current_page_num']), total_pages_count);
+	                        <!--page_icon(1,5,0);-->
+	                    }else{
+	                        page_icon(1, total_pages_count, parseInt(after_mofify_search_dict['current_page_num'])-1);
+	                    }
+	                }
+	            });
+	        }
+	    });
+	
+	    /* $('#add-modify-tab').click(function(){
+	        search_reset();
+	        var params_obj = {};
+	        params_obj['search_name'] = $('#search-name-text').val();
+	        
+	        params_obj['search_gender'] = $('#search-gender-text').val();
+	        params_obj['search_age'] = $('#search-age-text').val();
+	        
+	        params_obj['search_telephone'] = $('#search-telephone-text').val();
+	        params_obj['search_company'] = $('#search-company-text').val();
+	        params_obj['search_position'] = $('#search-position-text').val();
+	        params_obj['per_page_count'] = 10;
+	        params_obj['current_page_num'] = parseInt(1);
+	        add_modify_tab(params_obj);
+	    }); */
+	
+	    var $search_button_flag;
+	    $('#search-button').click(function(){
+	        $search_button_flag = 0;
+	
+	        var total_pages_count = 0;
+	        var current_page_num = 1;
+	
+	        search_common(current_page_num);
+	
+	        if($search_button_flag == 0){
+	            var total_pages_count = get_total_count();
+	
+	            if(total_pages_count > 5){
+	                page_icon(1,5,0);
+	            }else{
+	                page_icon(1,total_pages_count,0);
+	            }
+	        }
+	    })
+	
+	    //跳转到输入页数
+	    $(document).on("click", '#jump_button', function(){
+	        var total_pages_count = parseInt($("#total_page").text());
+	        var input_page_num = parseInt($("#jump_to_pageNum").val());//获取输入页数;
+	
+	        if(total_pages_count > 5){
+	            var pageNum = input_page_num;
+	            pageGroup(pageNum,total_pages_count);
+	        }else{
+	            $(this).addClass("on");
+	            $(this).siblings("li").removeClass("on");
+	        }
+	
+	        search_common(input_page_num);
+	    });
+	
+	    //点击分页按钮触发
+	    <!--$("#pageGro").on("click", 'li', function(){-->
+	    $(document).on("click", '#pageGro li', function(){
+	        <!--$search_button_flag = 1;-->
+	
+	        var total_pages_count = parseInt($("#total_page").text());
+	        var current_page_num = parseInt($(this).html());//获取当前页数;
+	
+	        if(total_pages_count > 5){
+	            var pageNum = current_page_num;
+	            pageGroup(pageNum,total_pages_count);
+	        }else{
+	            $(this).addClass("on");
+	            $(this).siblings("li").removeClass("on");
+	        }
+	
+	        search_common(current_page_num);
+	    });
+	
+	    //点击上一页触发
+	    $("#pageGro").on("click", '.pageUp', function(){
+	        <!--$search_button_flag = 1;-->
+	        var total_pages_count = parseInt($("#total_page").text());
+	        var current_page_num = parseInt($("#pageGro ul li.on").html());
+	
+	        if(parseInt($("#pageGro ul li.on").html()) == 1){
+	            return;
+	        }
+	
+	        if(total_pages_count > 5){
+	            var pageNum = current_page_num;
+	            pageGroup(pageNum-1,total_pages_count);
+	        }else{
+	            var index = $("#pageGro ul li.on").index();//获取当前页
+	            if(index > 0){
+	                $("#pageGro li").removeClass("on");//清除所有选中
+	                $("#pageGro ul li").eq(index-1).addClass("on");//选中上一页
+	            }
+	        }
+	
+	        current_page_num = current_page_num - 1;
+	
+	        search_common(current_page_num);
+	    });
+	
+	    //点击下一页触发
+	    $("#pageGro").on("click", '.pageDown', function(){
+	        <!--$search_button_flag = 1;-->
+	
+	        var total_pages_count = parseInt($("#total_page").text());
+	        var current_page_num = parseInt($("#pageGro ul li.on").html());
+	
+	        if(parseInt($("#pageGro ul li.on").html()) == total_pages_count){
+	            return;
+	        }
+	
+	        if(total_pages_count > 5){
+	            var pageNum = current_page_num;
+	            pageGroup(pageNum+1,total_pages_count);
+	        }else{
+	            var index = $("#pageGro ul li.on").index();//获取当前页
+	            if(index+1 < total_pages_count){
+	                $("#pageGro li").removeClass("on");//清除所有选中
+	                $("#pageGro ul li").eq(index+1).addClass("on");//选中下一页
+	            }
+	        }
+	
+	        current_page_num = current_page_num + 1;
+	
+	        search_common(current_page_num);
+	    });
+	    
+		/* // 点击姓名，弹出点击姓名的个人信息
+		$("#tbody_result").on("click", "td#name a", function(){
+			var name = $(this).parents("tr").find("#name").text();
+			var telephone = $(this).parents("tr").find("#telephone").text();
+			resume_info(name, telephone);
+		}); */
+	});
+	    
+	var date_obj = new Date();
+	//获取当前年
+	var year = date_obj.getFullYear();
+	//获取当前月
+	var month = date_obj.getMonth()+1;
+	//获取当前日
+	var day = date_obj.getDate(); 
+	var h = date_obj.getHours();       //获取当前小时数(0-23)
+	var m = date_obj.getMinutes();     //获取当前分钟数(0-59)
+	/* var s = date_obj.getSeconds(); */
+	
+	var now_date = year+'-'+getNow(month)+"-"+getNow(day)+" "+getNow(h)+':'+getNow(m);
+	/* alert(now_date); */
+	//格式化日期日月
+	function getNow(s) {
+		return s < 10 ? '0' + s: s;
+	}
+
+    //重置清空搜索框内容
+    function search_reset(){
+        $("#search_info").find(":input").val('');
+    }
+
+    //根据当前选中页生成页面点击按钮
+    function page_icon(current_page_num,count,eq){
+        var ul_html = "";
+        for(var page_num = current_page_num; page_num <= count; page_num++){
+            ul_html += "<li>" + page_num + "</li>";
+        }
+        $("#pageGro ul").html(ul_html);
+        $("#pageGro ul li").eq(eq).addClass("on");
+    }
+
+    //点击跳转页面
+    function pageGroup(pageNum,pageCount){
+        switch(pageNum){
+            case 1:
+                page_icon(1,5,0);
+            break;
+            case 2:
+                page_icon(1,5,1);
+            break;
+            case pageCount-1:
+                page_icon(pageCount-4,pageCount,3);
+            break;
+            case pageCount:
+                page_icon(pageCount-4,pageCount,4);
+            break;
+            default:
+                page_icon(pageNum-2,pageNum+2,2);
+            break;
+        }
+    }
+
+    function get_total_count(param_obj){
+        var search_name_text = $('#search-name-text').val();
+        var search_company_text = $('#search-company-text').val();
+        var search_telephone = $('#search-telephone-text').val();
+        var search_position = $('#search-position-text').val();
+
+        if(param_obj){
+            if(param_obj.hasOwnProperty("telephone")){
+                search_telephone = param_obj.telephone;
+            }
+        }
+
+        var per_page_count = 10;
+        var total_pages_count;
+        var params = {'name':search_name_text,'company':search_company_text,'telephone':search_telephone,'position':search_position};
+
+        $.ajax({
+            async: false,
+            url:"{% url 'get-total-count' %}",
+            type:'GET',
+            data:params,
+            success:function(ret){
+                items_total_count = ret;
+                total_pages_count = Math.ceil(items_total_count/per_page_count);
+
+                $("#total_page").empty();
+                $("#total_count").empty();
+                $("#page_num_div").empty();
+
+                $("#total_page").html(total_pages_count);
+                $("#total_count").html(items_total_count);
+
+                if(total_pages_count > 10){
+                    $("#jump").show();
+                }else{
+                    $("#jump").hide();
+                }
+            }
+        });
+        return total_pages_count;
+    }
+
+    function search_common(current_page_num, param_obj){
+        var search_name_text = $('#search-name-text').val();
+        var search_company_text = $('#search-company-text').val();
+        var search_telephone = $('#search-telephone-text').val();
+        var search_position = $('#search-position-text').val();
+
+        var per_page_count = 10;
+
+        if(param_obj){
+            if(param_obj.hasOwnProperty("telephone")){
+                search_telephone = param_obj.telephone;
+            }
+        }
+        
+        /* if(search_telephone){
+        	search_telephone = parseInt(search_telephone);
+        } */
+        
+
+        var params = {'name':search_name_text,'company':search_company_text,'telephone':search_telephone,'position':search_position,'per_page_count':per_page_count,'current_page_num':current_page_num};
+        $.getJSON("{% url 'search-jianli' %}", params, function(ret){
+            if($.isEmptyObject(ret)){
+                $("#search_result_null").show();
+                $("#search_result").hide();
+            }else{
+                $("#search_result_null").hide();
+                $("#tbody_result").empty();
+
+                var url = "{% url 'get-resumeInfo' %}?telephone=";
+                $.each(ret, function(i,item){
+                	
+                	if(!item.age || item.age == 'null'){
+                		item.age = '';
+                    }
+                	
+                	if(!item.gender || item.gender == 'null'){
+                		item.gender = '';
+                    }
+                	
+                	if(!item.position || item.position == 'null'){
+                		item.position = '';
+                    }
+                	
+                	if(!item.company || item.company == 'null'){
+                		item.company = '';
+                    }
+                	
+                    var tr=$('<tr class="text-c" id="' + i + '"></tr>');
+                    tr.append('<td id="name">' + 
+                    				'<a data-title="' + item.name + '" data-href="' + url + item.telephone + '" class="c-primary" href="javascript:;">'+ item.name + '</a>' + 
+                    			'</td>' + 
+                    			'<td id="age">'+ item.age + '</td>' + 
+                    			'<td id="gender">'+ item.gender + '</td>' + 
+                    			'<td id="telephone">'+ item.telephone + '</td>' + 
+                    			'<td style="white-space: nowrap; overflow:hidden;" id="company">'+ item.company + '</td>' + 
+                    			'<td style="white-space: nowrap;" id="position">'+ item.position + '</td>');
+
+                    var first_upload_info;
+                    if(item.first_upload_time){
+                    	first_upload_info = '<strong>' + item.first_upload_time + '</strong>' + ' by ' + '<mark>' + '<strong>' + item.first_uploader + '</strong>' + '</mark>';
+                    }else{
+                    	first_upload_info = ''
+                    }
+                    tr.append('<td id="first_upload_info">' + first_upload_info + '</td>');
+                    
+                    var last_update_info;
+                    if(item.update_time){
+                    	last_update_info = item.update_time + ' by ' + '<mark>' + item.last_operator + '</mark>';
+                    }else{
+                    	last_update_info = ''
+                    }
+                    tr.append('<td id="last_update_info" class="warning">' + last_update_info + '</td>');
+                    
+                    
+                    //	此区块被注释原因，见	2019-01-03	业务更新
+                    /* var all_remark_string = '';
+                    
+                    if(typeof(item.new_remark) == 'object'){
+                    	$.each(item.new_remark, function(i, one_remark){     
+                   			
+                   			if(!one_remark['comment']){
+                   				next;
+                   			}
+                   			
+                   			one_remark_string = '<mark>' + one_remark['date_string'] + '</mark><br>' + one_remark['comment'];
+                   			all_remark_string += one_remark_string + '<br>'
+                   		});  
+                    }
+                    
+                    all_remark_string = all_remark_string.replace(/(<br>$)/g,"")
+                    
+                    if(all_remark_string != ''){
+                    	all_remark_string = '<div id="part">' + all_remark_string.substring(0, 16) + '<a href="javascript:void(0);"><span class="part_to_all" style="color:green"> 最新备注 >> 展开</span></a>' + '</div>' + '<div id="all"><span id="all_remark">' + all_remark_string + '</span><a href="javascript:void(0);"><span class="all_to_part" style="color:red"> 最新备注 << 收起</span></a>' + '</div>'	
+                    } */
+                    
+                    //	2019-01-03	业务更新，搜索简历list页面，不需要显示备注信息，弄能已转移到详情页面。
+                    /* tr.append('<td class="text-l" style="width:300px;" id="new_remark">' + all_remark_string + '</td>'); */
+                    
+                    //	原始版本，历史记录
+                    /* if(all_remark_string && all_remark_string.length > 16){
+                        tr.append('<td class="text-l" style="width:300px;" id="new_remark"><div id="part">' + all_remark_string.substring(0, 16) + '<a href="javascript:void(0);"><span class="part_to_all" style="color:green"> >> 展开</span></a>' + '</div>' + '<div id="all"><span id="all_remark">' + all_remark_string + '</span><a href="javascript:void(0);"><span class="all_to_part" style="color:red"> << 收起</span></a>' + '</div>' + '</td>');
+                    }else{
+                        tr.append('<td class="text-l" style="width:300px;" id="new_remark"><span id="all_remark">' + all_remark_string + '</span></td>');
+                    } */
+                    
+                    /* if(item.new_remark && item.new_remark.length > 21){
+                        tr.append('<td class="text-l" style="width:300px;" id="new_remark"><div id="part">' + item.new_remark.substring(0, 17) + '<a href="javascript:void(0);"><span class="part_to_all" style="color:green"> >> 展开</span></a>' + '</div>' + '<div id="all"><span id="all_remark">' + item.new_remark + '</span><a href="javascript:void(0);"><span class="all_to_part" style="color:red"> << 收起</span></a>' + '</div>' + '</td>');
+                    }else{
+                        tr.append('<td class="text-l" style="width:300px;" id="new_remark"><span id="all_remark">'+ item.new_remark + '</span></td>');
+                    } */
+
+                    //	2019-01-03	业务更新，搜索简历list页面，不需要存在添加备注按钮，已在之前的版本转移到了详情页面中。
+                    /* var edit_button_string = '<button type="button" class="btn btn-primary radius" id="edit_button">添加备注</button>';
+                    tr.append('<td style="width:100px;">'+ edit_button_string + '</td>'); */
+                    $("#tbody_result").append(tr);
+                });
+
+                if($("#tbody_result")){
+                	$("#search_result").show();
+                	$("#data_table").show();
+                	$("#pagination_div").show();
+                	
+                	show_time_col();
+                	
+                	$("div #all").hide();
+                }
+            }
+        })
+    }
+
+    function add_modify_tab(params_obj){
+        $("#search_result").show();
+        $("#pagination_div").hide();
+        hide_time_col();
+
+        $("#tbody_result").empty();
+        
+        hide_time_col();
+
+        <!--alert($("#tr_head").html());-->
+        
+        var tr=$('<tr></tr>');
+        $('#tr_head').children("th:visible").each(function(i){
+            <!--alert($(this).attr('data-title'));-->
+            var tmp_id = $(this).attr('data-title');
+
+            var text_value = '';
+            if(params_obj[tmp_id]){
+                text_value = params_obj[tmp_id];
+            }
+
+            var text_string = '<input type="text" class="input-text size-M" name="' + tmp_id + '" id="add_' + tmp_id + '" value="' + text_value + '">';
+            tr.append('<td>'+ text_string + '</td>');
+        });
+        $("#tbody_result").append(tr);
+
+        var submit_button_string;
+        submit_button_string = '<button type="button" id="add_submit">确认录入</button>';
+        tr.append('<td>'+ submit_button_string + '</td>');
+        $("#tbody_result").append(tr);
+    }
+    
+    //	旧版本含有备注的增加修改功能
+    /* function add_modify_tab(params_obj){
+        $("#search_result").show();
+        $("#pagination_div").hide();
+        hide_time_col();
+
+        $("#tbody_result").empty();
+        
+        hide_time_col();
+
+        <!--alert($("#tr_head").html());-->
+        
+        var tr=$('<tr></tr>');
+        $('#tr_head').children("th:visible").each(function(i){
+            <!--alert($(this).attr('data-title'));-->
+            var tmp_id = $(this).attr('data-title');
+
+            var text_value = '';
+            if(params_obj[tmp_id]){
+                text_value = params_obj[tmp_id];
+            }
+
+            var text_string = '<input type="text" class="input-text size-M" name="' + tmp_id + '" id="add_' + tmp_id + '" value="' + text_value + '">';
+
+            if(tmp_id == 'telephone'){
+                text_string = text_string + '<input type="hidden" id="telephone_hidden" value="' + text_value + '">';
+
+                text_string = text_string + '<input type="hidden" id="search_name_hidden" value="' + params_obj['search_name'] + '">';
+                text_string = text_string + '<input type="hidden" id="search_telephone_hidden" value="' + params_obj['search_telephone'] + '">';
+                text_string = text_string + '<input type="hidden" id="search_company_hidden" value="' + params_obj['search_company'] + '">';
+                text_string = text_string + '<input type="hidden" id="search_position_hidden" value="' + params_obj['search_position'] + '">';
+                text_string = text_string + '<input type="hidden" id="per_page_count_hidden" value="' + params_obj['per_page_count'] + '">';
+                text_string = text_string + '<input type="hidden" id="current_page_num_hidden" value="' + params_obj['current_page_num'] + '">';
+            }
+            
+            if(tmp_id == 'new_remark'){
+                var base_num = 17;
+                var area_rows = 1;
+
+                text_string = '<textarea rows="' + area_rows + '" cols="30" name="' + tmp_id + '" id="add_' + tmp_id + '"></textarea>';
+            }
+            tr.append('<td>'+ text_string + '</td>');
+        });
+        $("#tbody_result").append(tr);
+
+        var submit_button_string;
+        if($("#telephone_hidden").val()){
+            submit_button_string = '<button type="button" id="modify_submit">确认修改</button>';
+        }else{
+            submit_button_string = '<button type="button" id="add_submit">确认录入</button>';
+        }
+
+        tr.append('<td>'+ submit_button_string + '</td>');
+        $("#tbody_result").append(tr);
+    } */
+    
+    $("#tbody_result").on("mouseenter", "td", function(){
+		if($(this).text() != ''){
+			if (this.offsetWidth < this.scrollWidth) {
+	            var that = this;
+	            var text = $(this).text();
+	            layer.tips(text, that,{
+	                tips: [3, '#3595CC'],
+	                time: 4000
+	            });
+	        }
+		}
+    });
+    
+    //	点添加修改按钮时，隐藏两个时间的列
+    function hide_time_col() {
+        
+    	var last_update_info_index = $("#tr_head th[data-title='last_update_info']").index();
+        $("#tr_head").find("th").eq(last_update_info_index).hide();
+    	
+    	var first_upload_info_index = $("#tr_head th[data-title='first_upload_info']").index();
+        $("#tr_head").find("th").eq(first_upload_info_index).hide();
+    }
+    
+	//	点添加修改按钮时，显示两个时间的列
+    function show_time_col() {
+        
+    	var last_update_info_index = $("#tr_head th[data-title='last_update_info']").index();
+        $("#tr_head").find("th").eq(last_update_info_index).show();
+    	
+    	var first_upload_info_index = $("#tr_head th[data-title='first_upload_info']").index();
+        $("#tr_head").find("th").eq(first_upload_info_index).show();
+    }
+
+	/*简历详细信息*/
+	/* function resume_info(name, telephone) {
+		var url = "{% url 'get-resumeInfo' %}?telephone=" + telephone;
+		layer.open({
+			type : 2,
+			area : [ '1000px', '600px' ],
+			fix : false, //不固定
+			maxmin : true,
+			shade : 0.4,
+			title : name + ' - 简历信息',
+			content : url
+		});
+	} */
+</script>
+</body>
+</html>
+

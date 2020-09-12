@@ -1,0 +1,206 @@
+﻿{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../common_html/_header.html' %}
+<body>
+<article class="page-container">
+	<form action="{% url 'admin-role-add' %}" method="post" class="form form-horizontal" id="form-admin-role-add">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{{role_name}}" placeholder="" id="role_name" name="role_name" required>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">角色级别：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<select id="role_level_select" name="role_level">
+	                <option value=1>1</option>
+	                <option value=2>2</option>
+	                <option value=3>3</option>
+	                <option value=4>4</option>
+	                <option value=5>5</option>
+	                <option value=10 selected="selected">默认10</option>
+	            </select>
+	        </div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">描述：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{{role_description}}" placeholder="" id="role_description" name="role_description">
+			</div>
+		</div>
+		<!-- <div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3">网站角色：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<dl class="permission-list">
+					<dt>
+						<label>
+							<input type="checkbox" value="" name="user-Character-0" id="user-Character-0">
+							资讯管理</label>
+					</dt>
+					<dd>
+						<dl class="cl permission-list2">
+							<dt>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-0-0" id="user-Character-0-0">
+									栏目管理</label>
+							</dt>
+							<dd>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-0">
+									添加</label>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-1">
+									修改</label>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-2">
+									删除</label>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-3">
+									查看</label>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-4">
+									审核</label>
+								<label class="c-orange"><input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-5"> 只能操作自己发布的</label>
+							</dd>
+						</dl>
+						<dl class="cl permission-list2">
+							<dt>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-0-1" id="user-Character-0-1">
+									文章管理</label>
+							</dt>
+							<dd>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-0-1-0" id="user-Character-0-1-0">
+									添加</label>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-0-1-0" id="user-Character-0-1-1">
+									修改</label>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-0-1-0" id="user-Character-0-1-2">
+									删除</label>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-0-1-0" id="user-Character-0-1-3">
+									查看</label>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-0-1-0" id="user-Character-0-1-4">
+									审核</label>
+								<label class="c-orange"><input type="checkbox" value="" name="user-Character-0-2-0" id="user-Character-0-2-5"> 只能操作自己发布的</label>
+							</dd>
+						</dl>
+					</dd>
+				</dl>
+				<dl class="permission-list">
+					<dt>
+						<label>
+							<input type="checkbox" value="" name="user-Character-0" id="user-Character-1">
+							用户中心</label>
+					</dt>
+					<dd>
+						<dl class="cl permission-list2">
+							<dt>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-1-0" id="user-Character-1-0">
+									用户管理</label>
+							</dt>
+							<dd>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-1-0-0" id="user-Character-1-0-0">
+									添加</label>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-1-0-0" id="user-Character-1-0-1">
+									修改</label>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-1-0-0" id="user-Character-1-0-2">
+									删除</label>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-1-0-0" id="user-Character-1-0-3">
+									查看</label>
+								<label class="">
+									<input type="checkbox" value="" name="user-Character-1-0-0" id="user-Character-1-0-4">
+									审核</label>
+							</dd>
+						</dl>
+					</dd>
+				</dl>
+			</div>
+		</div> -->
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+				<button type="submit" class="btn btn-success radius" id="admin-role-save" value="{{role_name}}" name="old-role-name"><i class="icon-ok"></i> 确定</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+{% include '../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/validate-methods.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/messages_zh.js' %}"></script>
+<script type="text/javascript">
+
+$(function(){
+	$("#role_level_select").find("option[value='{{role_level}}']").attr("selected",true);
+	
+	var ajax_option={
+		success:function(ret){
+			/* alert("添加成功");
+			alert(ret);
+			alert(typeof(ret)); */
+			
+			if(ret == 'success'){
+        		var index = parent.layer.getFrameIndex(window.name);
+        		
+        		// 刷新父页面
+        		parent.location.reload();
+    			parent.layer.close(index);
+        	}else{
+        		alert("添加失败");
+        	}
+		}
+	}
+	
+	$("#form-admin-role-add").validate({
+		rules:{
+			role_name:{
+				required:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			/* alert("完成验证"); */
+			$(form).ajaxSubmit(ajax_option);
+		}
+	});
+	
+	/* $("#form-admin-role-add").validate({
+		rules:{
+			role_name:{
+				required:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			alert("完成验证");
+			$(form).ajaxSubmit();
+			var index = parent.layer.getFrameIndex(window.name);
+			parent.layer.close(index);
+		}
+	}); */
+	
+	$("#reset").click(function() {
+        validator.resetForm();
+    });
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

@@ -1,0 +1,262 @@
+﻿{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../common_html/_header.html' %}
+<title>用户列表</title>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 超级管理 <span class="c-gray en">&gt;</span> 用户管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="cl pd-5 bg-1 bk-gray">
+		<span class="l">
+			<a href="javascript:;" onclick="user_batch_del()" class="btn btn-danger radius" style="pointer-events:none" id="batch_del"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+		</span>
+		<span class="r">共有数据：<strong>{{result_count}}</strong> 条</span>
+	</div>
+	<br>
+	<div id="result_info_null" style="display:none"><p>暂无记录</p></div>
+	<div id="result_info" style="display:none">
+        <table id="data_table" class="table table-border table-bordered table-hover table-bg">
+            <thead>
+            	<tr>
+					<th scope="col" colspan="8">用户列表</th>
+				</tr>
+				<tr id="tr_head" class="text-c">
+					<th width="25"><input type="checkbox" value="" name="" disabled="true"></th>
+					<th width="100">姓名</th>
+					<th width="90">手机</th>
+					<th width="200">邮箱</th>
+					<th width="100" data-title="role_name">角色</th>
+					<th width="130">账号创建时间</th>
+					<th width="100">是否已启用</th>
+					<th width="100" data-title="operation">操作</th>
+				</tr>
+            </thead>
+            <tbody id="tbody_result">
+            </tbody>
+        </table>
+        <br>
+    </div>
+    <br>
+	
+	<!-- <table class="table table-border table-bordered table-bg">
+		<thead>
+			<tr>
+				<th scope="col" colspan="9">用户列表</th>
+			</tr>
+			<tr class="text-c">
+				<th width="25"><input type="checkbox" name="" value=""></th>
+				<th width="150">登录名</th>
+				<th width="90">手机</th>
+				<th width="150">邮箱</th>
+				<th>角色</th>
+				<th width="130">加入时间</th>
+				<th width="100">是否已启用</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="text-c">
+				<td><input type="checkbox" value="1" name=""></td>
+				<td>admin</td>
+				<td>13000000000</td>
+				<td>admin@mail.com</td>
+				<td>超级管理员</td>
+				<td>2014-6-11 11:11:42</td>
+				<td class="td-status"><span class="label label-success radius">已启用</span></td>
+				<td class="td-manage"><a style="text-decoration:none" onClick="user_stop(this,'10001')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a> <a title="编辑" href="javascript:;" onclick="user_edit('管理员编辑','admin-add.html','1','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="user_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+			</tr>
+			<tr class="text-c">
+				<td><input type="checkbox" value="2" name=""></td>
+				<td>zhangsan</td>
+				<td>13000000000</td>
+				<td>admin@mail.com</td>
+				<td>栏目编辑</td>
+				<td>2014-6-11 11:11:42</td>
+				<td class="td-status"><span class="label radius">已停用</span></td>
+				<td class="td-manage"><a style="text-decoration:none" onClick="user_start(this,'10001')" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe615;</i></a> <a title="编辑" href="javascript:;" onclick="user_edit('管理员编辑','admin-add.html','2','800','500')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="user_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+			</tr>
+		</tbody>
+	</table> -->
+</div>
+
+{% include '../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'datatables/1.10.0/jquery.dataTables.min.js' %}"></script> 
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	// 判断是否有数据，有数据则动态创建表格显示
+	if({{result_count}} > 0){
+		var result_json_obj = {{result_json|safe}};
+		
+		// 输出对象类型的字符串，方便debug
+		//alert(JSON.stringify(result_json_obj));
+		
+		$("#tbody_result").empty();
+
+        $.each(result_json_obj, function(i,item){
+        	var tr=$('<tr class="text-c"></tr>');
+        	
+        	var create_time_obj = item.create_time;
+        	var create_time_stamp;
+        	var create_date_obj;
+        	var create_date_string = '';
+        	if(create_time_obj){
+        		/* alert(JSON.stringify(create_time_obj));
+        		alert(create_time_obj.$date); */
+        		
+        		create_time_stamp = (create_time_obj.$date);
+        		
+        		create_date = new Date(create_time_stamp);
+        		
+        		year = create_date.getFullYear();
+        		month = (create_date.getMonth()+1 < 10 ? '0'+(create_date.getMonth()+1) : create_date.getMonth()+1);
+        		day = (create_date.getDate() < 10 ? '0'+(create_date.getDate()) : create_date.getDate());
+        		/* h = date.getHours();
+        		m = date.getMinutes();
+        		s = date.getSeconds(); */
+        		
+        		create_date_string = year + '-' + month + '-' + day;
+        		
+        		//alert(create_date_string);
+        	}
+        	
+        	var account_status = '已停用';
+        	if(item.account_status){
+        		account_status = '已启用';
+        	}
+        	
+        	var tds_string = 
+        		'<td width="25"><input type="checkbox" value="' + item.real_name + '" name="check"></td>' + 
+	    		'<td width="100" id="real_name">'+ item.real_name + '</td>' + 
+	    		'<td width="90" id="telephone">'+ item.telephone + '</td>' + 
+	    		'<td width="200" id="email">'+ item.email + '</td>' + 
+	    		'<td width="100" id="role_name">'+ item.role_name + '</td>' + 
+	    		'<td width="130" id="create_time">'+ create_date_string + '</td>' + 
+	    		'<td width="100" id="account_status">'+ account_status + '</td>' + 
+	    		'<td width="100">' + 
+	    			'<a title="编辑" href="javascript:;" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>' + 
+	    			'<a title="删除" href="javascript:;" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>' + 
+	    		'</td>';
+			
+			//alert(tds_string);
+			tds_string = tds_string.replace(/\s*undefined\s*/isg,"");
+			//alert(tds_string);
+			
+    	    tr.append(tds_string);
+    	    $("#tbody_result").append(tr);
+        });
+        
+		$('#result_info').show();
+		$('#result_info_null').hide();
+	}else{
+		$('#result_info').hide();
+		$('#result_info_null').show();
+	}
+	
+	// 有至少一个checkbox checked，批量删除按钮样式变为可用，否则不可用
+	$('input:checkbox').click(function(){
+		
+		if($("input[type='checkbox']:checked").length>0){
+			$("a[id='batch_del']").attr("disabled", false);
+			$("a[id='batch_del']").css("pointer-events","auto");
+		}else{
+			$("a[id='batch_del']").attr("disabled", true);
+			$("a[id='batch_del']").css("pointer-events","none");
+		}
+	})
+	
+	/* $("#tbody_result").on("click", "a[title='编辑']", function(){
+		
+		var role_level = $(this).parents("tr").find("#role_level").text();
+		var role_name = $(this).parents("tr").find("#role_name").text();
+		var role_description = $(this).parents("tr").find("#role_description").text();
+		var url_string = '{% url "admin-role-add" %}' + '?type=edit&role_name=' + role_name + '&role_description=' + role_description + '&role_level=' + role_level;
+		
+		user_edit('角色编辑',url_string,'real_name');
+    }); */
+	
+	$("#tbody_result").on("click", "a[title='删除']", function(){
+		var del_real_name = $(this).parents("tr").find("#role_name").text();
+		
+		if(del_real_name){
+			user_del(del_real_name);
+		}else{
+			alert("del error");
+		}
+    });
+})
+
+/*用户-批量删除*/
+function user_batch_del(){
+    
+	var real_name_dict = {};
+    $.each($('input:checkbox:checked'),function(){
+    	real_name_dict[$(this).val()] = 1;
+    });
+    
+    layer.confirm('角色删除须谨慎，确认要删除吗？', {icon: 2, title:'批量删除'}, function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{% url 'user-del' %}",
+			data: real_name_dict,
+			success: function(ret){
+				if(ret == 'success'){
+					layer.msg('已删除!',{icon:1,time:1000});
+					location.reload();
+				}
+			}
+		});
+	});
+}
+
+/*用户-编辑*/
+function user_edit(title,url,id,w,h){
+	layer_show(title,url,w,h);
+}
+/*用户-删除*/
+function user_del(del_real_name){
+	var real_name_dict = {};
+	real_name_dict[del_real_name] = 1;
+	
+    layer.confirm('角色删除须谨慎，确认要删除吗？', {icon: 2, title:'删除'}, function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{% url 'user-del' %}",
+			data: real_name_dict,
+			success: function(ret){
+				if(ret == 'success'){
+					layer.msg('已删除!',{icon:1,time:1000});
+					location.reload();
+				}
+			}
+		});
+	});
+}
+/*用户-停用*/
+function user_stop(obj,id){
+	layer.confirm('确认要停用吗？',function(index){
+		//此处请求后台程序，下方是成功后的前台处理……
+		
+		$(obj).parents("tr").find(".td-manage").prepend('<a onClick="user_start(this,id)" href="javascript:;" title="启用" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;</i></a>');
+		$(obj).parents("tr").find(".td-status").html('<span class="label label-default radius">已禁用</span>');
+		$(obj).remove();
+		layer.msg('已停用!',{icon: 5,time:1000});
+	});
+}
+
+/*用户-启用*/
+function user_start(obj,id){
+	layer.confirm('确认要启用吗？',function(index){
+		//此处请求后台程序，下方是成功后的前台处理……
+		
+		$(obj).parents("tr").find(".td-manage").prepend('<a onClick="user_stop(this,id)" href="javascript:;" title="停用" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;</i></a>');
+		$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
+		$(obj).remove();
+		layer.msg('已启用!', {icon: 6,time:1000});
+	});
+}
+</script>
+</body>
+</html>

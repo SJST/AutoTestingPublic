@@ -1,0 +1,69 @@
+"""zzmk_django URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/2.1/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path
+
+# from django.conf.urls import *
+# from django.conf.urls import include
+from django.conf.urls import url
+from lmk_app import views
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+#     url(r'^$', views.index),
+    
+    #    首页
+    url(r'^$', views.index, name='index'),
+    #    新员工注册
+    url(r'^register-info$', views.register_info, name='register-info'),
+    #    用户登录登出
+    url(r'^login$', views.login, name='login'),
+    url(r'^logout$', views.logout, name='logout'),
+    #    首页-用户信息
+    url(r'^get_userInfo/[^\/]*$', views.get_userInfo, name='get-userInfo'),
+    #    首页-管理员信息处理
+    url(r'^show-prompt-message/[^\/]*$', views.show_prompt_message, name='show-prompt-message'),
+    url(r'^prompt-message-del', views.prompt_message_del, name='prompt-message-del'),
+    url(r'^prompt-register-authorize', views.prompt_register_authorize, name='prompt-register-authorize'),
+    #    首页-内嵌iframe
+    url(r'^welcome', views.iframe_welcome, name='iframe-welcome'),
+    #    人才管理-简历管理
+    url(r'^resume-manage', views.resume_manage, name='resume-manage'),
+    url(r'^get-resumeInfo', views.get_resumeInfo, name='get-resumeInfo'),
+    url(r'^resume-remark-add', views.resume_remark_add, name='resume-remark-add'),
+    #    人才管理-简历管理
+    url(r'^search-jianli/[^\/]*$', views.search_jianli, name='search-jianli'),
+    url(r'^insert-jianli/[^\/]*$', views.insert_jianli, name='insert-jianli'),
+    url(r'^update-jianli/[^\/]*$', views.update_jianli, name='update-jianli'),
+    url(r'^get-total-count/[^\/]*$', views.get_total_count, name='get-total-count'),
+    #    超级管理-权限管理
+    url(r'^admin-permission$', views.admin_permission, name='admin-permission'),
+    url(r'^admin-permission-add', views.admin_permission_add, name='admin-permission-add'),
+    url(r'^admin-permission-del', views.admin_permission_del, name='admin-permission-del'),
+    #    超级管理-角色管理
+    url(r'^admin-role$', views.admin_role, name='admin-role'),
+    url(r'^admin-role-add$', views.admin_role_add, name='admin-role-add'),
+    url(r'^admin-role-del', views.admin_role_del, name='admin-role-del'),
+    #    超级管理-用户管理
+    url(r'^user-list$', views.show_user_list, name='show-user-list'),
+    url(r'^user-account-switch', views.user_account_switch, name='user-account-switch'),
+    url(r'^user-del', views.user_del, name='user-del'),
+    #    工具管理-简历导入
+    url(r'^resume-import$', views.resume_import, name='resume-import'),
+]
+
+

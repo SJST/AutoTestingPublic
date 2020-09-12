@@ -1,0 +1,535 @@
+﻿{% load static %}
+<!DOCTYPE HTML>
+<!-- 这个页面用来添加新的公司  -->
+<html>
+{% include '../../common_html/_header.html' %}
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+<link rel="stylesheet" type="text/css" href="{% static 'Hui-iconfont/1.0.8/iconfont.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui/css/H-ui.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui.admin/css/H-ui.admin.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'my-css/client/company_add.css' %}" />
+<title>Hi，H-ui v3.1</title>
+<meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+<meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+<!--  <style>
+		button{
+			border-radius:20px;}
+		#save-from{
+		 margin-left:267px;}
+		textarea{
+			text-indent:15px;
+			resize:none ;
+			border-radius:10px;}
+		textarea:hover{
+			border-color:#f40;}
+		.modle_div {
+		/*这个是模块的css样式*/ 
+			border-bottom: solid 1px transparent;
+		    padding: 8px 15px;
+		    font-size: 14px;
+		    font-weight: 700;
+		    margin-bottom: -1px;
+		    
+		    background-color:#eee;
+		    }
+		/*将需要同行显示的div改为块级元素,也可以使用float*/
+		
+		.many_div{
+					display:inline-block;
+				}
+		.button_div{
+					text-align:right;
+		        }
+		
+<!--这是每个模块的样式-->
+</style>
+</head>
+<body>
+<article class="page-container">
+	<form action="{% url 'company-add' %}" method="post" class="form form-horizontal" id="form-register">
+		<div class="row cl modle_div" id="model1"> 
+		基本信息:
+		</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">客户类型：</label>
+				<div class="formControls col-xs-4" style="display:inline-block" >
+					<div class="check-box">
+						<input type="checkbox" id="class-1" name="company_class" value="签约客户" checked>
+						<label for="class-1">签约客户</label>
+					</div>
+					<div class="check-box">
+						<input type="checkbox" id="class-2" name="company_class" value="开发中客户" >
+						<label for="class-1">开发中客户</label>
+					
+					</div>
+			</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3"><span class="c-red">*</span>公司名称：</label>
+				<div class="formControls col-xs-8">
+					<input type="text" class="input-text" placeholder="2~16个字符，字母/中文/数字/下划线" name="company_name" id="company_name"  required>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">公司规模：</label>
+				<div class="formControls col-xs-2" style="display:inline-block" >
+					<select  class="select" size="1" name="company_size" id="company_size">
+	  					<option value="1-50人">1-50人 </option>
+	  					<option value="50-100人">50-100人</option>
+	  					<option value="100-500人">100-500人</option>
+	  					<option value="500-1000人">500-1000人</option>
+	  					<option value="1000-2000人">1000-2000人</option>
+	  					<option value="2000-5000人">2000-5000人</option>
+	  					<option value="5000-10000人">5000-10000人</option>
+	  					<option value="10000人以上">10000人以上</option>
+					</select>
+					
+				</div>
+			
+			
+				<label class="form-label col-xs-3">公司性质：</label>
+				<div class="formControls col-xs-2"  style="display:inline-block" >
+					<select  class="select" size="1" name="company_nature" id="company_nature">
+	  					<option value="私营/民营企业">私营/民营企业 </option>
+	  					<option value="国有企业">国有企业</option>
+	  					<option value="外商企业 ">外商企业 </option>
+	  					<option value="中外合作企业 ">中外合作企业 </option>
+	  					<option value="事业单位">事业单位</option>
+	  					<option value="政府机构/非盈利机构">政府机构/非盈利机构</option>
+	  					<option value="其他">其他</option>
+	  					
+					</select>
+					
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">所属行业：</label>
+				<div class="formControls col-xs-2" style="display:inline-block" >
+					<select  class="select" size="1" name="industry" id="industry">
+	  					<option value="互联网 ">互联网 </option>
+	  					<option value="计算机软件">计算机软件</option>
+	  					<option value="通信">通信</option>
+	  					<option value="电子/半导体">电子/半导体</option>
+	  					<option value="金融">金融</option>
+	  					<option value="房产建筑房产建筑">房产建筑</option>
+	  					<option value="医疗生物">医疗生物</option>
+	  					<option value="汽车">汽车</option>
+	  					<option value="消费品">消费品</option>
+	  					<option value="广告/传媒">广告/传媒</option>
+	  					<option value="教育培训">教育培训</option>
+	  					<option value="咨询/外包/中介">咨询/外包/中介</option>
+	  					<option value="服务业">服务业</option>
+	  					<option value="轻工贸易">轻工贸易</option>
+	  					<option value="机械重工">机械重工</option>
+	  					<option value="化工能源">化工能源</option>
+	  					<option value="农林牧渔">农林牧渔</option>
+	  					<option value="政府公益">政府公益</option>
+					</select>
+					
+				</div>
+			
+			
+				<label class="form-label col-xs-3">公司阶段：</label>
+				<div class="formControls col-xs-2"  style="display:inline-block" >
+					<select  class="select" size="1" name="stage" id="stage">
+	  					<option value="不需要融资">不需要融资 </option>
+	  					<option value="D轮及以上">D轮及以上</option>
+	  					<option value="C轮">C轮</option>
+	  					<option value="B轮">B轮</option>
+	  					<option value="A轮">A轮</option>
+	  					<option value="天使轮">天使轮</option>
+	  					<option value="上市公司">上市公司</option>
+	  					<option value="未融资">未融资</option>
+					</select>	
+				</div>
+			</div>
+		
+			<div class="row cl">
+				<label class="form-label col-xs-3">公司地址：</label>
+				<div class="formControls col-xs-8">
+					<input type="text" class="input-text" placeholder="公司地址" name="company_address" id="company_address"  required>
+				</div>
+			</div>
+	<!-- 	<div class="row cl modle_div many_div" id="model2"> 
+		联系人:
+		</div>	
+		<div id="add_div"></div>
+		<div class="row cl">
+			<div class="formControls col-xs-8 button_div many_div" >
+					<button class="btn btn-primary " type="button" id="add-button" value="">&nbsp;&nbsp;添加其他联系人&nbsp;&nbsp;</button>
+			</div>
+		</div>-->
+		<div class="row cl modle_div" id="model3"> 
+		调研信息:
+		</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">公司官网：</label>
+				<div class="formControls col-xs-8">
+					<textarea name="company_website" id="company_website" rows="3" cols="120" placeholder="请输入公司官网"></textarea>
+				</div>	
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">公司介绍：</label>
+				<div class="formControls col-xs-8 ">
+					<textarea name="company_introduction" id="company_introduction" rows="3" cols="120" placeholder="请输入公司亮点"></textarea>
+				</div>
+			</div>
+			<div class="row cl">	
+				<label class="form-label col-xs-3">薪酬福利：</label>
+				<div class="formControls col-xs-8 ">
+					<textarea name="package" id="package" rows="3" cols="120" placeholder="请输入薪酬福利"></textarea>
+				</div>	
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">公司亮点：</label>
+				<div class="formControls col-xs-8 ">
+					<textarea name="company_highlights" id="company_highlights" rows="3" cols="120" placeholder="请输入公司亮点"></textarea>
+				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">面试流程：</label>
+				<div class="formControls col-xs-8 ">
+					<textarea name="interview_process" id="interview_process" rows="3" cols="120" placeholder="请输入面试流程"></textarea>
+				</div>	
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">其他：</label>
+				<div class="formControls col-xs-8">
+					<textarea name="other_info" id="other_info" rows="3" cols="120" placeholder="请输入其他信息"></textarea>
+				</div>	
+			</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-xs-offset-3">
+				<button class="btn btn-primary" type="button" id="save-from" value="">&nbsp;&nbsp;保存&nbsp;&nbsp;</button>
+			   <button class="btn btn-default " type="button" id="add-button">&nbsp;&nbsp;添加联系人&nbsp;&nbsp;</button>
+			</div>
+		</div>
+	</form>
+</article>
+
+{% include '../../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'h-ui/js/H-ui.js' %}"></script>
+<script type="text/javascript" src="{% static 'layer/2.4/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/validate-methods.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/messages_zh.js' %}"></script>
+<script type="text/javascript" src="{% static 'My97DatePicker/4.8/WdatePicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'webuploader/0.1.5/webuploader.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/1.4.3/ueditor.config.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/1.4.3/ueditor.all.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/1.4.3/lang/zh-cn/zh-cn.js' %}"></script>
+
+<script type="text/javascript">
+//点击按钮自动添加联系人模块 
+/*
+$('#add-button').on('click', function(){
+	var father_div=$("#add_div")
+	var div=$("<div class='content' id='content_model'> </div>")
+	//设置第一行的div内容
+	var frist_div=$('<div class="row cl"> </div>');
+	var frist_label=$('<label class="form-label col-xs-3"><span class="c-red">*</span>姓名：</label>');
+	var frist_div1=$("<div class='formControls col-xs-2 many_div'></div>");
+	var frist_input= $('<input type="text" class="input-text" placeholder=""name="new_contectsName" id="new_contectsName" required>');
+	var frist_label1 = $('<label class="form-label col-xs-3">职务：</label>');
+	var frist_div2 =$('<div class="formControls col-xs-2 many_div">');
+	var frist_input1 =$('<input type="text" class="input-text" placeholder="" name="new_contectsJob" id="new_contectsJob"  required>');
+	//设置第二行的div内容
+	var second_div=$('<div class="row cl" ></div>');
+	var second_label=$('<label class="form-label col-xs-3"><span class="c-red">*</span>手机：</label>');
+	var second_div1=$("<div class='formControls col-xs-8'></div>");
+	var	second_input=$('<input type="text" class="input-text" autocomplete="on" placeholder="如：1889088..." name="new_contectsTel" id="new_contectsTel" required>');
+	//设置第三行的div内容
+	var three_div=$('<div class="row cl" ></div>');
+	var three_label=$('<label class="form-label col-xs-3">邮箱：</label>');
+	var three_div1=$("<div class='formControls col-xs-8'></div>");
+	var	three_input=$('<input type="text" class="input-text" placeholder="@"autocomplete="off"name="new_contectsEmall" id="new_contectsEmall" required>'); 
+	//设置第四行的div内容
+	var four_div=$('<div class="row cl" ></div>');
+	var four_label=$('<label class="form-label col-xs-3">座机：</label>');
+	var four_div1=$("<div class='formControls col-xs-8'></div>");
+	var	four_input=$('<input type="text" class="input-text"autocomplete="off" name="new_contectsLine" id="new_contectsLine">'); 
+	//设置第五行的div内容
+	var five_div=$('<div class="row cl" ></div>');
+	var five_label=$('<label class="form-label col-xs-3">其他：</label>');
+	var five_div1=$("<div class='formControls col-xs-8'></div>");
+	var	five_input=$('<input type="text" class="input-text"autocomplete="off" name="new_contectsOther" id="new_contectsOther" >');
+	//设置第六行的div内容
+	var six_div=$('<div class="row cl" ></div>');
+	var six_label=$('<label class="form-label col-xs-3">备注 ：</label>');
+	var six_div1=$("<div class='formControls col-xs-8'></div>");
+	var	six_input=$('<input type="text" class="input-text"autocomplete="off" name="new_contectsRemark" id="new_contectsRemark" >');
+	
+	//设置删除按钮
+	var delete_div=$('<div class="row cl">');
+	var delete_div1=$("<div class='formControls col-xs-5 button_div'></div>");
+	
+	var delete_botton=$('<button class="btn btn-primary" type="button"  id ="delete_button"value="">&nbsp;&nbsp;删除联系人&nbsp;&nbsp;</button>')
+	//第一行加载到页面
+	div.append(frist_div);
+	frist_div.append(frist_label);
+	frist_div.append(frist_div1);
+	frist_div.append(frist_label1);
+	frist_div.append(frist_div2);
+	frist_div1.append(frist_input);
+	frist_div2.append(frist_input1);
+	div.append(frist_div);
+	//第二行加载到页面
+	div.append(second_div);
+	second_div.append(second_div1);
+	second_div.append(second_label);
+	second_div.append(second_div1);
+	second_div1.append(second_input);
+	//第三行加载到页面
+	div.append(three_div);
+	three_div.append(three_div1);
+	three_div.append(three_label);
+	three_div.append(three_div1);
+	three_div1.append(three_input);
+	//第四行加载到页面上
+	div.append(four_div);
+	four_div.append(four_div1);
+	four_div.append(four_label);
+	four_div.append(four_div1);
+	four_div1.append(four_input);
+	//第五行加载到页面上
+	div.append(five_div);
+	five_div.append(five_div1);
+	five_div.append(five_label);
+	five_div.append(five_div1);
+	five_div1.append(five_input);
+	//第六行加载到页面上
+	div.append(six_div);
+	six_div.append(six_div1);
+	six_div.append(six_label);
+	six_div.append(six_div1);
+	six_div1.append(six_input);
+	//添加删除按钮
+	div.append(delete_div);
+	delete_div.append(delete_div1);
+	delete_div1.append(delete_botton);
+	father_div.append(div);
+	//向div中添加id
+	var i=$(".content").length;
+	//根据长度拼接联系人id
+	
+
+	$('#new_contectsName').attr('name',"new_contectsName"+i);
+	$('#new_contectsName').attr('id',"new_contectsName"+i);
+	$('#new_contectsJob').attr('name',"new_contectsJob"+i);
+	$('#new_contectsJob').attr('id',"new_contectsJob"+i);
+	$('#new_contectsTel').attr('name',"new_contectsTel"+i);
+	$('#new_contectsTel').attr('id',"new_contectsTel"+i);
+	$('#new_contectsEmall').attr('name',"new_contectsEmall"+i);
+	$('#new_contectsEmall').attr('id',"new_contectsEmall"+i);
+	$('#new_contectsLine').attr('name',"new_contectsLine"+i);
+	$('#new_contectsLine').attr('id',"new_contectsLine"+i);
+	$('#new_contectsOther').attr('name',"new_contectsOther"+i);
+	$('#new_contectsOther').attr('id',"new_contectsOther"+i);
+	$('#new_contectsRemark').attr('name',"new_contectsRemark"+i);
+	$('#new_contectsRemark').attr('id',"new_contectsRemark"+i);
+	$('#delete_button').attr('id',"delete_button"+i)
+	$('#content_model').attr('id',"content_model"+i)
+	//点击按钮删除对应的联系人模块
+	$("#"+"delete_button"+i).on('click', function(){
+		$("#"+"content_model"+i).remove();
+	});
+	$("#"+"new_contectsEmall"+i).emailsuggest();
+	$("#form-register").validate({
+		rules:{
+			company_name:{
+				required:true,
+				minlength:2,
+				maxlength:12
+			},
+			new_contectsName1:{
+				required:true,
+				minlength:2,
+				maxlength:12
+			},
+			real_name:{
+				required:true,
+			},
+			telephone:{
+				required:true,
+				isMobile:true,
+			},
+			email:{
+				required:true,
+				email:true,
+			},
+		},
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			/* alert("完成验证"); */
+			/*$(form).ajaxSubmit(ajax_option);
+		}
+	});*/
+	/*second_div.append(input_one);
+	three_div.append(input_tow);
+	frist_div.append(frist_label);
+	frist_div.append(second_div);
+	frist_div.append(second_label);
+	frist_div.append(three_div);
+	div.append(frist_div);*/
+	//var input = $("<input name='userName' value='' id='input1'/>");
+		//提交表单
+		//form.submit();
+//	}); 
+	/*var  company_name= $('#company_name').val();
+	alert(company_name);
+	layer.open({
+		  type: 2,
+		  title: '添加新的联系人',
+		  closeBtn: 0,
+		  shadeClose: true,
+		  skin: 'yourclass',
+		  content: "{% url 'add-contects' %}?company_name=" + company_name,
+		  area: ['600px', '360px'],
+		});*/
+//加载页面时候自动执行一遍点击事件
+/*function xieyi(){
+	$("#add-button").trigger("click");
+	};
+	$(document).ready(function(){
+	       
+	     window.onload=xieyi;
+	    });
+	//获得id列表 做判断 并且声明一个联系人列表
+$("#addfrom").on('click',function(){
+	var content_list=[];
+	var id_list=[];
+	$("input" ).each( function() {
+	    var a=$( this ).attr( "id" );
+	    id_list.push(a)
+	} );
+
+	for (var x = 1;x< 10; x++){
+		 y="new_contectsName"+x
+		 alert("#"+"new_contectsName"+x);
+		 if(id_list.indexOf(y) != -1){
+			 var new_contectsName=$("#"+"new_contectsName"+x).val();
+			 alert(new_contectsName);
+			 var new_contectsJob=$("#"+"new_contectsJob"+x).val();
+			 var new_contectsTel=$("#"+"new_contectsTel"+x).val();
+			 var new_contectsEmall=$("#"+"new_contectsEmall"+x).val();
+			 var new_contectsLine=$("#"+"new_contectsLine"+x).val();
+			 var new_contectsOther=$("#"+"new_contectsOther"+x).val();
+			 var new_contectsRemark=$("#"+"new_contectsRemark"+x).val();
+			 var content_dict={"new_contectsName":new_contectsName,
+					 			"new_contectsJob":new_contectsJob,
+					 			"new_contectsTel":new_contectsTel,
+					 			"new_contectsEmall":new_contectsEmall,
+					 			"new_contectsLine":new_contectsLine,
+					 			"new_contectsOther":new_contectsOther,
+					 			"new_contectsRemark":new_contectsRemark}
+			 content_list.push(content_dict)
+			 
+		}
+		 else{
+			 break;
+		 }
+	}*/
+$("#save-from").on('click',function(){
+	//生成base_info 和 Survey 的元素 
+	var company_class;
+	var class_1=$("#class-1").val();
+	var	class_2=$("#class-2").val();
+	if (class_1!=""){
+		company_class=class_1
+	}
+	else{
+		company_class=class_2
+		}
+	var company_name=$("#company_name").val();
+	var company_size=$("#company_size").val();
+	var company_nature=$("#company_nature").val();
+	var industry=$("#industry").val();
+	var stage=$("#stage").val();
+	var company_address=$("#company_address").val();
+	var company_website=$("#company_website").val();
+	var company_introduction=$("#company_introduction").val();
+	var packages=$("#package").val();
+	var company_highlights=$("#company_highlights").val();
+	var interview_process=$("#interview_process").val();
+	var other_info=$("#other_info").val();
+	var base_info = {'company_class':company_class,
+					'company_name':company_name,
+					'company_size':company_size,
+					'company_nature':company_nature,
+					'industry':industry,
+					'stage':stage,
+					'company_address':company_address
+					};
+	var Survey_info = {
+			'company_website':company_website,
+			'company_introduction':company_introduction,
+			'package':packages,
+			'company_highlights':company_highlights,
+			'interview_process':interview_process,
+			'other_info':other_info			
+	};
+	//传值 
+	$.ajax({
+    	async: false,
+    	url:"{% url 'company-add' %}",
+    	type:'POST',
+    	dataType: 'json',
+    	data:{'base_info':base_info,'Survey_info':Survey_info/*'content_info':content_list*/},
+    	success:function(ret){
+    		$.each(ret, function(i,item){
+    			if( item== 'success'){
+            		var index = parent.layer.getFrameIndex(window.name);
+            		layer.alert('添加成功!', {title:'添加成功', icon:1}, function(index){
+            			parent.layer.close(index);	
+            		});
+            		location.reload();
+            	}else{
+            		alert("添加失败");
+            	}
+    		});
+		},
+      	error:function(ret){
+    	  	alert("1111");
+      	}
+	});
+});
+
+	
+
+/*$(function(){
+	$('.skin-minimal input').iCheck({
+		checkboxClass: 'icheckbox-blue',
+		radioClass: 'iradio-blue',
+		increaseArea: '20%'
+	});
+	
+/*	var ajax_option={
+		success:function(ret){
+			/* alert("添加成功");
+			alert(ret);
+			alert(typeof(ret)); */
+			
+			
+		
+	
+	
+
+//});
+
+//	********************************************************************
+//表单验证
+
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

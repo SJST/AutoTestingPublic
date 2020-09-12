@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/css/jqueryui-editable.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="{% static 'Hui-iconfont/1.0.8/iconfont.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui/css/H-ui.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui.admin/css/H-ui.admin.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'my-css/client/company-list.css' %}" />
+<title>公司列表</title>
+<meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+<meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+	<style>
+	    #table_head th,td{
+	    			text-align:center;}
+		.button_class{
+		text-align:right;}
+	</style>
+</head>
+<body ontouchstart>
+
+<div class="containBox">
+	<div class="container ui-sortable">
+		<!-- <h1>知识词典，属于我自己的学习目标</h1>
+		<p>开始学习之旅！</p>-->
+		<div class="panel panel-default">
+			<div class="panel-header">客户列表</div>
+			<div class="top-warp">
+				<div class="search-li">
+					<ul>
+						<li id="company">公司</li>
+						<li id="indu">行业</li>
+						<li id="city">城市</li>
+						<li id="class">类型</li>
+					</ul>
+				</div>
+				<div class= "search-div">
+					<div class="search">
+						<div class="search-company">
+							<input type="text" placeholder="请输入公司名称" class="input-text ac_input " name="search_text" value="" id="search_company" autocomplete="off" style="width:300px">
+							<button type="submit" class="btn btn-default search_button" id="search_button">搜索</button>		
+						</div>
+						<div class= "search-industy">
+							<input type="text" placeholder="请输入行业关键词" class="input-text ac_input" name="search_text" value="" id="search_industy" autocomplete="off" style="width:300px">
+							<button type="submit" class="btn btn-default search_button" id="search_button">搜索</button>				
+						</div>
+						<div class= "search-city">
+							<input type="text" placeholder="请输入城市关键词" class="input-text ac_input" name="search_text" value="" id="search_city" autocomplete="off" style="width:300px">
+							<button type="submit" class="btn btn-default search_button" id="search_button">搜索</button>				
+						</div>
+						<div class= "search-class">
+							<input type="text" placeholder="请输入类型关键词" class="input-text ac_input" name="search_text" value="" id="search_class" autocomplete="off" style="width:300px">
+							<button type="submit" class="btn btn-default search_button" id="search_button">搜索</button>				
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div>
+		</div>
+			<table border="1"width="50%" height="50%" align="center" id=table_head  class="os-content" >
+				<thead>
+				<tr id="table_head">
+					<th data-title="company_name" height="20px">公司名称</th>
+					<th data-title="company_city">所在城市</th>
+					<th data-title="position-num">职位个数</th>
+					<th data-title="stage">融资阶段</th>
+					<th	data-title="contacts_class">客户类型</th>
+					<th data-title='operate'>操作</th>
+					<!-- <th	data-title="new_contectsJob">联系人</th>
+					<th	data-title="new_contectsTel">职务</th>
+					<th	data-title="new_contectsLine">电话</th>
+					<th	data-title="new_contectsEmall">座机</th>
+					<th	data-title="new_contectsRemark">邮箱</th>
+					<th data-title='new_contectsName'>备注</th>
+					<th data-title='operate'>操作</th>-->
+				
+				</tr>
+				</thead>
+				<tbody id="tbody_result">
+					
+				</tbody>
+			</table>
+			<div id="reset"></div>
+			<br/>
+			
+			<!--  <button type="button" class="btn btn-success radius" id='add-button'>
+				<i class="Hui-iconfont"></i>添加知识点
+			</button>
+			<button type="button" class="btn btn-secondary radius" id='next_page'>
+				<i class="Hui-iconfont"></i>下一页
+			</button>-->
+
+			</div>
+	
+	</div>
+</div>
+</body>
+
+<script type="text/javascript" src="{% static 'jquery/1.9.1/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery-ui/1.9.1/jquery-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'layer/2.4/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui/js/H-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui.admin/js/H-ui.admin.js' %}"></script>
+<script type="text/javascript" src="{% static 'my-js/company-list.js' %}"></script>
+<script language="javascript">
+				
+		
+
+
+</script>
+</html>

@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../../common_html/_header.html' %}
+<title>公司列表</title>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 客户管理 <span class="c-gray en">&gt;</span> 职位管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" >刷新当前页面<i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div id="search_info">
+		<fieldset>
+			<legend style="text-align:center;">检索信息</legend>
+			<div class="text-c">
+		        <span>职位名称：</span><input type="text" class="input-text" style="width:250px" id="search-company-text">
+		        <span>公司名称：</span><input type="text" class="input-text" style="width:250px" id="search-city-text"><br>
+		        <span>城市：</span><input type="text" class="input-text" style="width:250px;margin-right:294px"   id="search-type-text">
+		        <!-- <span>融资阶段：</span><input type="text" class="input-text" style="width:250px" id="search-financing_stage-text">--><br><br>
+	        </div>
+	        <div id="button">
+		        <button type="button" class="btn btn-success radius col-md-offset-0" id='add-position-tab'>新建职位 </button>
+		    	<button type="button" class="btn btn-primary radius col-md-offset-4" id='search-reset'>清空搜索框</button>
+		        <button type="button" class="btn btn-success radius col-md-offset-0" id='search-button'><i class="Hui-iconfont">&#xe665;</i> 搜职位</button>
+		    </div>
+		</fieldset>
+    </div>
+    </div>
+    <br>
+     <table id="data_table" class="table table-border table-bordered table-hover table-bg">
+            <thead>
+            	<tr>
+					<th scope="col" colspan="11">职位列表 --- ( 点击职位名称查看公司信息 )</th>
+				</tr>
+				<tr id="tr_head" class="text-c">
+					<th width="50">职位名称</th>
+					<th width="50">所属公司</th>
+					<th width="90">联系人</th>
+				</tr>
+            </thead>
+            <tbody id="tbody_result">
+            </tbody>
+        </table>
+        <br>
+    <br>
+
+    
+	<!-- <div class="cl pd-5 bg-1 bk-gray">
+		<span class="l">
+			<a href="javascript:;" onclick="company_batch_del()" class="btn btn-danger radius" style="pointer-events:none" id="batch_del"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+		</span>
+		<span class="r">共有数据：<strong>{{result_count}}</strong> 条</span>
+	</div>
+	<br> -->
+	<div id="result_info_null" style="display:none"><p>暂无记录</p></div>
+	<script type="text/javascript" src="{% static 'jquery/1.9.1/jquery.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'jquery-ui/1.9.1/jquery-ui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'layer/2.4/layer.js' %}"></script>
+	<script type="text/javascript" src="{% static 'h-ui/js/H-ui.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'h-ui.admin/js/H-ui.admin.js' %}"></script>
+	<script language="javascript"> 
+	$(document).ready(function(){
+		$('#table_head').hide();
+		//$.fn.editable.defaults.mode = 'inline';
+		/*$("#tbody_result").on("click", "td#company_name a", function(){
+			var company_name= $(this).text()
+			
+			Hui_admin_tab(this);
+		});*/
+
+		var test_num=0
+
+		$.ajax({
+			async: false,
+			url:"position-ajax",
+			type:'GET',
+			dataType: 'json',
+			data:{'test_num':test_num},
+			success:function(ret){
+				
+				$('#table_head tr:gt(0)').remove();
+				$('#table_head').show();
+				$.each(ret, function(i,item){
+//					if(ID_list.indexOf(item.company_id)==-1){
+//						ID_list.push(item.ID)
+//					}
+//					if(client_list.indexOf(item.company_class)==-1){
+//						client_list.push(item.company_class)
+//					}
+//					if(company_list.indexOf(item.company_name)==-1){
+//						company_list.push(item.company_name)
+//					}
+//					if(industy_list.indexOf(item.industry)==-1){
+//						industy_list.push(item.industry)
+//					}
+//					if(city_list.indexOf(item.city_list)==-1){
+//						city_list.push(item.company_address)
+//					}
+					var company_name=item.company_name;
+		        	//var url ="{% url 'show-company-list' %}?company_name="+company_name;
+					var tr_new=$('<tr class="order" border="3"></tr>');
+					
+					//获得 小对象个数用于table合并
+					
+					tr_new.append(
+							'<td height="20px" width="100px"class="big_table" >' + item.position_name+ '</td>'+
+							'<td height="20px" width="100px"class="big_table" >' + item.company_name+ '</td>'+
+							'<td height="20px" width="100px" class="big_table" >'+item.contact_name+'</td>');
+					$("#tbody_result").append(tr_new);
+
+				});
+			}
+		});
+		});
+		
+	$("#add-position-tab").click(function(){
+		alert("以上程序没有问题");
+		window.open('http://127.0.0.1:8000/ask-position');
+		
+	});
+			
+		
+	</script>
+	
+</body>
+</html>

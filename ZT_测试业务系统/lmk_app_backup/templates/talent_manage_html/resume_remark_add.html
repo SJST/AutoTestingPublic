@@ -1,0 +1,65 @@
+﻿{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../common_html/_header.html' %}
+<body>
+<article class="page-container">
+	<form action="{% url 'resume-remark-add' %}" method="post" class="form form-horizontal" id="form-resume-remark-add">
+		<div class="row cl">
+			<div class="formControls col-xs-10 col-xs-offset-1">
+				<input type="hidden" id="telephone_hidden" name="telephone" value="{{telephone}}">
+				<textarea class="textarea" style="height:300px;resize: both" rows="100" wrap="virtual" name="new_remark" autofocus></textarea>
+				<div class="row cl">
+					<div class="text-c">
+						<button type="submit" class="btn btn-success radius" id="resume-remark-add" value="" name=""><i class="icon-ok"></i> 确定添加</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</article>
+
+{% include '../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/validate-methods.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/messages_zh.js' %}"></script>
+<script type="text/javascript">
+
+$(function(){
+	
+	var ajax_option={
+		success:function(ret){
+			/* alert("添加成功");
+			alert(ret);
+			alert(typeof(ret)); */
+			
+			/* if(ret == 'success'){ */
+			if(ret.status == 'success'){
+        		var index = parent.layer.getFrameIndex(window.name);
+        		
+        		// 刷新父页面
+        		parent.location.reload();
+    			parent.layer.close(index);
+        	}else{
+        		alert("添加失败");
+        	}
+		}
+	}
+	
+	$("#form-resume-remark-add").validate({
+		onkeyup:false,
+		focusCleanup:true,
+		success:"valid",
+		submitHandler:function(form){
+			/* alert("完成验证"); */
+			$(form).ajaxSubmit(ajax_option);
+		}
+	});
+	
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

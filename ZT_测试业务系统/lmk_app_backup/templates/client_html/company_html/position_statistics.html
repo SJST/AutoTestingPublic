@@ -1,0 +1,190 @@
+﻿{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../../common_html/_header.html' %}
+<title>公司列表</title>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 客户管理 <span class="c-gray en">&gt;</span> 公司管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="cl pd-5 bg-1 bk-gray">
+		<span class="l">
+			<a href="javascript:;" onclick="company_batch_del()" class="btn btn-danger radius" style="pointer-events:none" id="batch_del"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+		</span>
+		<span class="r">共有数据：<strong>{{result_count}}</strong> 条</span>
+	</div>
+	<br>
+	<div id="result_info_null" style="display:none"><p>暂无记录</p></div>
+	<div id="result_info" style="display:none">
+        <table id="data_table" class="table table-border table-bordered table-hover table-bg">
+            <thead>
+            	<tr>
+					<th scope="col" colspan="11">公司列表 --- ( 点击公司名称查看公司信息 )</th>
+				</tr>
+				<tr id="tr_head" class="text-c">
+					<th width="25"><input type="checkbox" value="" name="" disabled="true"></th>
+					<th width="50">公司名称</th>
+					<th width="50">所属行业</th>
+					<th width="90">所在城市</th>
+					<th width="70">联系人</th>
+					<th width="70">电话</th>
+					<th width="90">职位列表</th>
+					<th width="70">推荐数</th>
+					<th width="70">面试数</th>
+					<th width="70">通过数</th>
+					<th width="70">客户类型</th>
+				</tr>
+            </thead>
+            <tbody id="tbody_result">
+            </tbody>
+        </table>
+        <br>
+    </div>
+    <br>
+	
+</div>
+
+{% include '../../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'datatables/1.10.0/jquery.dataTables.min.js' %}"></script> 
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	// 判断是否有数据，有数据则动态创建表格显示
+	if({{result_count}} > 0){
+		var result_json_obj = {{result_json|safe}};
+		
+		// 输出对象类型的字符串，方便debug
+		//alert(JSON.stringify(result_json_obj));
+		
+		$("#tbody_result").empty();
+
+		$.each(result_json_obj, function(i,item){
+        	var row_merge_count = item.company_positions.length;
+        	var rowspan_string = ' rowspan="' + row_merge_count + '"';
+        	
+        	var td_merge_string_1 = 
+        		'<td width="25"' + rowspan_string + '><input type="checkbox" value="' + item.company_name + '" name="check"></td>' + 
+        		'<td width="50" id="company_name"' + rowspan_string + '><a class="c-primary" href="javascript:;">'+ item.company_name + '</a></td>' + 
+	    		'<td width="50" id="company_industry"' + rowspan_string + '>'+ item.company_industry + '</td>' + 
+	    		'<td width="90" id="company_city"' + rowspan_string + '>'+ item.company_city + '</td>' + 
+	    		'<td width="70" id="contact_name"' + rowspan_string + '>'+ item.company_contacts[0].contact_name + '</td>' + 
+	    		'<td width="90" id="contact_telephone"' + rowspan_string + '>'+ item.company_contacts[0].contact_telephone + '</td>';
+	    	
+	    	var td_merge_string_2 = 
+	    		'<td width="70" id="client_type"' + rowspan_string + '>'+ item.client_type + '</td>';
+	    		
+	    	$.each(item.company_positions, function(i,item){
+	    		var tr=$('<tr class="text-c"></tr>');
+	    		var one_position_string = 
+	    			'<td width="70" id="position_name">'+ item.position_name + '</td>' + 
+		    		'<td width="70" id="position_recommend_count">'+ item.position_recommend_count + '</td>' + 
+		    		'<td width="70" id="position_interview_count">'+ item.position_interview_count + '</td>' + 
+		    		'<td width="70" id="position_offer_count">'+ item.position_offer_count + '</td>';
+		    	
+		    	var tds_string;
+		    	if(i == 0){
+		    		tds_string = td_merge_string_1 + one_position_string + td_merge_string_2;
+		    	}else{
+		    		tds_string = one_position_string;
+		    	}
+		    	
+	    		tds_string = tds_string.replace(/\s*undefined\s*/isg,"");
+	    		tr.append(tds_string);
+	    	    $("#tbody_result").append(tr);
+	    	})
+        	
+        	/* var tr=$('<tr class="text-c"></tr>');
+        	var tds_string = 
+        		'<td width="25"><input type="checkbox" value="' + item.company_name + '" name="check"' + rowspan_string + '></td>' + 
+        		'<td width="50" id="company_name"><a class="c-primary" href="javascript:;"' + rowspan_string + '>'+ item.company_name + '</a></td>' + 
+	    		'<td width="50" id="company_industry"' + rowspan_string + '>'+ item.company_industry + '</td>' + 
+	    		'<td width="90" id="company_city"' + rowspan_string + '>'+ item.company_city + '</td>' + 
+	    		'<td width="70" id="contact_name"' + rowspan_string + '>'+ item.company_contacts[0].contact_name + '</td>' + 
+	    		'<td width="90" id="contact_telephone"' + rowspan_string + '>'+ item.company_contacts[0].contact_telephone + '</td>' + 
+	    		'<td width="70" id="position_name">'+ item.company_positions + '</td>' + 
+	    		'<td width="70" id="position_recommend_count">'+ item.company_positions + '</td>' + 
+	    		'<td width="70" id="position_interview_count">'+ item.company_positions + '</td>' + 
+	    		'<td width="70" id="position_offer_count">'+ item.company_positions + '</td>' + 
+	    		'<td width="70" id="client_type"' + rowspan_string + '>'+ item.client_type + '</td>'; */
+			
+			//alert(tds_string);
+			//tds_string = tds_string.replace(/\s*undefined\s*/isg,"");
+			//alert(tds_string);
+			
+    	    /* tr.append(tds_string);
+    	    $("#tbody_result").append(tr); */
+        });
+        
+		$('#result_info').show();
+		$('#result_info_null').hide();
+	}else{
+		$('#result_info').hide();
+		$('#result_info_null').show();
+	}
+	
+	// 有至少一个checkbox checked，批量删除按钮样式变为可用，否则不可用
+	$('input:checkbox').click(function(){
+		
+		if($("input[type='checkbox']:checked").length>0){
+			$("a[id='batch_del']").attr("disabled", false);
+			$("a[id='batch_del']").css("pointer-events","auto");
+		}else{
+			$("a[id='batch_del']").attr("disabled", true);
+			$("a[id='batch_del']").css("pointer-events","none");
+		}
+	})
+	
+	
+    
+})
+
+/*用户-批量删除*/
+function company_batch_del(){
+    
+	var real_name_dict = {};
+    $.each($('input:checkbox:checked'),function(){
+    	real_name_dict[$(this).val()] = 1;
+    });
+    
+    layer.confirm('角色删除须谨慎，确认要删除吗？', {icon: 2, title:'批量删除'}, function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{% url 'user-del' %}",
+			data: real_name_dict,
+			success: function(ret){
+				if(ret.status == 'success'){
+					layer.msg('已删除!',{icon:1,time:1000});
+					location.reload();
+				}
+			}
+		});
+	});
+}
+
+/*用户-编辑*/
+function company_edit(title,url,id,w,h){
+	layer_show(title,url,w,h);
+}
+/*用户-删除*/
+function company_del(del_real_name){
+	var real_name_dict = {};
+	real_name_dict[del_real_name] = 1;
+	
+    layer.confirm('角色删除须谨慎，确认要删除吗？', {icon: 2, title:'删除'}, function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{% url 'user-del' %}",
+			data: real_name_dict,
+			success: function(ret){
+				if(ret.status == 'success'){
+					layer.msg('已删除!',{icon:1,time:1000});
+					location.reload();
+				}
+			}
+		});
+	});
+}
+</script>
+</body>
+</html>

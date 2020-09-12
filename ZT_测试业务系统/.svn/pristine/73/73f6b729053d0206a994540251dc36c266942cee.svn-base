@@ -1,0 +1,280 @@
+from .models import Candidate_user
+from .models import Candidate_resource
+from .models import One_remark
+import time
+import re
+from bson.json_util import dumps
+
+try:
+    from django.http import JsonResponse
+except ImportError:
+    from .tool import JsonResponse
+
+from functools import wraps
+from django.shortcuts import render, redirect, HttpResponse
+# 说明：这个装饰器的作用，就是在每个视图函数被调用时，都验证下有没法有登录，
+# 如果有过登录，则可以执行新的视图函数，
+# 否则没有登录则自动跳转到登录页面。
+def check_login(f):
+    @wraps(f)
+    def inner(request,*arg,**kwargs):
+        if request.session.get('is_login')=='1':
+            return f(request,*arg,**kwargs)
+        else:
+            return redirect('login')
+    return inner
+
+@check_login
+def index(request):
+    # return render(request, 'test_index.html')
+
+#     user_id = request.session.get('user_id')
+    user_id = request.session.get('user_id')
+#     user_id = '5bd038a76c92a52074dc29e3'
+
+    # 使用user_id去数据库中找到对应的user信息
+    userobj = Candidate_user.objects.filter(_id=user_id)
+
+#     #---
+#     userobj = MongoUser.objects.all()
+
+    if userobj:
+        return render(request, 'index.html', {"user": userobj[0]})
+#         return render(request, 'index.html', {"user": userobj[0]})
+#         return render(request, 'base.html', {"user": userobj[0]})
+    else:
+        return redirect('login')
+
+def login(request):
+    # 如果是POST请求，则说明是点击登录按扭 FORM表单跳转到此的，那么就要验证密码，并进行保存session
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        candidate_user = Candidate_user.objects.filter(username=username, password=password)
+        
+        if candidate_user:
+            # 登录成功
+            # 1，生成特殊字符串
+            # 2，这个字符串当成key，此key在数据库的session表（在数据库存中一个表名是session的表）中对应一个value
+            # 3，在响应中,用cookies保存这个key ,(即向浏览器写一个cookie,此cookies的值即是这个key特殊字符）
+            request.session['is_login'] = '1'  # 这个session是用于后面访问每个页面（即调用每个视图函数时要用到，即判断是否已经登录，用此判断）
+            request.session['username'] = username  # 这个要存储的session是用于后面，每个页面上要显示出来，登录状态的用户名用。
+            # 说明：如果需要在页面上显示出来的用户信息太多（有时还有积分，姓名，年龄等信息），所以我们可以只用session保存user_id
+            
+            user_id = str(candidate_user[0]._id)
+            print(user_id)
+            
+#             request.session['user_id'] = candidate_user[0]._id
+            request.session['user_id'] = user_id
+            
+            return redirect('index')
+    # 如果是GET请求，就说明是用户刚开始登录，使用URL直接进入登录页面的
+    return render(request, 'login.html')
+
+@check_login
+def iframe_welcome(request):
+
+#     candidate_obj = Candidate_resource.objects[0:5]
+#     candidate_obj = Candidate_resource.objects(company='美团', name='周璐')
+#     data_list = list(candidate_obj)
+#     total_count = len(data_list)
+#     print('total:' + str(total_count))
+#     print(Candidate_resource.objects.count())
+#     
+#     return render(request, 'welcome.html', {"user": candidate_obj[0]})
+    return render(request, 'welcome.html')
+
+#     user_id1 = request.session.get('user_id')
+#      
+#     user_id1 = '5bd038a76c92a52074dc29e3'
+#     userobj = Candidate_user.objects.filter(_id=user_id1)
+#  
+#     #---    MongoDB
+#     mongo_obj = Candidate_resource.objects.all()[0:10]
+#      
+#     if userobj:
+# #         return render(request, 'welcome.html', {"user": userobj[0]})
+#         return render(request, 'welcome.html', {"user": userobj[0], "mongo_info": mongo_obj[0]})
+    
+#-----------------------------------------------------------------------------------------------------------------------
+
+def get_total_count(request):
+    filter_params_dict = {}
+    for key, value in request.GET.items():
+        if value:
+            key = key + '__icontains'
+            filter_params_dict.update({key: value})
+
+#     if filter_params_dict:
+#         candidate_obj = CandidateResource.objects.filter(**filter_params_dict).values('name', 'telephone', 'company', 'position', 'new_remark')
+#     else:
+#         candidate_obj = CandidateResource.objects.all().values('name', 'telephone', 'company', 'position')
+    
+#     candidate_obj = Candidate_resource.objects(company='美团', name='周璐')
+#     candidate_obj = Candidate_resource.objects(**filter_params_dict)
+#     if filter_params_dict:
+#         candidate_obj = Candidate_resource.objects(**filter_params_dict)
+#     else:
+#         candidate_obj = Candidate_resource.objects.all()
+
+    if filter_params_dict:
+        candidate_obj = Candidate_resource.objects(**filter_params_dict)
+        data_list = list(candidate_obj)
+        total_count = len(data_list)
+    else:
+        total_count = Candidate_resource.objects.count()
+    
+    print('total:' + str(total_count))
+    return HttpResponse(total_count)
+
+def search_jianli(request):
+    filter_params_dict = {}
+    pagination_params_dict = {}
+
+    for key, value in request.GET.items():
+        print(key + ':' + value)
+        if re.search('page', key, flags=0):
+            pagination_params_dict.update({key:value})
+        else:
+            if value:
+                key = key + '__icontains'
+                filter_params_dict.update({key:value})
+
+    print(filter_params_dict)
+    print(pagination_params_dict)
+
+    per_page_count = int(pagination_params_dict.get('per_page_count'))
+
+    from_search_count = 0
+    if pagination_params_dict.get('current_page_num'):
+        current_page_num = int(pagination_params_dict.get('current_page_num')) - 1
+        from_search_count = per_page_count * current_page_num
+
+#     if filter_params_dict:
+#         # candidate_obj = CandidateResource.objects.filter(company='美团', name='周璐').values('name', 'telephone', 'company')[:10]
+#         # candidate_obj = CandidateResource.objects.filter(**filter_params_dict)[0:1]   #---    这种方式报错
+#         candidate_obj = CandidateResource.objects.filter(**filter_params_dict).values('name', 'telephone', 'company', 'position', 'new_remark')[from_search_count:from_search_count + 10]
+#     else:
+#         candidate_obj = CandidateResource.objects.all().values('name', 'telephone', 'company', 'position', 'new_remark')[from_search_count:from_search_count + 10]
+
+    collection_obj = Candidate_resource.objects(**filter_params_dict)[0:1]
+    candidate_obj = collection_obj._collection_obj.find(collection_obj._query)[from_search_count:from_search_count + 10]
+    
+#     if filter_params_dict:
+#         candidate_obj = Candidate_resource.objects(**filter_params_dict)[from_search_count:from_search_count + 10]
+#     else:
+# #         candidate_obj = Candidate_resource.objects.all()[from_search_count:from_search_count + 10]
+#         candidate_obj = Candidate_resource.objects[from_search_count:from_search_count + 10]
+#     
+#     data_list = list(candidate_obj)
+    
+#     print(len(data_list))
+#     for user in candidate_obj:
+#         print(user.name)
+
+    
+#     data_json = data_list.to_json()
+#     data_json = serializers(data_list)
+#     data_json = json.dumps(data_list, ensure_ascii=False)
+
+    data_json = dumps(candidate_obj, ensure_ascii=False)
+#     data_json = serializers.serialize('json', candidate_obj, ensure_ascii=False)
+    print(data_json)#-----------------------------------
+
+    return HttpResponse(data_json)
+
+def insert_jianli(request):
+    filter_params_dict = {}
+    update_params_dict = {}
+
+    for key, value in request.GET.items():
+        if key == 'telephone':
+            value = int(value)
+            print(type(value))
+            filter_params_dict.update({key: value})
+        else:
+            if value:
+                # print(key + ':' + value)
+                update_params_dict.update({key: value})
+            else:
+                update_params_dict.update({key: ''})
+
+#     conment = update_params_dict['new_remark']
+    conment = update_params_dict.pop('new_remark')
+    print(conment)
+    
+    print(filter_params_dict)
+    print(update_params_dict)
+    
+    #    时间戳
+    date_strf = time.time()
+    #    格式化时间
+    format_time_string = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+
+    status = 'error'
+    if filter_params_dict:
+        if(conment != ''):
+            one_remark = One_remark(comment=conment, date_strf=date_strf, date_string=format_time_string)
+            candidate_obj = Candidate_resource.objects(**filter_params_dict).update(upsert= True, **update_params_dict, push__new_remark=one_remark)
+            if candidate_obj:
+                status = 'success'
+        else:
+            candidate_obj = Candidate_resource.objects(**filter_params_dict).update(upsert= True, **update_params_dict)
+            if candidate_obj:
+                status = 'success'
+
+    return JsonResponse({'status': status})
+
+#-----------------------------------------------------------------------------------------------------------------------
+def update_jianli(request):
+    filter_params_dict = {}
+    update_params_dict = {}
+
+    for key, value in request.GET.items():
+        if key == 'telephone':
+            value = int(value)
+            print(type(value))
+            filter_params_dict.update({key: value})
+        else:
+            if value:
+                # print(key + ':' + value)
+                update_params_dict.update({key: value})
+            else:
+                update_params_dict.update({key: ''})
+
+#     conment = update_params_dict['new_remark']
+    conment = update_params_dict.pop('new_remark')
+    print(conment)
+    
+    print(filter_params_dict)
+    print(update_params_dict)
+    
+    #    时间戳
+    date_strf = time.time()
+    #    格式化时间
+    format_time_string = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+
+    status = 'error'
+    if filter_params_dict:
+#         candidate_obj = CandidateResource.objects.filter(**filter_params_dict).update(**update_params_dict)
+        
+#         candidate_resource.update(filter_params_dict, {"$set":update_params_dict,
+#                                                     "$push":{"new_remark":{
+#                                                                                    "comment" : "1101更新数据和更新内嵌文档都已经好用了",
+#                                                                                    "date_strf":date_strf,
+#                                                                                    "date_string":format_time_string
+#                                                                                    }}})
+        
+        if(conment != ''):
+            one_remark = One_remark(comment=conment, date_strf=date_strf, date_string=format_time_string)
+#             candidate_obj = Candidate_resource.objects(**filter_params_dict).update(push__new_remark=one_remark)
+            candidate_obj = Candidate_resource.objects(**filter_params_dict).update(upsert= True, **update_params_dict, push__new_remark=one_remark)
+            if candidate_obj:
+                status = 'success'
+        
+
+    return JsonResponse({'status': status})
+#-----------------------------------------------------------------------------------------------------------------------
+
+

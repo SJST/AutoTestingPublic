@@ -1,0 +1,404 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/css/jqueryui-editable.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="{% static 'Hui-iconfont/1.0.8/iconfont.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui/css/H-ui.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui.admin/css/H-ui.admin.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'my-css/client/company_info.css' %}" />
+<title>公司列表</title>
+<meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+<meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+	
+	<style>
+		body{
+				background-color: #EEE
+			}
+		.text{
+				font-size: 20px;
+				font-weight: bolder;
+				color:skyblue;
+				margin-left:60px
+		}
+		#button_div{text-align:right;
+					width:1170px;
+					margin:0 auto 0;
+					float:right;
+					background-color:#fafafa}
+		#exid_button{
+					margin-left : 1px;
+					text-align:right;}
+		#save_button,#sub_button{
+					margin-left : 15px;
+					text-align:right;}
+		
+		.modle_div { 
+				width:200px;
+				display:inline-block;
+				text-align:right;
+				font-size: 20px;
+				font-weight: 700;}
+	
+	
+	    #table_head td{
+	    			text-align:center;}
+		.button_class{
+		text-align:right;}
+		.input{border:none;
+			   outline:none !important;
+			   font-size: 14px;
+			 }
+		input{
+    		background:transparent;
+    }
+	</style>
+</head>
+<body ontouchstart>
+<div class="containBox">
+	<div class="container ui-sortable">
+		<!-- <h1>知识词典，属于我自己的学习目标</h1>
+		<p>开始学习之旅！</p>-->
+		<div class="panel panel-default">
+			<div class="panel-header">客户信息</div>
+			<br/>
+			<div id="div_header">
+				
+				<div id=button_div class="row cl"></div>
+			</div>
+				<article class="page-container">
+					<form action="{% url 'company-exid' %}" method="post" class="form form-horizontal" id="form-register">
+			<!--  <button type="button" class="btn btn-success radius" id='add-button'>
+				<i class="Hui-iconfont"></i>添加知识点
+			</button>
+			<button type="button" class="btn btn-secondary radius" id='next_page'>
+				<i class="Hui-iconfont"></i>下一页
+			</button>-->
+					</form>
+				</article>
+
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="{% static 'jquery/1.9.1/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'layer/2.4/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/validate-methods.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/messages_zh.js' %}"></script>
+
+<script type="text/javascript" src="{% static 'My97DatePicker/4.8/WdatePicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'webuploader/0.1.5/webuploader.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/1.4.3/ueditor.config.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/1.4.3/ueditor.all.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'ueditor/1.4.3/lang/zh-cn/zh-cn.js' %}"></script>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		//$.fn.editable.defaults.mode = 'inline';
+		var test_num=0
+		
+		$.ajax({
+        	async: false,
+        	url:"{% url 'company-info' %}",
+        	type:'GET',
+        	dataType: 'json',
+        	data:{'test_num':test_num},
+        	success:function(ret){
+        		$.each(ret, function(i,item){
+        			var form=$("#form-register")
+        			
+        			var model_1=$('<div class=model_div></div>')
+        			var text1=$('<div class=text><img src="{% static "my-css/my-images/mouse01.png" %}"> 基本信息</div>')
+        			var frist_div= $('<div class="row cl"> </div>');
+        			var frist_label=$('<label class="form-label col-xs-3">公司名称：</label>');
+        			var frist_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	frist_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="company_name" id="company_name" value='+item.company_name+'>');
+        			form.append(model_1);
+        			
+        			model_1.append(text1);
+        			model_1.append(frist_div);
+        			frist_div.append(frist_label);
+        			frist_div.append(frist_div1);
+        			frist_div1.append(frist_input);
+        			//
+        			var second_div= $('<div class="row cl"> </div>');
+        			var second_label=$('<label class="form-label col-xs-3">客户类型：</label>');
+        			var second_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	second_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="company_class" id="company_class" value='+item.company_class+'>');
+        			model_1.append(second_div);
+        			second_div.append(second_label);
+        			second_div.append(second_div1);
+        			second_div1.append(second_input);
+        			//
+        			var three_div= $('<div class="row cl"> </div>');
+        			var three_label=$('<label class="form-label col-xs-3">公司规模：</label>');
+        			var three_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	three_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="company_size" id="company_size" value='+item.company_size+'>');
+        			model_1.append(three_div);
+        			three_div.append(three_label);
+        			three_div.append(three_div1);
+        			three_div1.append(three_input);
+        			//
+        			var four_div= $('<div class="row cl"> </div>');
+        			var four_label=$('<label class="form-label col-xs-3">公司性质：</label>');
+        			var four_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	four_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="company_nature" id="company_nature" value='+item.company_nature+'>');
+        			model_1.append(four_div);
+        			four_div.append(four_label);
+        			four_div.append(four_div1);
+        			four_div1.append(four_input);
+        			//
+        			var five_div= $('<div class="row cl"> </div>');
+        			var five_label=$('<label class="form-label col-xs-3">所属行业：</label>');
+        			var five_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	five_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="industry" id="industry" value='+item.industry+'>');
+        			model_1.append(five_div);
+        			five_div.append(five_label);
+        			five_div.append(five_div1);
+        			five_div1.append(five_input);
+        			//
+        			var six_div= $('<div class="row cl"> </div>');
+        			var six_label=$('<label class="form-label col-xs-3">公司阶段 ：</label>');
+        			var six_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	six_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="stage" id="stage" value='+item.stage+'>');
+        			model_1.append(six_div);
+        			six_div.append(six_label);
+        			six_div.append(six_div1);
+        			six_div1.append(six_input);
+        			//
+        			var seven_div= $('<div class="row cl"> </div>');
+        			var seven_label=$('<label class="form-label col-xs-3">公司地址 ：</label>');
+        			var seven_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	seven_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="company_address" id="company_address" value='+item.company_address+'>');
+        			model_1.append(seven_div);
+        			seven_div.append(seven_label);
+        			seven_div.append(seven_div1);
+        			seven_div1.append(seven_input);
+        			//
+        			var model_2=$('<div class=model_div></div>')
+        			var text2=$('<div class=text><img src="{% static "my-css/my-images/mouse01.png" %}">调研信息</div>')
+        			var eight_div= $('<div class="row cl"> </div>');
+        			var eight_label=$('<label class="form-label col-xs-3">公司网站 ：</label>');
+        			var eight_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	eight_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="company_website" id="company_website" value='+item.company_website+'>');
+        			form.append(model_2);
+        		
+        			model_2.append(text2);
+        			model_2.append(eight_div);
+        			eight_div.append(eight_label);
+        			eight_div.append(eight_div1);
+        			eight_div1.append(eight_input);
+        			//
+        			var nine_div= $('<div class="row cl"> </div>');
+        			var nine_label=$('<label class="form-label col-xs-3">公司介绍 ：</label>');
+        			var nine_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	nine_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="company_introduction" id="company_introduction" value='+item.company_introduction+'>');
+        			model_2.append(nine_div);
+        			nine_div.append(nine_label);
+        			nine_div.append(nine_div1);
+        			nine_div1.append(nine_input);
+        			//
+        			var ten_div= $('<div class="row cl"> </div>');
+        			var ten_label=$('<label class="form-label col-xs-3">薪酬福利：</label>');
+        			var ten_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	ten_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="package" id="package" value='+item.package+'>');
+        			model_2.append(ten_div);
+        			ten_div.append(ten_label);
+        			ten_div.append(ten_div1);
+        			ten_div1.append(ten_input);
+        			//
+        			var eleven_div= $('<div class="row cl"> </div>');
+        			var eleven_label=$('<label class="form-label col-xs-3">公司亮点：</label>');
+        			var eleven_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	eleven_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="company_highlights" id="company_highlights" value='+item.company_highlights+'>');
+        			model_2.append(eleven_div);
+        			eleven_div.append(eleven_label);
+        			eleven_div.append(eleven_div1);
+        			eleven_div1.append(eleven_input);
+        			//
+        			var process_div= $('<div class="row cl"> </div>');
+        			var process_label=$('<label class="form-label col-xs-3">面试流程：</label>');
+        			var process_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	process_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="interview_process" id="interview_process" value='+item.interview_process+'>');
+        			model_2.append(process_div);
+        			process_div.append(process_label);
+        			process_div.append(process_div1);
+        			process_div1.append(process_input);
+        			//
+        			var other_div= $('<div class="row cl"> </div>');
+        			var other_label=$('<label class="form-label col-xs-3">其他信息：</label>');
+        			var other_div1=$("<div class='formControls col-xs-8'></div>");
+        			var	other_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name="interview_process" id="interview_process" value='+item.other_info+'>');
+        			model_2.append(other_div);
+        			other_div.append(other_label);
+        			other_div.append(other_div1);
+        			other_div1.append(other_input);
+     
+        			if (typeof (item.new_contects) == 'object'){
+        				$.each(item.new_contects, function (a,one_contect){
+        							var b=a+1;
+        							var model_3=$('<div class=model_div></div>') 
+        							var text3=$('<div class=text><img src="{% static "my-css/my-images/mouse01.png" %}">'+"联系人"+b+'</div>')
+        							var contectsName_div= $('<div class="row cl"> </div>');
+        		        			var contectsName_label=$('<label class="form-label col-xs-3">姓名：</label>');
+        		        			var contectsName_div1=$("<div class='formControls col-xs-8'></div>");
+        		        			var	contectsName_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name='+"new_contectsName"+a+'  id='+"new_contectsName"+a+'  value='+one_contect.new_contectsName+'>');
+        		        			form.append(model_3);
+        		        			
+        		        			model_3.append(text3);
+        		        			model_3.append(contectsName_div);
+        		        			contectsName_div.append(contectsName_label);
+        		        			contectsName_div.append(contectsName_div1);
+        		        			contectsName_div1.append(contectsName_input);
+        		        			//
+        		        			var contectsJob_div= $('<div class="row cl"> </div>');
+        		        			var contectsJob_label=$('<label class="form-label col-xs-3">职位：</label>');
+        		        			var contectsJob_div1=$("<div class='formControls col-xs-8'></div>");
+        		        			var	contectsJob_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name='+"new_contectsJob"+a+'  id='+"new_contectsJob"+a+' value='+one_contect.new_contectsJob+'>');
+        		        			model_3.append(contectsJob_div);
+        		        			contectsJob_div.append(contectsJob_label);
+        		        			contectsJob_div.append(contectsJob_div1);
+        		        			contectsJob_div1.append(contectsJob_input);
+        		        			//
+        		        			var new_contectsTel_div= $('<div class="row cl"> </div>');
+        		        			var new_contectsTel_label=$('<label class="form-label col-xs-3">手机：</label>');
+        		        			var new_contectsTel_div1=$("<div class='formControls col-xs-8'></div>");
+        		        			var	new_contectsTel_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name='+"new_contectsTel"+a+' id='+"new_contectsTel"+a+' value='+one_contect.new_contectsTel+'>');
+        		        			model_3.append(new_contectsTel_div);
+        		        			new_contectsTel_div.append(new_contectsTel_label);
+        		        			new_contectsTel_div.append(new_contectsTel_div1);
+        		        			new_contectsTel_div1.append(new_contectsTel_input);
+        		        			//
+        		        			var new_contectsEmall_div= $('<div class="row cl"> </div>');
+        		        			var new_contectsEmall_label=$('<label class="form-label col-xs-3">邮箱 ：</label>');
+        		        			var new_contectsEmall_div1=$("<div class='formControls col-xs-8'></div>");
+        		        			var	new_contectsEmall_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name='+"new_contectsEmall"+a+' id='+"new_contectsEmall"+a+' value='+one_contect.new_contectsEmall+'>');
+        		        			model_3.append(new_contectsEmall_div);
+        		        			new_contectsEmall_div.append(new_contectsEmall_label);
+        		        			new_contectsEmall_div.append(new_contectsEmall_div1);
+        		        			new_contectsEmall_div1.append(new_contectsEmall_input);
+        		        			//
+        		        			var new_contectsLine_div= $('<div class="row cl"> </div>');
+        		        			var new_contectsLine_label=$('<label class="form-label col-xs-3">座机 ：</label>');
+        		        			var new_contectsLine_div1=$("<div class='formControls col-xs-8'></div>");
+        		        			var	new_contectsLine_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name='+"new_contectsLine"+a+' id='+"new_contectsLine"+a+' value='+one_contect.new_contectsLine+'>');
+        		        			model_3.append(new_contectsLine_div);
+        		        			new_contectsLine_div.append(new_contectsLine_label);
+        		        			new_contectsLine_div.append(new_contectsLine_div1);
+        		        			new_contectsLine_div1.append(new_contectsLine_input);
+        		        			//
+        		        			var new_contectsOther_div= $('<div class="row cl"> </div>');
+        		        			var new_contectsOther_label=$('<label class="form-label col-xs-3">其他 ：</label>');
+        		        			var new_contectsOther_div1=$("<div class='formControls col-xs-8'></div>");
+        		        			var	new_contectsOther_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name='+"new_contectsOther"+a+' id='+"new_contectsOther"+a+' value='+one_contect.new_contectsOther+'>');
+        		        			model_3.append(new_contectsOther_div);
+        		        			new_contectsOther_div.append(new_contectsOther_label);
+        		        			new_contectsOther_div.append(new_contectsOther_div1);
+        		        			new_contectsOther_div1.append(new_contectsOther_input);
+        		        			//
+        		        			var new_contectsRemark_div= $('<div class="row cl"> </div>');
+        		        			var new_contectsRemark_label=$('<label class="form-label col-xs-3">备注 ：</label>');
+        		        			var new_contectsRemark_div1=$("<div class='formControls col-xs-8'></div>");
+        		        			var	new_contectsRemark_input=$('<input type="text" disabled="disabled" class="input" autocomplete="off" placeholder=" 如：1889088..." name='+"new_contectsRemark"+a+' id='+"new_contectsRemark"+a+' value='+one_contect.new_contectsRemark+'>');
+        		        			model_3.append(new_contectsRemark_div);
+        		        			new_contectsRemark_div.append(new_contectsRemark_label);
+        		        			new_contectsRemark_div.append(new_contectsRemark_div1);
+        		        			new_contectsRemark_div1.append(new_contectsRemark_input);
+        		        			
+        		        			
+        		        			
+        		        			
+        				
+        					
+        					
+        				});
+        			}
+        			var button_div=$("#button_div")
+        			//var exid_div1=$("<div class='formControls col-xs-8 button_div'></div>");
+        			var exid_botton=$('<button class="btn radius btn-danger-outline radius" type="button"  id ="exid_button"value="">&nbsp;&nbsp;修改信息 &nbsp;&nbsp;</button>')
+        			var	save_botton=$('<button class="btn radius btn-secondary-outline radius" type="button"  id ="save_button"value="">&nbsp;&nbsp;保存信息 &nbsp;&nbsp;</button>')
+        			var sub_botton=$('<button class="btn btn-success-outline radius" type="button"  id ="sub_button"value="">&nbsp;&nbsp; 提交信息 &nbsp;&nbsp;</button>')
+        			button_div.append(exid_botton);
+        			button_div.append(save_botton);
+        			button_div.append(sub_botton);
+        		//	exid_div.append(exid_div1);
+        		//	exid_div1.append(exid_botton);
+        			//exid_div1.append(save_botton);
+        			//exid_div1.append(sub_botton);
+        		});
+        	}
+		});
+		var exid_list=[];
+		var exid_dict={};
+		$('#exid_button').on('click', function(){
+			$('input').removeAttr("disabled"); 
+			
+		});
+		$('#save_button').on('click', function(){
+			$('input').attr('disabled',"disabled");
+		});
+		
+		$("input").blur(function(){
+			var exid_id=$(this).attr('id')
+			
+			var exid_value=$("#"+exid_id).val();
+			exid_dict[exid_id]=exid_value
+			if(exid_list.indexOf(exid_dict) > -1){}
+			else {
+				exid_list.push(exid_dict);
+			}
+		});
+			
+		$('#sub_button').on('click', function(){
+			var company_name=$("#"+company_name).val();
+			$.ajax({
+	        	async: false,
+	        	url:"{% url 'company-exid' %}",
+	        	type:'POST',
+	        	dataType: 'json',
+	        	data:{'exid_list':exid_list,'company_name':company_name},
+	        	success:function(ret){
+	        			alert("提交成功!");
+	        		}
+	        	});
+		});
+		//按钮跟随页面 
+		$.fn.smartFloat = function() {
+			 var position = function(element) {
+			  var top = element.position().top, pos = element.css("position");
+			  $(window).scroll(function() {
+			   var scrolls = $(this).scrollTop();
+			   if (scrolls > top) {
+			    if (window.XMLHttpRequest) {
+			     element.css({
+			      position: "fixed",
+			      top: 0
+			     }); 
+			    } else {
+			     element.css({
+			      top: scrolls
+			     }); 
+			    }
+			   }else {
+			    element.css({
+			     position: pos,
+			     top: top
+			    }); 
+			   }
+			  });
+			 };
+			 return $(this).each(function() {
+			  position($(this));      
+			 });
+			};
+
+			$("#button_div").smartFloat();
+	});
+ </script>
+</html>

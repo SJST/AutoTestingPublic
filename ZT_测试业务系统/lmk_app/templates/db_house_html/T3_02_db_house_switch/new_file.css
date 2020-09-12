@@ -1,0 +1,44 @@
+html 
+{
+	background: url(http://area.sinaapp.com/bingImg/) top center no-repeat #000;
+	background-attachment: fixed;
+	
+}
+body
+{
+	background: none;
+}
+#mainContent
+	{
+		background: #fff0;
+	}
+#MySignature {
+	display: none;
+	background-color: #B2E866;
+	border-radius: 10px;
+	box-shadow: 1px 1px 1px #6B6B6B;
+	padding: 10px;
+	line-height: 1.5;
+	text-shadow: 1px 1px 1px #FFF;
+	font-size: 16px;
+	font-family: 'Microsoft Yahei';
+}
+/* 设置签名格式 定制css样式 */
+#MySignature {
+    display: none;
+    background-color: #B2E866;
+    border-radius: 10px;
+    box-shadow: 1px 1px 1px #6B6B6B;
+    padding: 10px;
+    line-height: 1.5;
+    text-shadow: 1px 1px 1px #FFF;
+    font-size: 16px;
+    font-family: 'Microsoft Yahei';
+}
+a:hover {
+        cursor:url(https://files.cnblogs.com/files/laoguantongxiegogo/click_24px_1231393_easyicon.net.ico),auto;
+ }
+body {
+        cursor:url(https://files.cnblogs.com/files/laoguantongxiegogo/pointer_24px_1231389_easyicon.net.ico),auto;
+ }
+

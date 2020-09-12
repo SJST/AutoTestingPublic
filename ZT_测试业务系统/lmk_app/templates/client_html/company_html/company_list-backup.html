@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jqueryui-editable/css/jqueryui-editable.css" rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="{% static 'Hui-iconfont/1.0.8/iconfont.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui/css/H-ui.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'h-ui.admin/css/H-ui.admin.css' %}" />
+
+<title>公司列表</title>
+<meta name="keywords" content="关键词,5个左右,单个8汉字以内">
+<meta name="description" content="网站描述，字数尽量空制在80个汉字，160个字符以内！">
+	<style>
+	    #table_head th,td{
+	    			text-align:center;}
+		.button_class{
+		text-align:right;}
+	</style>
+</head>
+<body ontouchstart>
+
+<div class="containBox">
+	<div class="container ui-sortable">
+		<!-- <h1>知识词典，属于我自己的学习目标</h1>
+		<p>开始学习之旅！</p>-->
+		<div class="panel panel-default">
+			<div class="panel-header">客户列表</div>
+			
+			<br>
+			<table border="1"width="50%" height="50%" align="center" id=table_head  class="os-content" >
+				<thead>
+				<tr id="table_head">
+					<th data-title="company_name" height="20px">公司名称</th>
+					<th data-title="company_city">所在城市</th>
+					<th data-title="position-num">职位个数</th>
+					<th data-title="stage">融资阶段</th>
+					<th	data-title="contacts_class">客户类型</th>
+					<th data-title='operate'>操作</th>
+					<!-- <th	data-title="new_contectsJob">联系人</th>
+					<th	data-title="new_contectsTel">职务</th>
+					<th	data-title="new_contectsLine">电话</th>
+					<th	data-title="new_contectsEmall">座机</th>
+					<th	data-title="new_contectsRemark">邮箱</th>
+					<th data-title='new_contectsName'>备注</th>
+					<th data-title='operate'>操作</th>-->
+				
+				</tr>
+				</thead>
+				<tbody id="tbody_result">
+					
+				</tbody>
+			</table>
+			<br/>
+			
+			<!--  <button type="button" class="btn btn-success radius" id='add-button'>
+				<i class="Hui-iconfont"></i>添加知识点
+			</button>
+			<button type="button" class="btn btn-secondary radius" id='next_page'>
+				<i class="Hui-iconfont"></i>下一页
+			</button>-->
+
+			</div>
+	
+	</div>
+</div>
+</body>
+
+<script type="text/javascript" src="{% static 'jquery/1.9.1/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'layer/2.4/layer.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui/js/H-ui.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'h-ui.admin/js/H-ui.admin.js' %}"></script>
+
+<script language="javascript">
+	$(document).ready(function(){
+		$('#table_head').hide();
+		//$.fn.editable.defaults.mode = 'inline';
+		$("#tbody_result").on("click", "td#company_name a", function(){
+			var company_name= $(this).text()
+			alert(company_name);
+			Hui_admin_tab(this);
+		});
+
+		var test_num=0
+		
+		$.ajax({
+        	async: false,
+        	url:"{% url 'company-ajax' %}",
+        	type:'GET',
+        	dataType: 'json',
+        	data:{'test_num':test_num},
+        	success:function(ret){
+        		
+        		$('#table_head tr:gt(0)').remove();
+        		$('#table_head').show();
+        	
+        		$.each(ret, function(i,item){
+        			var company_name=item.company_name;
+                	var url ="{% url 'company-info' %}?company_name="+company_name;
+        			var tr_new=$('<tr class="order" border="3"></tr>');
+        			//var num= (item.new_contects).length
+        			//获得 小对象个数用于table合并
+        			alert(num);
+        			tr_new.append(
+        					'<td height="20px" width="100px"class="big_table" id="company_name">'+'<a data-title="公司信息" data-href="' + url + '" class="c-primary" href="javascript:;">'+item.company_name + '</a>' +'</td>'+
+        					'<td height="20px" width="100px"class="big_table" >' + item.company_address+ '</td>'+
+        					'<td height="20px" width="100px" class="big_table" id="position-num">'+ ' ' +'</td>'+
+        					'<td height="20px" width="100px"class="big_table" >' + item.stage + '</td>'+
+        					'<td height="20px" width="100px"class="big_table" >' + item.company_class + '</td>'+
+        					'<td height="20px" width="100px"class="big_table" >' +'<a title="编辑" href="javascript:;" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>' +
+        																		  '<a title="删除" href="javascript:;" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>'+'</td>'
+        					);
+        			$("#tbody_result").append(tr_new);
+        			/*$(".big_table").attr("rowspan",num)
+        			
+        			$(".order").attr("id",i)
+        			var tr = $("#table_head").find("tbody tr:eq(0)").attr('id');
+        			
+                    	if( typeof(item.new_contects) == 'object'){
+                    		$.each(item.new_contects, function(a,one_contects){
+                    			
+                    			if(a==0)
+                    			{
+									$(".order").append('<td "rowspan="1" width="100px" height="12px">'+ one_contects.new_contectsName + '</td>'+
+													   '<td "rowspan="1" width="100px" height="12px">'+ one_contects.new_contectsJob + '</td>'+
+													   '<td "rowspan="1" width="100px" height="12px">'+ one_contects.new_contectsTel + '</td>'+
+													   '<td "rowspan="1" width="100px" height="12px">'+ one_contects.new_contectsLine +'</td>'+
+													   '<td "rowspan="1" width="100px" height="12px">'+ one_contects.new_contectsEmall +'</td>'+
+													   '<td "rowspan="1" width="100px" height="12px">'+ one_contects.new_contectsRemark +'</td>'
+														);}
+                    			else{$(".order").after('<tr>'+'<td "rowspan="1" width="100px" height="12px">'+ one_contects.new_contectsName + '</td>'+
+										   '<td "rowspan="1" width="100px" height="12px">'+ one_contects.new_contectsJob + '</td>'+
+										   '<td "rowspan="1" width="100px" height="12px">'+ one_contects.new_contectsTel + '</td>'+
+										   '<td "rowspan="1" width="100px" height="12px">'+ one_contects.new_contectsLine +'</td>'+
+										   '<td "rowspan="1" width="100px" height="12px">'+ one_contects.new_contectsEmall +'</td>'+
+										   '<td "rowspan="1" width="100px" height="12px">'+ one_contects.new_contectsRemark +'</td>'+'</tr>'
+											);}
+                    			
+                    			
+                    		});
+					 }  
+                   $("td").removeClass("big_table");
+                   $("tr").removeClass("order");*/
+                   // 每次循环结束后移除class
+        		});
+        	 }
+        });
+		
+	});
+                	/* function remark_exit(title,url,w,h){
+                		layer_show(title,url,w,h);
+                	} */
+	
+        		     
+
+			
+		
+
+
+</script>
+</html>

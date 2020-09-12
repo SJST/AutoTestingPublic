@@ -1,0 +1,202 @@
+﻿{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../common_html/_header.html' %}
+<title>权限管理</title>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 超级管理 <span class="c-gray en">&gt;</span> 权限管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+	<div class="cl pd-5 bg-1 bk-gray">
+		<span class="l">
+			<a href="javascript:;" onclick="admin_permission_batch_del()" class="btn btn-danger radius" style="pointer-events:none" id="batch_del"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+			<a href="javascript:;" onclick="admin_permission_add('添加权限','{% url 'admin-permission-add' %}','800')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加权限</a>
+		</span>
+		<span class="r">共有数据：<strong>{{result_count}}</strong> 条</span>
+	</div>
+	
+	<br>
+	<div id="result_info_null" style="display:none"><p>暂无记录</p></div>
+	<div id="result_info" style="display:none">
+        <table id="data_table" class="table table-border table-bordered table-hover table-bg">
+            <thead>
+            	<tr>
+					<th scope="col" colspan="4">权限列表</th>
+				</tr>
+                <tr id="tr_head" class="text-c">
+                	<th width="25"><input type="checkbox" value="" name="" disabled="true"></th>
+                    <th width="200" data-title="permission_name" style="text-align:center;font-weight:bold;">权限名称</th>
+                    <th width="300" data-title="permission_description" style="text-align:center;font-weight:bold;">描述</th>
+                    <th width="70" data-title="operation" style="text-align:center;font-weight:bold;">操作</th>
+                </tr>
+            </thead>
+            <tbody id="tbody_result">
+            </tbody>
+        </table>
+        <br>
+    </div>
+    <br>
+	
+	<!-- <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_permission_add('添加权限节点','admin-permission-add.html','','310')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加权限节点</a></span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>
+	<table class="table table-border table-bordered table-bg">
+		<thead>
+			<tr>
+				<th scope="col" colspan="7">权限节点</th>
+			</tr>
+			<tr class="text-c">
+				<th width="25"><input type="checkbox" name="" value=""></th>
+				<th width="40">ID</th>
+				<th width="200">权限名称</th>
+				<th>字段名</th>
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="text-c">
+				<td><input type="checkbox" value="1" name=""></td>
+				<td>1</td>
+				<td>栏目添加</td>
+				<td></td>
+				<td><a title="编辑" href="javascript:;" onclick="admin_permission_edit('角色编辑','admin-permission-add.html','1','','310')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a> <a title="删除" href="javascript:;" onclick="admin_permission_del(this,'1')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+			</tr>
+		</tbody>
+	</table> -->
+</div>
+
+{% include '../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'datatables/1.10.0/jquery.dataTables.min.js' %}"></script> 
+<script type="text/javascript">
+
+$(document).ready(function(){
+	
+	if({{result_count}} > 0){
+		var result_json_obj = {{result_json|safe}};
+		
+		$("#tbody_result").empty();
+
+        $.each(result_json_obj, function(i,item){
+        	var tr=$('<tr class="text-c"></tr>');
+    	    
+    	    tr.append(
+    	    		'<td width="25"><input type="checkbox" value="' + item.permission_name + '" name="check"></td>' + 
+    	    		'<td width="200" id="permission_name">'+ item.permission_name + '</td>' + 
+    	    		'<td width="300" id="permission_description">'+ item.permission_description + '</td>' + 
+    	    		'<td width="70">' + 
+    	    			'<a title="编辑" href="javascript:;" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>' + 
+    	    			'<a title="删除" href="javascript:;" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>' + 
+    	    		'</td>');
+    	    
+    	    $("#tbody_result").append(tr);
+        });
+		
+		$('#result_info').show();
+		$('#result_info_null').hide();
+	}else{
+		$('#result_info').hide();
+		$('#result_info_null').show();
+	}
+	
+	$('input:checkbox').click(function(){
+		//$('input:checkbox:checked').parents("tr").remove();
+		
+		if($("input[type='checkbox']:checked").length>0){
+			$("a[id='batch_del']").attr("disabled", false);
+			$("a[id='batch_del']").css("pointer-events","auto");
+		}else{
+			$("a[id='batch_del']").attr("disabled", true);
+			$("a[id='batch_del']").css("pointer-events","none");
+		}
+	})
+	
+	$("#tbody_result").on("click", "a[title='编辑']", function(){
+		
+		var permission_name = $(this).parents("tr").find("#permission_name").text();
+		var permission_description = $(this).parents("tr").find("#permission_description").text();
+		var url_string = '{% url "admin-permission-add" %}' + '?type=edit&permission_name=' + permission_name + '&permission_description=' + permission_description;
+		//alert(url_string);
+		
+		admin_permission_edit('权限编辑',url_string,'permission_name');
+    });
+	
+	$("#tbody_result").on("click", "a[title='删除']", function(){
+		var del_permission_name = $(this).parents("tr").find("#permission_name").text();
+		
+		if(del_permission_name){
+			admin_permission_del(del_permission_name);
+		}else{
+			alert("del error");
+		}
+    });
+})
+
+/*管理员-角色-批量删除*/
+function admin_permission_batch_del(){
+	// $('input:checkbox:checked') 等同于 $('input[type=checkbox]:checked')
+    // 意思是选择被选中的checkbox
+    
+    //var permission_name_array = [];
+	var permission_name_dict = {};
+    $.each($('input:checkbox:checked'),function(){
+        //window.alert("你选了："+$('input[type=checkbox]:checked').length+"个，其中有："+$(this).val());
+        
+    	//permission_name_array.push($(this).val());
+    	
+    	permission_name_dict[$(this).val()] = 1;
+    });
+    
+    layer.confirm('角色删除须谨慎，确认要删除吗？', {icon: 2, title:'批量删除'}, function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{% url 'admin-permission-del' %}",
+			data: permission_name_dict,
+			success: function(ret){
+				if(ret == 'success'){
+					//$('input:checkbox:checked').parents("tr").remove();
+					layer.msg('已删除!',{icon:1,time:1000});
+					location.reload();
+				}
+			}
+		});
+	});
+}
+
+/*
+	参数解释：
+	title	标题
+	url		请求的url
+	id		需要操作的数据id
+	w		弹出层宽度（缺省调默认值）
+	h		弹出层高度（缺省调默认值）
+*/
+/*管理员-权限-添加*/
+function admin_permission_add(title,url,w,h){
+	layer_show(title,url,w,h);
+}
+/*管理员-权限-编辑*/
+function admin_permission_edit(title,url,id,w,h){
+	layer_show(title,url,w,h);
+}
+
+/*管理员-权限-删除*/
+function admin_permission_del(del_permission_name){
+	var permission_name_dict = {};
+	permission_name_dict[del_permission_name] = 1;
+	
+    layer.confirm('角色删除须谨慎，确认要删除吗？', {icon: 2, title:'删除'}, function(index){
+		$.ajax({
+			type: 'POST',
+			url: "{% url 'admin-permission-del' %}",
+			data: permission_name_dict,
+			success: function(ret){
+				if(ret == 'success'){
+					layer.msg('已删除!',{icon:1,time:1000});
+					location.reload();
+				}
+			}
+		});
+	});
+}
+</script>
+</body>
+</html>

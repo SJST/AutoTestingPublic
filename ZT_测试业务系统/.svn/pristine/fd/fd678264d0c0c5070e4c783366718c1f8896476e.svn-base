@@ -1,0 +1,88 @@
+﻿{% load static %}
+<!DOCTYPE HTML>
+<html>
+{% include '../common_html/_header.html' %}
+<body>
+<div class="page-container">
+	<table id="resume_info_table" class="table" style="width:45%;display:inline-table;">
+		<thead>
+			<tr id="tr_head" class="text-c">
+			    <th scope="col" colspan="2" style="font-weight:bold;">简历信息</th>
+			</tr>
+        </thead>
+        <tbody id="resume_info_tbody">
+        	<tr>
+				<th class="text-r">姓名：</th>
+				<td>{{name}}</td>
+			</tr>
+			<tr>
+				<th class="text-r">公司：</th>
+				<td>{{company}}</td>
+			</tr>
+			<tr>
+				<th class="text-r">地点：</th>
+				<td>{{province_city}}{{district_city}}</td>
+			</tr>
+			<tr>
+				<th class="text-r">职位：</th>
+				<td>{{position}}</td>
+			</tr>
+			<tr>
+				<th class="text-r">电话：</th>
+				<td>{{telephone}}</td>
+			</tr>
+			<tr>
+				<th class="text-r">邮箱：</th>
+				<td>{{email}}</td>
+			</tr>
+        </tbody>
+    </table>
+    <table id="remark_table" class="table" style="width:45%;display:inline-table;">
+		<thead>
+            <tr id="tr_head" class="text-c">
+        		<th data-title="new_remark" style="text-align:center;font-weight:bold;">备注信息</th>
+            </tr>
+        </thead>
+        <tbody id="remark_tbody">
+	        <tr>
+				<td class="text-l">
+					<ul id="remark_fold" class="Huifold">
+						{% if new_remark %}
+							{% for one_remark in new_remark %}
+								<li class="item">
+									<h4>{{one_remark.date_string}}<b>+</b></h4>
+									<div class="info">{{one_remark.comment}}</div>
+								</li>
+							{% endfor %}
+						{% endif %}
+					</ul>
+				</td>
+			</tr>
+        </tbody>
+	</table>
+</div>
+
+{% include '../common_html/_script.html' %}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/jquery.validate.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/validate-methods.js' %}"></script>
+<script type="text/javascript" src="{% static 'jquery.validation/1.14.0/messages_zh.js' %}"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+	// 折叠
+	$("#remark_fold").Huifold({
+		titCell:'.item h4',
+		mainCell:'.item .info',
+		type:3,//1	只打开一个，可以全部关闭;2	必须有一个打开;3	可打开多个
+		trigger:'click',
+		className:"selected",
+		speed:'first',
+	});
+})
+
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

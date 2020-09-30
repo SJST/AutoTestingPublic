@@ -170,23 +170,7 @@ class Role(Document):
 #     new_contectsOther= StringField(require=True)
 #     new_contectsRemark= StringField(require=True)
  ######################客户展示和客户添加基本信息的model#######################################   
-class new_company(Document):
-    ID=IntField(require=True)
-    company_class = StringField(require=True)#客户类别
-    company_name = StringField(require=True)
-    company_size = StringField(require=True)
-    company_nature=StringField(require=True)#公司性质
-    industry = StringField(require=True)#行业
-    position_num=IntField(require=True)
-    stage = StringField(require=True)#阶段
-    company_address = StringField(require=True)
-    company_website = StringField(require=True)#网站
-    company_introduction = StringField(require=True)#介绍
-    package = StringField(require=True)#薪资
-    company_highlights = StringField(require=True)#亮点
-    interview_process = StringField(require=True)#面试流程
-    other_info = StringField(require=True)
-    flags=IntField(require=True)
+
 #     new_contects =  ListField(require=True)
 ##################################客户职位的model#############################
 # 
@@ -254,7 +238,48 @@ class position_info(Document):
     Seeking_advice = StringField(require=True)#寻访建议
     other_info = StringField(require=True)#其他信息
     
-
+    
+class SingleValue(Document):
+    '''
+    单值代码 映射
+    '''
+    codetype = StringField(require=True),#单值代码 pid\
+    code = StringField(),#码值\
+    name = StringField(),#翻译值\
+    mark = StringField(),#单值代码说明\
+    class Meta:
+        table_name ='T3-zt'
+class SwaggerData(Document):
+    '''
+    swagger 服务信息
+    '''
+    server = StringField(require=True),#服务名称 pid\
+    api = StringField(),#接口名称\
+    controller = StringField(),# 控制器\
+    class Meta:
+        table_name ='T3-zt'
+class new_company(Document):
+    '''
+    测试沉淀表单
+    
+    '''
+    ID=StringField(require=True,max_length=8)
+    CD_name = StringField(require=True)#客户类别
+    add_public = StringField()
+    important_level = StringField()
+    server=StringField()#公司性质
+    controller = StringField()#行业
+    api_change=StringField()
+    jmx_address = StringField()#阶段
+    brackground = StringField()
+    content = StringField()#网站
+    col_qpi = StringField()#网站
+    method = StringField()#介绍
+    other_info = StringField()
+    flags=StringField()
+    create_time = DateTimeField(default=datetime.now(), required=True)
+    update_time = DateTimeField(default=datetime.now(), required=True)
+    
 # Create your models here.
 # class CandidateResource(models.Model):
 #     name = models.CharField(max_length=32)

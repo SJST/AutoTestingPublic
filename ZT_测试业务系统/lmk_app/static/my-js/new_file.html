@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html style="display: block;"><head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit|ie-comp|ie-stand">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <link rel="Bookmark" href="/favicon.ico">
+  <link rel="Shortcut Icon" href="/favicon.ico">
+  <!--[if lt IE 9]>
+  <script type="text/javascript" src="//lib.h-ui.net/html5.js"></script>
+  <script type="text/javascript" src="//lib.h-ui.net/respond.min.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" type="text/css" href="//static.h-ui.net/h-ui/3.1/css/H-ui.min.css">
+  <link rel="stylesheet" type="text/css" href="//static.h-ui.net/h-ui.admin/3.1/css/H-ui.admin.css">
+  <link rel="stylesheet" type="text/css" href="//static.h-ui.net/www/home/css/H-ui.doc.css">
+  <link rel="stylesheet" type="text/css" href="//lib.h-ui.net/Hui-iconfont/1.0.9/iconfont.min.css">
+  <!--[if lt IE 9]>
+  <link href="//static.h-ui.net/h-ui/css/H-ui.ie.css" rel="stylesheet" type="text/css" />
+  <![endif]-->
+  <script src="https://hm.baidu.com/hm.js?080836300300be57b7f34f4b3e97d911"></script><script type="text/javascript" src="//lib.h-ui.net/jquery/1.9.1/jquery.min.js"></script>
+  <!--[if IE 6]>
+  <script type="text/javascript" src="//lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+  <script>DD_belatedPNG.fix('.pngfix,.iconpic,.list-icon');</script>
+  <![endif]-->
+  <!-- 反运营商劫持 S -->
+  <style type="text/css">
+  html {
+  	display:none}
+  </style>
+  <script>
+  if( self == top ) {
+  	document.documentElement.style.display = 'block' } else {
+  	top.location = self.location }
+  </script>
+  <!-- 反运营商劫持 E -->
+
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="">
+  <meta property="og:release_date" content="">
+  <meta property="og:title" content="[H-ui] jQuery.Huitab.js选项卡插件">
+  <title>jQuery.validate.js - H-ui前端框架官方网站 - 专注前端解决方案</title>
+  <meta name="keywords" content="jQuery.validate.js,表单验证插件,H-ui前端框架">
+  <meta name="description" content="jQuery.validate.js表单验证插件帮助手册。">
+  <style type="text/css">
+    #Hui-nav li#Huinav_3 a,
+    #Hui-nav li#Huinav_3 a:hover {
+      color: #fff;
+      background-color: #111
+    }
+    ol.linenums li {
+      color: #333
+    }
+  </style>
+</head>
+<body onload="prettyPrint()">
+  <header class="navbar-wrapper">
+  <div class="navbar navbar-black">
+    <div class="container-fluid cl"> <a class="logo navbar-logo hidden-xs" href="/aboutHui.shtml">H-ui前端框架</a> <a class="logo navbar-logo-m visible-xs" href="/aboutHui.shtml">H-ui</a> <span class="logo navbar-slogan hidden-xs">简单 · 免费 · 适合中国网站</span> <a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;"></a>
+      <nav id="Hui-nav" class="nav navbar-nav">
+        <ul class="cl">
+          <li id="Huinav_1"> <a href="/index.shtml">首页</a> </li>
+          <li id="Huinav_2"> <a href="/Hui-overview.shtml">核心</a> </li>
+          <li id="Huinav_3"> <a href="/lib/jQuery.cookie.js.shtml">脚本</a> </li>
+          <li id="Huinav_4"> <a href="/ext/list.shtml">扩展</a> </li>
+          <li id="Huinav_5"> <a href="/cases/index.shtml">案例</a> </li>
+        </ul>
+      </nav>
+      <nav class="navbar-userbar f-r hidden-xs hidden-sm">
+        <a href="javascript:void(0);" onclick="addFavoritepage();return !1;" class="btn btn-primary radius" title="收藏">收藏本页</a>
+        <a class="btn btn-success radius" target="_blank" href="/shareCode.shtml">代码分享</a>
+        <a class="btn btn-success radius juanzeng" target="_blank" href="/juanzeng.shtml">捐赠<span style="color:#333" class="bk-gray box-shadow text-c"><img src="//static.h-ui.net/www/home/images/alipay.jpg" width="300"></span></a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+  <aside class="Hui-aside">
+  <input runat="server" id="divScrollValue" type="hidden" value="">
+  <div class="menu_dropdown bk_2">
+    <dl id="menu-jquery">
+      <dt class="selected">1、jquery系列<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+      <dd style="display: block;">
+        <ul>
+          <li><a href="jQuery.cookie.js.shtml">jQuery.cookie.js</a></li>
+          <li><a href="jQuery.form.js.shtml">jQuery.form.js</a></li>
+          <li><a href="jQuery.lazyload.js.shtml">jQuery.lazyload.js</a></li>
+          <li><a href="jQuery.validation.shtml">jQuery.validation.js</a></li>
+          <!--
+          <li><a href="jQuery.contextmenu.js.shtml">jQuery.contextmenu.js</a></li>
+          <li><a href="jQuery.autocomplete.js.shtml">jQuery.autocomplete.js</a></li>
+          <li><a href="jQuery.fullPage.js.shtml">jQuery.fullPage.js</a></li>
+          <li><a href="jQuery.parallax.js.shtml">jQuery.parallax.js</a></li>-->
+        </ul>
+      </dd>
+    </dl>
+    <dl id="menu-hui">
+      <dt>2、Hui系列<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+      <dd>
+        <ul>
+          <li><a href="jQuery.Huihover.js.shtml">Huihover.js</a></li>
+          <li><a href="jQuery.Huifocusblur.js.shtml">Huifocusblur.js</a></li>
+          <li><a href="jQuery.Huifold.js.shtml">Huifold.js</a></li>
+          <li><a href="jQuery.Huispinner.js.shtml">Huispinner.js</a></li>
+          <li><a href="jQuery.Huitab.js.shtml">Huitab.js</a></li>
+          <li><a href="jQuery.Huitags.js.shtml">Huitags.js</a></li>
+          <li><a href="jQuery.Huitextarealength.js.shtml">Huitextarealength.js</a></li>
+          <li><a href="jQuery.HuitogglePassword.js.shtml">HuitogglePassword.js</a></li>
+          <li><a href="jQuery.Huitotop.js.shtml">Huitotop.js</a></li>
+          <li><a href="jQuery.Huipreview.js.shtml">Huipreview.js</a></li>
+          <li><a href="jQuery.HuicheckAll.shtml">HuicheckAll.js</a></li>
+          <!--<li><a href="jQuery.HuiphotoLayout.js.shtml">HuiphotoLayout.js</a></li>-->
+        </ul>
+      </dd>
+    </dl>
+    <dl id="menu-bootstrap">
+      <dt>3、bootstrap系列<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+      <dd>
+        <ul>
+          <li><a href="Bootstrap.datetimepicker.js.shtml">datetimepicker.js</a></li>
+        </ul>
+      </dd>
+    </dl>
+    <dl id="menu-layer">
+      <dt>4、layer系列<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+      <dd>
+        <ul>
+          <li><a href="layer.js.shtml">layer.js</a></li>
+          <!-- <li><a href="layer.mobile.js.shtml">layer.mobile.js</a></li>
+          <li><a href="layer.page.js.shtml">layer.page.js</a></li> -->
+        </ul>
+      </dd>
+    </dl>
+    <dl id="menu-other">
+      <dt>5、其他插件<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+      <dd>
+        <ul>
+          <li><a href="datatables.js.shtml">datatables.js</a></li>
+        </ul>
+      </dd>
+    </dl>
+  </div>
+</aside>
+
+  <div class="dislpayArrow hidden-xs"><a class="pngfix" href="javascript:void(0);" onclick="displaynavbar(this)"></a></div>
+  <section class="Hui-article-box">
+    <nav class="breadcrumb"><i class="Hui-iconfont"></i> <a class="maincolor" href="/">脚本</a>
+      <span class="c-999 en">&gt;</span>
+      <span class="c-666">jQuery.validate.js</span>
+    </nav>
+  	<div class="Hui-article">
+      <article class="cl pd-20">
+      <h1 class="page_title">jQuery.validate.js</h1>
+      <p>lib文件夹已包含了jQuery.validate.js插件，无需单独下载。单独下载地址 <a href="//lib.h-ui.net/jquery.validation/jquery.validation.zip" class="btn radius btn-primary"><i class="Hui-iconfont"></i> jquery.validation.zip</a> </p>
+      <p>jQuery.validate是由jQuery团队、 jQuery UI团队的主要开发人员Jörn Zaefferer 编写和维护的一套表单验证插件，为表单提供了强大的验证功能，让客户端表单验证变得更简单，同时提供了大量的定制选项，满足应用程序各种需求。是目前最前最强大的表单验证插件之一。</p>
+      <h2>使用方法</h2>
+        <p>1、jQuery.validate.js依赖jQuery或者zepto.js。</p>
+        <h3>引入脚本</h3>
+<pre>&lt;script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.min.js"&gt;&lt;/script&gt;</pre>
+        <p>validate-methods.js 为扩展的验证规则</p>
+        <p>messages_zh.js 为验证提示文件</p>
+        <p>js调用</p>
+<pre class="prettyprint linenums"><ol class="linenums"><li class="L0"><span class="pln">&nbsp;</span></li></ol></pre>
+        <h2>demo效果</h2>
+        <div class="codeView docs-example">
+          <form action="" method="post" class="form form-horizontal responsive" id="demoform" novalidate="novalidate">
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">邮箱：</label>
+              <div class="formControls col-xs-8">
+                <input type="text" class="input-text error" placeholder="@" name="email" id="email" autocomplete="off" aria-required="true" aria-invalid="true"><label id="email-error" class="error" for="email" style="display: block;">必填信息</label>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">用户名：</label>
+              <div class="formControls col-xs-8">
+                <input type="text" class="input-text error" placeholder="4~16个字符，字母/中文/数字/下划线" name="username" id="username" aria-required="true"><label id="username-error" class="error" for="username">必填信息</label>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">手机：</label>
+              <div class="formControls col-xs-8">
+                <input type="text" class="input-text error" autocomplete="off" placeholder="手机" name="telephone" id="telephone" aria-required="true"><label id="telephone-error" class="error" for="telephone">必填信息</label>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">密码：</label>
+              <div class="formControls col-xs-8">
+                <input type="password" class="input-text error" autocomplete="off" placeholder="密码" name="password" id="password" aria-required="true"><label id="password-error" class="error" for="password">必填信息</label>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">密码验证：</label>
+              <div class="formControls col-xs-8">
+                <input type="password" class="input-text error" autocomplete="off" placeholder="密码" name="password2" id="password2" aria-required="true"><label id="password2-error" class="error" for="password2">必填信息</label>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">单选框：</label>
+              <div class="formControls skin-minimal col-xs-5">
+                <div class="radio-box">
+                  <div class="iradio-blue"><input type="radio" id="sex-1" name="sex" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;" aria-required="true" class="error"><label id="sex-error" class="error" for="sex">必填信息</label><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"></ins></div>
+                  <label for="sex-1">男</label>
+                </div>
+                <div class="radio-box">
+                  <div class="iradio-blue"><input type="radio" id="sex-2" name="sex" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;" class="error"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"></ins></div>
+                  <label for="sex-2">女</label>
+                </div>
+                <div class="radio-box">
+                  <div class="iradio-blue"><input type="radio" id="sex-3" name="sex" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;" class="error"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"></ins></div>
+                  <label for="sex-3">保密</label>
+                </div>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">出生日期：</label>
+              <div class="formControls col-xs-8">
+                <input type="text" class="input-text datetimepicker-input error" value="" autocomplete="off" id="datetimepicker" name="datetimepicker" aria-required="true"><label id="datetimepicker-error" class="error" for="datetimepicker">必填信息</label>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">爱好：</label>
+              <div class="formControls skin-minimal col-xs-5">
+                <div class="check-box">
+                  <div class="icheckbox-blue"><input type="checkbox" id="checkbox-5" name="checkbox2" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;" aria-required="true" class="error"><label id="checkbox2-error" class="error" for="checkbox2">必填信息</label><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"></ins></div>
+                  <label for="checkbox-5">上网</label>
+                </div>
+                <div class="check-box">
+                  <div class="icheckbox-blue"><input type="checkbox" id="checkbox-6" name="checkbox2" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"></ins></div>
+                  <label for="checkbox-6">摄影</label>
+                </div>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">数量：</label>
+              <div class="formControls skin-minimal col-xs-5">
+                <div id="spinner-demo"><div class="spinner"><a class="subtract disabled" href="javascript:void(0)"><i>-</i></a><input class="amount input-text" value="1" autocomplete="off"><a class="add" href="javascript:void(0)"><i>+</i></a></div></div>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">附件：</label>
+              <div class="formControls col-xs-8">
+                <span class="btn-upload form-group">
+                  <input class="input-text upload-url" type="text" name="uploadfile-2" id="uploadfile-2" readonly="" style="width:200px">
+                  <a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont"></i> 浏览文件</a>
+                  <input type="file" multiple="" name="file-2" class="input-file">
+                </span>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">所在城市：</label>
+              <div class="formControls col-xs-8">
+                <div class="row clearfix" style="margin-top:0">
+                  <div class="col-xs-6">
+                    <span class="select-box">
+                      <select class="select error" size="1" name="city" aria-required="true">
+                        <option value="" selected="">选择省份</option>
+                        <option value="1">北京</option>
+                        <option value="2">上海</option>
+                        <option value="3">广州</option>
+                      </select><label id="city-error" class="error" for="city">必填信息</label>
+                    </span>
+                  </div>
+                  <div class="col-xs-6">
+                    <span class="select-box">
+                      <select class="select" size="1" name="city">
+                        <option value="" selected="">选择城市</option>
+                        <option value="1">北京</option>
+                        <option value="2">上海</option>
+                        <option value="3">广州</option>
+                      </select>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">网址：</label>
+              <div class="formControls col-xs-8">
+                <input type="text" class="input-text error" placeholder="http://" name="website" id="website" aria-required="true"><label id="website-error" class="error" for="website">必填信息</label>
+              </div>
+            </div>
+            <div class="row clearfix">
+              <label class="form-label col-xs-3">备注：</label>
+              <div class="formControls col-xs-8">
+                <textarea cols="" rows="" class="textarea valid" name="beizhu" id="beizhu" placeholder="说点什么...最少输入10个字符"></textarea>
+              <p class="textarea-numberbar"><em class="textarea-length">0</em>/200</p></div>
+            </div>
+            <div class="row clearfix">
+              <div class="col-xs-8 col-xs-offset-3">
+                <input class="btn btn-primary" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+              </div>
+            </div>
+          </form>
+        </div>
+        <h2>相关参数</h2>
+        <table class="table table-border table-bg table-bordered">
+          <thead>
+            <tr>
+              <th>属性</th>
+              <th>默认值</th>
+              <th>类型</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>required</td>
+              <td>false</td>
+              <td>boolean</td>
+              <td>是否必填</td>
+            </tr>
+            <tr>
+              <td>remote</td>
+              <td>-</td>
+              <td>string</td>
+              <td>使用 ajax 方法调用 check.php 验证输入值。</td>
+            </tr>
+            <tr>
+              <td>email</td>
+              <td>-</td>
+              <td>boolean</td>
+              <td>电子邮箱格式校验。</td>
+            </tr>
+            <tr>
+              <td>url</td>
+              <td>-</td>
+              <td>boolean</td>
+              <td>网址格式校验。</td>
+            </tr>
+            <tr>
+              <td>date</td>
+              <td>-</td>
+              <td>boolean</td>
+              <td>日期格式校验 ie6 出错，慎用。</td>
+            </tr>
+            <tr>
+              <td>dateISO</td>
+              <td>-</td>
+              <td>boolean</td>
+              <td>必须输入正确格式的日期（ISO），例如：2009-06-23，1998/01/22。只验证格式，不验证有效性。</td>
+            </tr>
+            <tr>
+              <td>number</td>
+              <td>-</td>
+              <td>boolean</td>
+              <td>校验数字（负数，小数）。</td>
+            </tr>
+            <tr>
+              <td>digits</td>
+              <td>-</td>
+              <td>boolean</td>
+              <td>校验整数。</td>
+            </tr>
+            <tr>
+              <td>creditcard</td>
+              <td>-</td>
+              <td>boolean</td>
+              <td>校验信用卡号。</td>
+            </tr>
+            <tr>
+              <td>equalTo</td>
+              <td>-</td>
+              <td>string</td>
+              <td>如："#password"。输入值必须和 #password 相同,通常用于密码验证。</td>
+            </tr>
+            <tr>
+              <td>accept</td>
+              <td>-</td>
+              <td>string</td>
+              <td>输入拥有合法后缀名的字符串（常用来校验上传的文件格式）。</td>
+            </tr>
+            <tr>
+              <td>min</td>
+              <td>-</td>
+              <td>number</td>
+              <td>如：10，输入值不能小于 10。</td>
+            </tr>
+            <tr>
+              <td>minlength</td>
+              <td>-</td>
+              <td>number</td>
+              <td>如：10，输入长度最小是 10 的字符串（汉字算一个字符）。</td>
+            </tr>
+            <tr>
+              <td>max</td>
+              <td>-</td>
+              <td>number</td>
+              <td>如：5，输入值不能大于 5。</td>
+            </tr>
+            <tr>
+              <td>maxlength</td>
+              <td>-</td>
+              <td>number</td>
+              <td>如：5，输入长度最多是 5 的字符串（汉字算一个字符）。</td>
+            </tr>
+            <tr>
+              <td>range</td>
+              <td>-</td>
+              <td>array</td>
+              <td>如：[5,10]，输入值必须介于 5 和 10 之间。</td>
+            </tr>
+            <tr>
+              <td>rangelength</td>
+              <td>-</td>
+              <td>array</td>
+              <td>如：[5,10]，输入长度必须介于 5 和 10 之间的字符串（汉字算一个字符）。</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="panel panel-default mt-20">
+          <div class="panel-header">推荐课程</div>
+          <div class="panel-body">
+            <ul class="clearfix">
+            <li><a href="http://www.imooc.com/learn/385" target="_blank">jQuery插件——Validation Plugin</a></li>
+            <li><a href="http://www.imooc.com/learn/44" target="_blank">源生开发表单验证</a></li>
+            </ul>
+          </div>
+        </div>
+      </article>
+      ﻿<footer class="footer mt-20">
+	<div class="container-fluid">
+		<nav>
+			<a href="/aboutHui.shtml" target="_blank">关于H-ui</a>
+			<span class="pipe">|</span>
+			<a href="/copyright.shtml" target="_blank">软件著作权</a>
+			<span class="pipe">|</span>
+			<a href="/juanzeng.shtml" target="_blank">感谢捐赠</a>
+		</nav>
+		<p>Copyright ©2013-2020 H-ui.net All Rights Reserved. <br>
+			<a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow">豫ICP备19019279号</a><br>
+			未经允许，禁止转载、抄袭、镜像<br>
+			用心做站，做不一样的站</p>
+	</div>
+</footer>
+<script type="text/javascript" src="//lib.h-ui.net/prettify.js"></script> 
+<script type="text/javascript" src="//static.h-ui.net/h-ui/3.1/js/H-ui.min.js"></script> 
+<script type="text/javascript" src="//static.h-ui.net/www/home/js/H-ui.admin.www.js"></script> 
+<script type="text/javascript" src="//static.h-ui.net/www/home/js/common.js"></script> 
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?080836300300be57b7f34f4b3e97d911";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s)})();
+</script>
+    </div>
+  </section>
+  <script type="text/javascript" src="//lib.h-ui.net/jquery.validation/1.14.0/jquery.validate.min.js"></script>
+  <script type="text/javascript" src="//lib.h-ui.net/jquery.validation/1.14.0/validate-methods.js"></script>
+  <script type="text/javascript" src="//lib.h-ui.net/jquery.validation/1.14.0/messages_zh.min.js"></script>
+  <script>
+    $(function(){
+      $("#menu-jquery dt").addClass("selected");
+      $("#menu-jquery dd").show();
+
+      $(".input-text,.textarea").Huifocusblur();
+      $('.skin-minimal input').iCheck({
+        checkboxClass: 'icheckbox-blue',
+        radioClass: 'iradio-blue',
+        increaseArea: '20%'
+      });
+      $("#datetimepicker").datetimepicker({
+        language: 'zh-cn',
+        format: 'yyyy-mm-dd',
+        minView: "month",
+        todayBtn:  1,
+        autoclose: 1,
+        endDate : new Date()
+      }).on('hide',function(e) {
+        //此处可以触发日期校验。
+      });
+
+      $("#spinner-demo").Huispinner({
+        value:1,
+        minValue:1,
+        maxValue:99,
+        dis:1
+      });
+
+      $(".textarea").Huitextarealength({
+        minlength:10,
+        maxlength:200.
+      });
+      $("#demoform").validate({
+        rules: {
+          email: {
+            required: true,
+            email: true,
+          },
+          username:{
+            required: true,
+            minlength: 4,
+            maxlength:16
+          },
+          telephone:{
+            required: true,
+            isMobile: true,
+          },
+          password:{
+            required: true,
+            isPwd: true,
+          },
+          password2:{
+            required: true,
+            equalTo: "#password"
+          },
+          sex:{
+            required: true,
+          },
+          datetimepicker:{
+            required: true,
+          },
+          checkbox2:{
+            required: true,
+          },
+          city:{
+            required: true,
+          },
+          website:{
+            required: true,
+            url: true,
+          },
+          beizhu:{
+            maxlength: 500,
+          }
+        },
+        onkeyup:false,
+        focusCleanup:true,
+        success:"valid",
+        submitHandler:function(form){
+          $("#modal-shenqing-success").modal("show");
+          $(form).ajaxSubmit();
+        }
+      });
+    });
+  </script>
+
+
+<a href="javascript:void(0)" class="tools-right toTop Hui-iconfont" title="返回顶部" alt="返回顶部" style="display:none;bottom:60px"></a><div class="datetimepicker datetimepicker-dropdown-bottom-right dropdown-menu" style="left: 572.75px; z-index: 1040;"><div class="datetimepicker-minutes" style="display: none;"><table class=" table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><i class="glyphicon icon-arrow-left"></i></th><th colspan="5" class="switch">17 九月 2020</th><th class="next" style="visibility: hidden;"><i class="glyphicon icon-arrow-right"></i></th></tr></thead><tbody><tr><td colspan="7"><span class="minute">12:00</span><span class="minute">12:05</span><span class="minute">12:10</span><span class="minute">12:15</span><span class="minute">12:20</span><span class="minute">12:25</span><span class="minute">12:30</span><span class="minute">12:35</span><span class="minute">12:40</span><span class="minute">12:45</span><span class="minute">12:50</span><span class="minute active">12:55</span></td></tr></tbody><tfoot><tr><th colspan="7" class="today">今天</th></tr><tr><th colspan="7" class="clear" style="display: none;">清除</th></tr></tfoot></table></div><div class="datetimepicker-hours" style="display: none;"><table class=" table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><i class="glyphicon icon-arrow-left"></i></th><th colspan="5" class="switch">17 九月 2020</th><th class="next" style="visibility: hidden;"><i class="glyphicon icon-arrow-right"></i></th></tr></thead><tbody><tr><td colspan="7"><span class="hour">0:00</span><span class="hour">1:00</span><span class="hour">2:00</span><span class="hour">3:00</span><span class="hour">4:00</span><span class="hour">5:00</span><span class="hour">6:00</span><span class="hour">7:00</span><span class="hour">8:00</span><span class="hour">9:00</span><span class="hour">10:00</span><span class="hour">11:00</span><span class="hour active">12:00</span><span class="hour disabled">13:00</span><span class="hour disabled">14:00</span><span class="hour disabled">15:00</span><span class="hour disabled">16:00</span><span class="hour disabled">17:00</span><span class="hour disabled">18:00</span><span class="hour disabled">19:00</span><span class="hour disabled">20:00</span><span class="hour disabled">21:00</span><span class="hour disabled">22:00</span><span class="hour disabled">23:00</span></td></tr></tbody><tfoot><tr><th colspan="7" class="today">今天</th></tr><tr><th colspan="7" class="clear" style="display: none;">清除</th></tr></tfoot></table></div><div class="datetimepicker-days" style="display: block;"><table class=" table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><i class="glyphicon icon-arrow-left"></i></th><th colspan="5" class="switch">九月 2020</th><th class="next" style="visibility: hidden;"><i class="glyphicon icon-arrow-right"></i></th></tr><tr><th class="dow">日</th><th class="dow">一</th><th class="dow">二</th><th class="dow">三</th><th class="dow">四</th><th class="dow">五</th><th class="dow">六</th></tr></thead><tbody><tr><td class="day old">30</td><td class="day old">31</td><td class="day">1</td><td class="day">2</td><td class="day">3</td><td class="day">4</td><td class="day">5</td></tr><tr><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td><td class="day">10</td><td class="day">11</td><td class="day">12</td></tr><tr><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td><td class="day active">17</td><td class="day disabled">18</td><td class="day disabled">19</td></tr><tr><td class="day disabled">20</td><td class="day disabled">21</td><td class="day disabled">22</td><td class="day disabled">23</td><td class="day disabled">24</td><td class="day disabled">25</td><td class="day disabled">26</td></tr><tr><td class="day disabled">27</td><td class="day disabled">28</td><td class="day disabled">29</td><td class="day disabled">30</td><td class="day new disabled">1</td><td class="day new disabled">2</td><td class="day new disabled">3</td></tr><tr><td class="day new disabled">4</td><td class="day new disabled">5</td><td class="day new disabled">6</td><td class="day new disabled">7</td><td class="day new disabled">8</td><td class="day new disabled">9</td><td class="day new disabled">10</td></tr></tbody><tfoot><tr><th colspan="7" class="today">今天</th></tr><tr><th colspan="7" class="clear" style="display: none;">清除</th></tr></tfoot></table></div><div class="datetimepicker-months" style="display: none;"><table class="table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><i class="glyphicon icon-arrow-left"></i></th><th colspan="5" class="switch">2020</th><th class="next" style="visibility: hidden;"><i class="glyphicon icon-arrow-right"></i></th></tr></thead><tbody><tr><td colspan="7"><span class="month">一月</span><span class="month">二月</span><span class="month">三月</span><span class="month">四月</span><span class="month">五月</span><span class="month">六月</span><span class="month">七月</span><span class="month">八月</span><span class="month active">九月</span><span class="month disabled">十月</span><span class="month disabled">十一月</span><span class="month disabled">十二月</span></td></tr></tbody><tfoot><tr><th colspan="7" class="today">今天</th></tr><tr><th colspan="7" class="clear" style="display: none;">清除</th></tr></tfoot></table></div><div class="datetimepicker-years" style="display: none;"><table class="table-condensed"><thead><tr><th class="prev" style="visibility: visible;"><i class="glyphicon icon-arrow-left"></i></th><th colspan="5" class="switch">2020-2029</th><th class="next" style="visibility: hidden;"><i class="glyphicon icon-arrow-right"></i></th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2019</span><span class="year active">2020</span><span class="year disabled">2021</span><span class="year disabled">2022</span><span class="year disabled">2023</span><span class="year disabled">2024</span><span class="year disabled">2025</span><span class="year disabled">2026</span><span class="year disabled">2027</span><span class="year disabled">2028</span><span class="year disabled">2029</span><span class="year old disabled">2030</span></td></tr></tbody><tfoot><tr><th colspan="7" class="today">今天</th></tr><tr><th colspan="7" class="clear" style="display: none;">清除</th></tr></tfoot></table></div></div></body></html>

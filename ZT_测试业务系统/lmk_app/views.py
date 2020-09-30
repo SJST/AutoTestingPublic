@@ -1,11 +1,12 @@
 
 # from lmk_app.models import Candidate_resource
 import os
+import string,random
 import sys
 import importlib
 importlib.reload(sys)
 
-from lmk_app.models import Candidate_user
+from lmk_app.models import Candidate_user, SingleValue, SwaggerData
 from lmk_app.models import Candidate_resource
 from lmk_app.models import One_remark, One_prompt
 from lmk_app.models import Skin_color
@@ -929,7 +930,7 @@ def list_exid(request):
             update_params_dict.update({new_key: value})
     print(filter_params_dict)
     print(update_params_dict)
-    company_obj = new_company.objects(**filter_params_dict).update(upsert= True, **update_params_dict)    
+    company_obj = new_company.objects(update_params_dict).update(upsert= True, **update_params_dict)    
             
     print("11111")
     status="success"
@@ -1002,22 +1003,14 @@ def business_add(request):
 #     content_dict={}
     for key, value in request.POST.items():
         #解析前台传递的列表数据,例如base_info[0]company_name变成company_name  与数据库对应
-        if "base_info" in key:
-            print(key)
-            key_list=key.split("[")
-            print(key_list)
-            new_key=(key_list[1].split("]"))[0]
-            print(new_key)
-            print(value)
-            company_dict.update({new_key: value})
-        if "Survey_info" in key:
-            print(key)
-            key_list=key.split("[")
-            print(key_list)
-            new_key=(key_list[1].split("]"))[0]
-            print(new_key)
-            print(value)
-            company_dict.update({new_key: value})
+        print(key +"[:]"+ value)
+        if value == '' or '选择' in value:
+            value = None
+        company_dict.update({key: value})
+        random_data = "".join(map(lambda x:random.choice(string.digits), range(8)))
+        company_dict.update({'ID': random_data,'flags':'1'})
+ 
+
 #         if "content_info" in key:
 #             key_list=key.split("[")
 #             key1=(key_list[1])[:-1]
@@ -1034,15 +1027,39 @@ def business_add(request):
 #     if content_list !=[]:     
 #         company_dict.update({"new_contects":content_list})
 #         print(company_dict)
+    print(company_dict)
     if company_dict =={}:#判断是不是添加按钮之后进的后台
-        return render( request,'client_html/company_html/company_add.html')
+        yx_server_list = []
+        value_list= SingleValue.objects.order_by('-codetype').as_pymongo()
+        all_value=dumps(value_list, ensure_ascii=False)
+        server_info = SwaggerData.objects.as_pymongo()
+        for item in server_info:
+            server = item.get('server')
+            if server:
+                if server not in  yx_server_list:
+                    yx_server_list.append(server)
+        print(yx_server_list)
+        server_count = len(yx_server_list)
+        value_count = value_list.count()
+        result_data = {
+            'all_value':all_value,
+            'value_count':value_count,
+            'server_list':yx_server_list,
+            'server_count':server_count
+            }
+        
+        return render( request,'client_html/company_html/business_add.html',result_data)
     else :
-        company_obj = new_company(**company_dict)
-        company_obj.save()
-        print("保存成功")
-        status='success'
-        print(111)
-        return JsonResponse({'status': status})
+        name = company_dict['CD_name']
+        query_set= new_company.objects.filter(CD_name=name).order_by('-ID').as_pymongo()
+        if query_set:
+            return HttpResponse(status)
+        else:
+            company_obj = new_company(**company_dict)
+            company_obj.save()
+            print("保存成功")
+            status='success'        
+            return HttpResponse(status)
 #         if "company_name" in company_dict:
 #             global company_name
 #             company_name=company_dict["company_name"]

@@ -51,7 +51,7 @@
 </head>
 <body>
 <article class="page-container">
-	<form action="{% url 'business-add' %}" method="post" class="form form-horizontal" id="form-register">
+	<form action="/business_add" method="post" class="form form-horizontal" id="form-register">
 		<div class="row cl modle_div" id="model1"> 
 		基本信息:
 		</div>
@@ -72,13 +72,13 @@
 			<div class="row cl">
 				<label class="form-label col-xs-3"><span class="c-red">*</span>沉淀名称：</label>
 				<div class="formControls col-xs-8">
-					<input type="text" class="input-text" placeholder="2~16个字符，字母/中文/数字/下划线" name="company_name" id="company_name"  required>
+					<input type="text" class="input-text" placeholder="2~16个字符，字母/中文/数字/下划线" name="CD_name" id="CD_name"  required="true" />
 				</div>
 			</div>
 			<div class="row cl">
 				<label class="form-label col-xs-3">添加版本：</label>
 				<div class="formControls col-xs-2" style="display:inline-block" >
-					<select  class="select" size="1" name="company_size" id="company_size">
+					<select  class="select" size="1" name="add_public" id="add_public">
 	  					<option value="V2.0.6">V2.0.6 </option>
 	  					<option value="V2.0.7人">V2.0.7</option>
 	  					<option value="V2.0.8">V2.0.8</option>
@@ -94,15 +94,7 @@
 			
 				<label class="form-label col-xs-3"> 重要程度：</label>
 				<div class="formControls col-xs-2"  style="display:inline-block" >
-					<select  class="select" size="1" name="company_nature" id="company_nature">
-	  					<option value="私营/民营企业">私营/民营企业 </option>
-	  					<option value="国有企业">国有企业</option>
-	  					<option value="外商企业 ">外商企业 </option>
-	  					<option value="中外合作企业 ">中外合作企业 </option>
-	  					<option value="事业单位">事业单位</option>
-	  					<option value="政府机构/非盈利机构">政府机构/非盈利机构</option>
-	  					<option value="其他">其他</option>
-	  					
+					<select  class="select" size="1" name="important_level" id="11400001">
 					</select>
 					
 				</div>
@@ -110,49 +102,48 @@
 			<div class="row cl">
 				<label class="form-label col-xs-3">所属服务：</label>
 				<div class="formControls col-xs-2" style="display:inline-block" >
-					<select  class="select" size="1" name="industry" id="industry">
-	  					<option value="互联网 ">互联网 </option>
-	  					<option value="计算机软件">计算机软件</option>
-	  					<option value="通信">通信</option>
-	  					<option value="电子/半导体">电子/半导体</option>
-	  					<option value="金融">金融</option>
-	  					<option value="房产建筑房产建筑">房产建筑</option>
-	  					<option value="医疗生物">医疗生物</option>
-	  					<option value="汽车">汽车</option>
-	  					<option value="消费品">消费品</option>
-	  					<option value="广告/传媒">广告/传媒</option>
-	  					<option value="教育培训">教育培训</option>
-	  					<option value="咨询/外包/中介">咨询/外包/中介</option>
-	  					<option value="服务业">服务业</option>
-	  					<option value="轻工贸易">轻工贸易</option>
-	  					<option value="机械重工">机械重工</option>
-	  					<option value="化工能源">化工能源</option>
-	  					<option value="农林牧渔">农林牧渔</option>
-	  					<option value="政府公益">政府公益</option>
+					<select  class="select" size="1" name="server" id="server">
+	  					
 					</select>
 					
 				</div>
 			
 			
-				<label class="form-label col-xs-3">测试关联：</label>
+				<label class="form-label col-xs-3">controller：</label>
 				<div class="formControls col-xs-2"  style="display:inline-block" >
-					<select  class="select" size="1" name="stage" id="stage">
-	  					<option value="不需要融资">不需要融资 </option>
-	  					<option value="D轮及以上">D轮及以上</option>
-	  					<option value="C轮">C轮</option>
-	  					<option value="B轮">B轮</option>
-	  					<option value="A轮">A轮</option>
-	  					<option value="天使轮">天使轮</option>
-	  					<option value="上市公司">上市公司</option>
-	  					<option value="未融资">未融资</option>
+					<select  class="select" size="1" name="controller" id="controller"  >
+						<option value="请先选择服务">请先选择服务 </option>
 					</select>	
 				</div>
+			</div>
+			<div class="row cl">
+				<label class="form-label col-xs-3">所属接口：</label>
+				<div class="formControls col-xs-2" style="display:inline-block" >
+					<select  class="select" size="1" name="col_qpi" id="col_qpi">
+						
+					</select>
+					
+				</div>
+			
+				<label class="form-label col-xs-3">接口变动：</label>
+				<div class="formControls col-xs-2" style="display:inline-block" >
+					<div class="check-box">
+						<input type="checkbox" id="class-1" name="api_change" value="是" checked>
+						<label for="class-1">是</label>
+					</div>
+					<div class="check-box">
+						<input type="checkbox" id="class-2" name="api_change" value="否" >
+						<label for="class-1">否</label>
+					
+					</div>
+			</div>
+				
 			</div>
 		
 			<div class="row cl">
 				<label class="form-label col-xs-3">脚本地址：</label>
 				<div class="formControls col-xs-8">
-					<input type="text" class="input-text" placeholder="脚本地址" name="company_address" id="company_address"  required>
+					<input type="text" class="input-text" placeholder="脚本地址" name="jmx_address" id="jmx_address">
 				</div>
 			</div>
 	<!-- 	<div class="row cl modle_div many_div" id="model2"> 
@@ -170,19 +161,19 @@
 			<div class="row cl">
 				<label class="form-label col-xs-3">修改背景：</label>
 				<div class="formControls col-xs-8">
-					<textarea name="company_website" id="company_website" rows="3" cols="120" placeholder="请输入公司官网"></textarea>
+					<textarea name="brackground" id="brackground" rows="3" cols="120" placeholder="请输入背景"></textarea>
 				</div>	
 			</div>
 			<div class="row cl">
 				<label class="form-label col-xs-3">修改内容：</label>
 				<div class="formControls col-xs-8 ">
-					<textarea name="company_introduction" id="company_introduction" rows="3" cols="120" placeholder="请输入公司亮点"></textarea>
+					<textarea name="content" id="content" rows="3" cols="120" placeholder="请输入修改内容"></textarea>
 				</div>
 			</div>
 			<div class="row cl">	
 				<label class="form-label col-xs-3">测试方法：</label>
 				<div class="formControls col-xs-8 ">
-					<textarea name="package" id="package" rows="3" cols="120" placeholder="请输入薪酬福利"></textarea>
+					<textarea name="method" id="method" rows="3" cols="120" placeholder="请输入测试方法"></textarea>
 				</div>	
 			</div>
 			<!-- <div class="row cl">
@@ -198,14 +189,14 @@
 				</div>	
 			</div> -->
 			<div class="row cl">
-				<label class="form-label col-xs-3">其他：</label>
+				<label class="form-label col-xs-3">其他信息：</label>
 				<div class="formControls col-xs-8">
 					<textarea name="other_info" id="other_info" rows="3" cols="120" placeholder="请输入其他信息"></textarea>
 				</div>	
 			</div>
 		<div class="row cl">
 			<div class="col-xs-8 col-xs-offset-3">
-				<button class="btn btn-primary" type="button" id="save-from" value="">&nbsp;&nbsp;保存&nbsp;&nbsp;</button>
+				<button class="btn btn-primary" type="submit" id="save-from" value="">&nbsp;&nbsp;保存&nbsp;&nbsp;</button>
 			   <button class="btn btn-default " type="button" id="add-button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
 			</div>
 		</div>
@@ -225,9 +216,102 @@
 <script type="text/javascript" src="{% static 'ueditor/1.4.3/ueditor.config.js' %}"></script>
 <script type="text/javascript" src="{% static 'ueditor/1.4.3/ueditor.all.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'ueditor/1.4.3/lang/zh-cn/zh-cn.js' %}"></script>
-<script type="text/javascript" src="{% static 'my-js/company_add.js' %}"></script>
+<script type="text/javascript" src="{% static 'my-js/CD.js' %}"></script>
 <script type="text/javascript">
+	
+	
+	$(document).ready(function(){
+		
+		if({{value_count}}>0){
+			var result_json_obj = {{all_value|safe}};
+			$('#11400001').empty()
+			$.each(result_json_obj, function(i,item){
+				if ("11400001"== item.codetype) {
+					$('#11400001').append("<option value = " + item.name +">" + item.name +"</option>")
+				}
+				
+			})
+		}
+		if ({{server_count}}>0) {
+			var server_info_obj = {{server_list|safe}};
+			$('#server').empty().append("<option value = 请选择 >" + "---请选择---------" +"</option>");
+			for (let i = 0; i < server_info_obj.length; i++) {
+				if (server_info_obj[i]) {
+					// alert(server_info_obj[i])
+					$('#server').append("<option value = " + server_info_obj[i] + ">" + server_info_obj[i] +"</option>")
+				}
+			  
+			  }
+			}
+		var ajax_option={
+			success:function(ret){
+				/* alert("添加成功");
+				alert(ret);
+				alert(typeof(ret)); */
+				
+				if(ret == 'success'){
+					// var index = parent.layer.getFrameIndex(window.name);
 
+					// alert(index);
+					layer.alert('保存成功', {title:'保存状态', icon:1}, function(index){
+						 layer.close(index);		 	
+					});
+				}else{
+					layer.alert('保存失败', {title:'保存状态', icon:2}, function(index){
+						 layer.close(index);		 	
+					});
+					
+				}
+				
+			}
+		}
+		
+		$('#form-register').validate({
+			rules:{
+				CD_name:{
+					required:true,
+					minlength:4,
+					maxlength:60
+				}
+			},
+			onkeyup:false,
+			focusCleanup:true,
+			success:"valid",
+			submitHandler:function(form){
+				$(form).ajaxSubmit(ajax_option);
+			}
+		});
+	}	
+)
+
+	$("#server").change(function(){
+		 servers = $(this).val()
+		 $.get('/controller?server=' + servers,function(data){
+			 controller = $('#controller')
+			 controller.empty();
+			 res =data.data
+			 
+			 $.each(res,function(index,item) {
+				 controller_name = item
+				 $('#controller').append("<option value = " + controller_name + ">" + controller_name +"</option>")
+			 })
+		 })
+	})
+	
+<!-- 联动 接口名称-->
+	$("#controller").change(function(){
+		 controlleres = $(this).val()
+		 $.get('/col_api?controller=' + controlleres,function(data){
+			 col_api = $('#col_qpi')
+			 col_api.empty();
+			 res =data.data
+			 $.each(res,function(index,item) {
+				 controller_name = item
+				 $('#col_qpi').append("<option value = " + controller_name + ">" + controller_name +"</option>")
+			 })
+		 })
+	})
+	
 
 
 </script>

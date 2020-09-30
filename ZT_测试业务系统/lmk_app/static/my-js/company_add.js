@@ -1,4 +1,5 @@
 //这个公司添加模块的js
+
 $("#save-from").on('click',function(){
 	//生成base_info 和 Survey 的元素 
 	var company_class;

@@ -62,7 +62,7 @@ urlpatterns = [
     url(r'^user-account-switch', views.user_account_switch, name='user-account-switch'),
     url(r'^user-del', views.user_del, name='user-del'),
     url(r'^company-list$', views.company_list, name='company-list'),
-    url(r'^company_add$', views.business_add, name='business-add'),
+    url(r'^business_add$', views.business_add, name='business-add'),
     url(r'^position_list$', views.position_list, name='position-list'),
     url(r'^position_add$', views.position_add, name='position-add'),
     #    数据仓库配置的url
@@ -73,8 +73,10 @@ urlpatterns = [
     url(r'^T3_01_get_DB_info', views2.DB_chick_show, name='get-DB-info'),
     #    db_house 操作列表页面
     url(r'^db_house_index', views2.db_house_index, name='db-house-index'),
-    
-    
+    # 获取 controller 列表
+    url(r'^controller', views2.controller),
+    # 获取 col_api 列表
+    url(r'^col_api', views2.API),
     
 ]
 

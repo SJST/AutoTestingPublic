@@ -10,6 +10,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'Hui-iconfont/1.0.8/iconfont.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'h-ui/css/H-ui.min.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'h-ui.admin/css/H-ui.admin.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'my-css/pager/page.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'my-css/client/company-list.css' %}" />
 <title>公司列表</title>
 <meta name="keywords" content="关键词,5个左右,单个8汉字以内">
@@ -22,7 +23,6 @@
 	</style>
 </head>
 <body ontouchstart>
-
 <div class="containBox">
 	<div class="container ui-sortable">
 		<!-- <h1>知识词典，属于我自己的学习目标</h1>
@@ -41,19 +41,19 @@
 				<div class= "search-div">
 					<div class="search">
 						<div class="<search-company></search-company>">
-							<input type="text" placeholder="请输入沉淀名称" class="input-text ac_input " name="search_text" value="" id="search_company" autocomplete="off" style="width:300px">
+							<input type="text" placeholder="请输入沉淀名称" class="input-text ac_input " name="search_text" value="" id="search_chendian" autocomplete="off" style="width:300px">
 							<button type="submit" class="btn btn-default search_button" id="search_button">搜索</button>		
 						</div>
 						<div class= "search-industy">
-							<input type="text" placeholder="请输入版本关键词" class="input-text ac_input" name="search_text" value="" id="search_industy" autocomplete="off" style="width:300px">
+							<input type="text" placeholder="请输入版本关键词" class="input-text ac_input" name="search_text" value="" id="search_public" autocomplete="off" style="width:300px">
 							<button type="submit" class="btn btn-default search_button" id="search_button">搜索</button>				
 						</div>
 						<div class= "search-city">
-							<input type="text" placeholder="请输入服务关键词" class="input-text ac_input" name="search_text" value="" id="search_city" autocomplete="off" style="width:300px">
+							<input type="text" placeholder="请输入服务关键词" class="input-text ac_input" name="search_text" value="" id="search_server" autocomplete="off" style="width:300px">
 							<button type="submit" class="btn btn-default search_button" id="search_button">搜索</button>				
 						</div>
 						<div class= "search-class">
-							<input type="text" placeholder="请输入接口关键词" class="input-text ac_input" name="search_text" value="" id="search_class" autocomplete="off" style="width:300px">
+							<input type="text" placeholder="请输入接口关键词" class="input-text ac_input" name="search_text" value="" id="search_api" autocomplete="off" style="width:300px">
 							<button type="submit" class="btn btn-default search_button" id="search_button">搜索</button>				
 						</div>
 					</div>
@@ -65,11 +65,11 @@
 			<table border="1"width="50%" height="50%" align="center" id=table_head  class="os-content" >
 				<thead>
 				<tr id="table_head">
-					<th data-title="company_name" height="20px">公司名称</th>
-					<th data-title="company_city">所在城市</th>
-					<th data-title="position-num">职位个数</th>
-					<th data-title="stage">融资阶段</th>
-					<th	data-title="contacts_class">客户类型</th>
+					<th data-title="Server" height="20px">服务名称</th>
+					<th data-title="CD_name">沉淀名称</th>
+					<th data-title="AddPublic">添加版本</th>
+					<th data-title="person">添加人</th>
+					<th	data-title="CreatTime">添加时间</th>
 					<th data-title='operate'>操作</th>
 					<!-- <th	data-title="new_contectsJob">联系人</th>
 					<th	data-title="new_contectsTel">职务</th>
@@ -85,8 +85,8 @@
 					
 				</tbody>
 			</table>
-			<div id="reset"></div>
-			<br/>
+			<!-- 分页 -->
+			<div class="paging"></div>
 			
 			<!--  <button type="button" class="btn btn-success radius" id='add-button'>
 				<i class="Hui-iconfont"></i>添加知识点
@@ -106,11 +106,8 @@
 <script type="text/javascript" src="{% static 'layer/2.4/layer.js' %}"></script>
 <script type="text/javascript" src="{% static 'h-ui/js/H-ui.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'h-ui.admin/js/H-ui.admin.js' %}"></script>
-<script type="text/javascript" src="{% static 'my-js/company-list.js' %}"></script>
+<script type="text/javascript" src="{% static 'my-js/Page.js' %}"></script>
+<script type="text/javascript" src="{% static 'my-js/TestingPoints.js' %}"></script>
 <script language="javascript">
-				
-		
-
-
 </script>
 </html>

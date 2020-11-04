@@ -96,7 +96,10 @@ $.ajax({
 	data:{'page':test_num},
 	success:function(ret){
 		count = ret['data_count']
-		alert(count);
+		let paging = new Paging({
+		            total: count,
+		        })
+		const strToObj = JSON.parse(ret['data'])
 		$('#table_head tr:gt(0)').remove();
 		$('#table_head').show();
 		$('.paging').show();
@@ -112,8 +115,7 @@ $.ajax({
 			如果 返回的数据在 定义的列表中没有找到 就加入
 			达到搜索下拉包含全部不重复的值
 		*/
-	    
-		$.each(ret['data'], function(i,item){
+		$.each(strToObj, function(i,item){
 			// if(ID_list.indexOf(item.ID)==-1){
 			// 	ID_list.push(item.ID)
 			// }
@@ -122,7 +124,7 @@ $.ajax({
 			// 	company_list.push(item.CD_name)
 			// }
 			if(server_list.indexOf(item.Server)==-1){
-				industy_list.push(item.Server)
+				server_list.push(item.Server)
 			}
 			if(public_list.indexOf(item.add_public)==-1){
 				public_list.push(item.add_public)
@@ -133,7 +135,7 @@ $.ajax({
 			//获得 小对象个数用于table合并
 			
 			tr_new.append(
-					'<td height="20px" width="100px"class="big_table" id="Server">'+'<a data-title="服务信息" data-href="' + url + '" class="c-primary" href="javascript:;">'+item.Server + '</a>' +'</td>'+
+					'<td height="20px" width="100px"class="big_table" id="Server">'+'<a data-title="服务信息" data-href="' + url + '" class="c-primary" href="javascript:;">'+item.server + '</a>' +'</td>'+
 					'<td height="20px" width="100px"class="big_table" id="CD_name">' + item.CD_name+ '</td>'+
 					'<td height="20px" width="100px" class="big_table" id="AddPublic">'+item.add_public+'</td>'+
 					'<td height="20px" width="100px"class="big_table"  id= "person">' + item.person + '</td>'+
@@ -371,6 +373,3 @@ function xieyi(){
 	       
 	     window.onload=xieyi;
 	    });
-let paging = new Paging({
-            total: count,
-        })

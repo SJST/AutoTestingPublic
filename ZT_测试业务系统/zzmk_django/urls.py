@@ -77,6 +77,10 @@ urlpatterns = [
     url(r'^controller', views2.controller),
     # 获取 col_api 列表
     url(r'^col_api', views2.API),
+    # 映射 search-ajax 查询符合条件的测试沉淀
+    url(r'^search_ajax',views.search_ajax),
+    # company-ajax 展示沉淀列表
+     url(r'^company-ajax',views.company_ajax)
     
 ]
 

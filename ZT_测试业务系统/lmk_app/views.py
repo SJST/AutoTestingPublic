@@ -4,9 +4,11 @@ import os
 import string,random
 import sys
 import importlib
+from lmk_app.Cs01_CommonMethod import StrMehod
 importlib.reload(sys)
 
-from lmk_app.models import Candidate_user, SingleValue, SwaggerData
+from lmk_app.Contants import DataBaseFeildContants,SystemContants
+from lmk_app.models import Candidate_user, SingleValue, SwaggerCommon
 from lmk_app.models import Candidate_resource
 from lmk_app.models import One_remark, One_prompt
 from lmk_app.models import Skin_color
@@ -906,14 +908,24 @@ def company_list(request):#公司展示
         return render(request, 'client_html/company_html/company_list.html')
     ########公司列表修改内容#################
 def company_ajax(request):#公司展示ajax 不传参
-    query_set= new_company.objects.filter(flags=1)
-    commpany_list= query_set._collection_obj.find(query_set._query)
-    print(commpany_list)
+#     query_set= new_company.objects.filter(flags=1) 过滤掉已经删除的数据
+    end = None 
+    start = None
+    page = request.GET.get('page')   
+    PageSize = 10,
+    N = int(page)*PageSize # n = 20
+    CD_obj = new_company.objects.order_by('server').as_pymongo()
+    value_count = CD_obj.count() #16
+    if  value_count > N:
+        end = N
+        start = N-10
+    elif N-10<value_count<N:
+        end = value_count
+        start = N-10
+    data_obj = CD_obj[start:end]
+    all_value=dumps(data_obj, ensure_ascii=False)
     
-    data_json=dumps(commpany_list, ensure_ascii=False)
-    print(data_json)
-    print(111)
-    return HttpResponse(data_json)
+    return JsonResponse({'data_count': value_count, 'data': all_value})
 def list_exid(request):
     filter_params_dict = {}
     update_params_dict = {}
@@ -952,7 +964,7 @@ def list_del(request):
     return JsonResponse({'status': status})
 #####################搜索展示内容###############################
 def search_ajax(request):
-    status="error"
+    status = SystemContants.ErrorStatus
     search_text=request.POST.get("search_text")
     print(search_text)
     search_list=search_text.split(":")
@@ -960,7 +972,7 @@ def search_ajax(request):
     value=search_list[1]
     print(key)
     print(value)
-    if key=="search_company":
+    if key=="search_chendian":
         query_set= new_company.objects.filter(company_name=value)
         commpany_list= query_set._collection_obj.find(query_set._query)
         print(commpany_list)
@@ -976,8 +988,8 @@ def search_ajax(request):
         print(data_json)
         print(111)
         return HttpResponse(data_json)
-    if key=="search_city":
-        query_set= new_company.objects.filter(company_address=value)
+    if key=="search_server":
+        query_set= new_company.objects.filter(server=value)
         commpany_list= query_set._collection_obj.find(query_set._query)
         print(commpany_list)
         data_json=dumps(commpany_list, ensure_ascii=False)
@@ -1007,8 +1019,12 @@ def business_add(request):
         if value == '' or '选择' in value:
             value = None
         company_dict.update({key: value})
+        login_name = request.session.get('login_name')
         random_data = "".join(map(lambda x:random.choice(string.digits), range(8)))
-        company_dict.update({'ID': random_data,'flags':'1'})
+        company_dict.update({'ID': random_data,'flags':'1','person' : login_name})
+        Method = StrMehod.StrMethod()
+        location_time = Method.format_time_to_str()
+        company_dict.update({SystemContants.CreatTime:location_time,SystemContants.UpdateTime:location_time})
  
 
 #         if "content_info" in key:
@@ -1027,14 +1043,14 @@ def business_add(request):
 #     if content_list !=[]:     
 #         company_dict.update({"new_contects":content_list})
 #         print(company_dict)
-    print(company_dict)
+
     if company_dict =={}:#判断是不是添加按钮之后进的后台
         yx_server_list = []
         value_list= SingleValue.objects.order_by('-codetype').as_pymongo()
         all_value=dumps(value_list, ensure_ascii=False)
-        server_info = SwaggerData.objects.as_pymongo()
+        server_info = SwaggerCommon.objects.as_pymongo()
         for item in server_info:
-            server = item.get('server')
+            server = item.get(DataBaseFeildContants.ServerKey)
             if server:
                 if server not in  yx_server_list:
                     yx_server_list.append(server)

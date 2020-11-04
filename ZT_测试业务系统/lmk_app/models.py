@@ -249,15 +249,22 @@ class SingleValue(Document):
     mark = StringField(),#单值代码说明\
     class Meta:
         table_name ='T3-zt'
-class SwaggerData(Document):
+class SwaggerCommon(Document):
     '''
     swagger 服务信息
     '''
     server = StringField(require=True),#服务名称 pid\
     api = StringField(),#接口名称\
-    controller = StringField(),# 控制器\
-    class Meta:
-        table_name ='T3-zt'
+    method = StringField(),# 控制器\
+    tags = StringField()
+    description = StringField()
+    summary = StringField()
+    consumes = StringField()
+    pid = StringField()
+    ref = StringField()
+    BeanDescription = StringField()
+    ApiNum = IntField()
+    Address = StringField()
 class new_company(Document):
     '''
     测试沉淀表单
@@ -277,8 +284,9 @@ class new_company(Document):
     method = StringField()#介绍
     other_info = StringField()
     flags=StringField()
-    create_time = DateTimeField(default=datetime.now(), required=True)
-    update_time = DateTimeField(default=datetime.now(), required=True)
+    person = StringField()
+    create_time = StringField(required=True)
+    update_time = StringField(required=True)
     
 # Create your models here.
 # class CandidateResource(models.Model):

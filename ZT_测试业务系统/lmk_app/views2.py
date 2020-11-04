@@ -6,7 +6,7 @@ import importlib
 importlib.reload(sys)
 
 from lmk_app.models import Candidate_user,InitializationData,SwaggerAddressData,\
-    SwaggerData
+    SwaggerCommon
 from lmk_app.models import Candidate_resource
 from lmk_app.models import One_remark, One_prompt
 from lmk_app.models import Skin_color
@@ -94,26 +94,26 @@ def controller(request):
     result = []
     server_name = request.GET.get('server')
     print(server_name)
-    YxData = SwaggerData.objects.all().as_pymongo()
+    YxData = SwaggerCommon.objects.all().as_pymongo()
     for item in YxData:
-        DB_server = item.get('server')
+        DB_server = item.get('Server')
         if DB_server == server_name:
-            if item.get('controller'):
-                if item.get('controller') not in result:
-                    result.append(item.get('controller'))
+            if item.get('tags'):
+                if item.get('tags') not in result:
+                    result.append(item.get('tags'))
     result.append('其他')
     return JsonResponse({'data':result})
                      
 def API(request):
     result = []
     controller_name = request.GET.get('controller')
-    YxData = SwaggerData.objects.all().as_pymongo()
+    YxData = SwaggerCommon.objects.all().as_pymongo()
     for item in YxData:
-        DB_controller = item.get('controller')
+        DB_controller = item.get('tags')
         if DB_controller == controller_name:
-            if item.get('api'):
-                if item.get('api') not in result:
-                    result.append(item.get('api'))
+            if item.get('description'):
+                if item.get('description') not in result:
+                    result.append(item.get('description'))
     result.append('其他')
     return JsonResponse({'data':result})           
       

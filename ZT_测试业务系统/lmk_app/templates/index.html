@@ -30,7 +30,7 @@
 			<a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
 			<nav id="Hui-userbar" class="nav navbar-nav navbar-userbar hidden-xs">
 				<ul class="cl">
-					<li>超级管理员</li>
+					<li>{{user_info.team}}</li>
 					<li class="dropDown dropDown_hover">
 						<a href="#" class="dropDown_A">{{user_info.real_name}} <i class="Hui-iconfont">&#xe6d5;</i></a>
 						<ul class="dropDown-menu menu radius box-shadow">
@@ -72,12 +72,12 @@
 						 -->
 						<a data-href="{% url 'business-add' %}" data-title="沉淀添加" href="javascript:void(0)">沉淀添加</a>
 					</li>
-					<li>
+					<!-- <li>
 						<a data-href="{% url 'position-list' %}" data-title="职位管理" href="javascript:void(0)">职位管理</a>
 					</li>
 					<li>
 						<a data-href="{% url 'position-add' %}" data-title="新增职位" href="javascript:void(0)">新增职位</a>
-					</li>
+					</li> -->
 				</ul>
 			</dd>
 		</dl>

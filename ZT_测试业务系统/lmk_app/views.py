@@ -911,15 +911,17 @@ def company_ajax(request):#公司展示ajax 不传参
 #     query_set= new_company.objects.filter(flags=1) 过滤掉已经删除的数据
     end = None 
     start = None
-    page = request.GET.get('page')   
-    PageSize = 10,
-    N = int(page)*PageSize # n = 20
+    page = request.GET.get('page')
+    PageSize = 10   
+    TN = int(page)*PageSize # n = 20
+    N = TN
     CD_obj = new_company.objects.order_by('server').as_pymongo()
     value_count = CD_obj.count() #16
-    if  value_count > N:
+    print(type(value_count))
+    if  int(value_count) > int(N):
         end = N
         start = N-10
-    elif N-10<value_count<N:
+    elif N-10< int(value_count)<N:
         end = value_count
         start = N-10
     data_obj = CD_obj[start:end]

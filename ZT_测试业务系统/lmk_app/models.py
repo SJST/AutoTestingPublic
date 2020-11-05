@@ -87,7 +87,6 @@ class Candidate_user(Document):
     
     birthday = DateTimeField()
     telephone = IntField(required=True)
-    
     gender = StringField()
     address = StringField() #    家庭住址
     email = EmailField()
@@ -98,10 +97,9 @@ class Candidate_user(Document):
     rank = StringField()    #    职级，是否是合伙人，TL等
     work_status = BooleanField(default=True) #    工作状态，是否在职
     account_status = BooleanField(default=False)    #    账号状态，是否启用
-    
     role_name = StringField()   #    角色名称，
     permission_name = ListField() #    权限名称，应该是list，其中可以有多种权限
-    
+    team = StringField() # 所属团队
     create_time = DateTimeField(Default=datetime.now()) #    用户创建时间
     
     #    最后操作信息要改成list，list中是修改时间和修改者的键值对
